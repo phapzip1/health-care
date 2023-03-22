@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_care/screens/Patient/updatePatientInformation.dart';
 
 class PatientInformation extends StatefulWidget {
   const PatientInformation({super.key});
@@ -48,7 +49,9 @@ class _PatientInformationState extends State<PatientInformation> {
                                   padding: EdgeInsets.zero,
                                   minimumSize: const Size(30, 30),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const UpdatePatientInfo()));
+                                },
                                 child: const ImageIcon(
                                   AssetImage("assets/images/edit.png"),
                                   color: Color(0xFF3A86FF),
