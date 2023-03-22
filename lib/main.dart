@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import './screens/Patient/mainPage.dart';
+
 
 //screen import
 import './screens/login_screen.dart';
@@ -13,7 +15,9 @@ class MyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginScreen(),
+      // home: LoginScreen(),
+      home: PatientMainPage(),
+      
     );
   }
 }
