@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import './screens/Patient/mainPage.dart';
+
 
 //screen import
 import './screens/login_screen.dart';
@@ -17,8 +19,8 @@ class MyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     
     return MaterialApp(
-      home: LoginScreen(),
       theme: getDefaultTheme(),
+      home: PatientMainPage(),
     );
   }
 }
