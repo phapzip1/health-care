@@ -20,9 +20,7 @@ class _PatientInformationState extends State<PatientInformation> {
             height: MediaQuery.of(context).size.height * 0.5,
           ),
           Container(
-            // Ko dc fix cứng
             height: 410,
-
             child: Card(
               margin: const EdgeInsets.only(top: 48),
               shape: RoundedRectangleBorder(
@@ -30,9 +28,7 @@ class _PatientInformationState extends State<PatientInformation> {
               child: Padding(
                 padding: const EdgeInsets.only(right: 16, left: 16, bottom: 16),
                 child: Container(
-                  // Phải có 1 cách để margin ko fix cứng như z
                   margin: const EdgeInsets.only(top: 60),
-
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -50,7 +46,11 @@ class _PatientInformationState extends State<PatientInformation> {
                                   minimumSize: const Size(30, 30),
                                 ),
                                 onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const UpdatePatientInfo()));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const UpdatePatientInfo()));
                                 },
                                 child: const ImageIcon(
                                   AssetImage("assets/images/edit.png"),

@@ -91,7 +91,6 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
                 const SizedBox(
                   height: 20,
                 ),
-
                 const Text('Phone number',
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
@@ -111,48 +110,28 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
                 const SizedBox(
                   height: 20,
                 ),
-
                 const Text('Gender',
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 const SizedBox(
                   height: 8,
                 ),
-
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black38, width: 1),
-                    borderRadius: BorderRadius.circular(
-                        50), 
+                const DropDownTextField(
+                  clearOption: false,
+                  dropDownItemCount: 2,
+                  dropDownList: [
+                    DropDownValueModel(name: 'Male', value: 'male'),
+                    DropDownValueModel(name: 'Female', value: 'female'),
+                  ],
+                  textFieldDecoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                   ),
-                  child: Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20, top: 4, bottom: 4),
-                      child: DropdownButton(
-                        // value: "Male",
-                        items: const [
-                          DropdownMenuItem(
-                            child: Text("Male"),
-                            value: "male",
-                          ),
-                          DropdownMenuItem(
-                            child: Text("Female"),
-                            value: "female",
-                          )
-                        ],
-                        onChanged: (value) {},
-
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-
-                        underline: Container(), 
-                        isExpanded: true, 
-                      )),
+                  // onChanged: () {},
                 ),
-
                 const SizedBox(
                   height: 20,
                 ),
-
                 const Text('Birthday',
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
@@ -172,7 +151,6 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
                 const SizedBox(
                   height: 20,
                 ),
-
                 const Text('Email',
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),

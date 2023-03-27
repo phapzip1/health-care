@@ -1,7 +1,6 @@
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
 import 'package:flutter/material.dart';
+import 'package:dropdown_textfield/dropdown_textfield.dart';
+
 
 class UpdateDotorInfo extends StatefulWidget {
   const UpdateDotorInfo({super.key});
@@ -122,15 +121,18 @@ class _UpdateDotorInfoState extends State<UpdateDotorInfo> {
                 const SizedBox(
                   height: 8,
                 ),
-                TextField(
-                  style: const TextStyle(fontSize: 16),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 20),
+                const DropDownTextField(
+                  clearOption: false,
+                  dropDownItemCount: 2,
+                  dropDownList: [
+                    DropDownValueModel(name: 'Male', value: 'male'),
+                    DropDownValueModel(name: 'Female', value: 'female'),
+                  ],
+                  textFieldDecoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                   ),
+                  // onChanged: () {},
                 ),
                 const SizedBox(
                   height: 20,
