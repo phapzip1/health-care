@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_care/screens/Doctor/updateDoctorInformation.dart';
 
 class DoctorInformation extends StatefulWidget {
   const DoctorInformation({super.key});
@@ -20,7 +21,7 @@ class _DoctorInformationState extends State<DoctorInformation> {
           ),
           Container(
             // Ko dc fix cứng
-            height: 490,
+            height: 496,
 
             child: Card(
               margin: const EdgeInsets.only(top: 48),
@@ -48,7 +49,13 @@ class _DoctorInformationState extends State<DoctorInformation> {
                                   padding: EdgeInsets.zero,
                                   minimumSize: const Size(30, 30),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const UpdateDotorInfo()));
+                                },
                                 child: const ImageIcon(
                                   AssetImage("assets/images/edit.png"),
                                   color: Color(0xFF3A86FF),

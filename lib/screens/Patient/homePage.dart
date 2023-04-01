@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:health_care/widgets/appointment_list_patient.dart';
 import '../../models/appointment_patient.dart';
@@ -99,6 +99,7 @@ class _MyWidgetState extends State<HomePage> {
           child: Column(
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const CircleAvatar(
                     radius: 28.0,
@@ -231,7 +232,7 @@ class _MyWidgetState extends State<HomePage> {
               // Appointment list
               const Text(
                 'My Appointment',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
               ),
               const SizedBox(
                 height: 16,
@@ -261,7 +262,7 @@ class _MyWidgetState extends State<HomePage> {
               ),
               const Text(
                 'What are your Symptoms ?',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
               ),
               const SizedBox(
                 height: 16,
@@ -316,9 +317,7 @@ class _MyWidgetState extends State<HomePage> {
                 ),
               ),
 
-              const SizedBox(
-                height: 8,
-              ),
+
 
               AppointmentListPatient(appointmentList),
             ]),

@@ -12,14 +12,13 @@ class AppointmentListPatient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.of(context).size;
 
     return Container(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: appointmentList
             .map((e) => Container(
-              margin: const EdgeInsets.only(top: 16),
+                  margin: const EdgeInsets.only(top: 16),
                   decoration: const BoxDecoration(
                     boxShadow: [
                       BoxShadow(
@@ -39,75 +38,115 @@ class AppointmentListPatient extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       child: Column(children: [
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
+                              borderRadius: BorderRadius.circular(10.0),
                               child: const Image(
                                 image:
                                     AssetImage('assets/images/avatartUser.jpg'),
-                                height: 64,
-                                width: 56,
+                                height: 80,
+                                width: 64,
+                                fit: BoxFit.cover,
                               ),
                             ),
-                            Column(
-                              children: [
-                                Text(e.doctorName),
-                                Text(e.doctorSpecialization),
-                                Flex(
-                                  direction: Axis.horizontal,
-                                  children: [
-                                    const Icon(
-                                      FontAwesomeIcons.star,
-                                      color: Colors.yellow,
-                                      size: 20,
-                                    ),
-                                    const Icon(
-                                      FontAwesomeIcons.star,
-                                      color: Colors.yellow,
-                                      size: 20,
-                                    ),
-                                    const Icon(
-                                      FontAwesomeIcons.star,
-                                      color: Colors.yellow,
-                                      size: 20,
-                                    ),
-                                    const Icon(
-                                      FontAwesomeIcons.star,
-                                      color: Colors.yellow,
-                                      size: 20,
-                                    ),
-                                    const Icon(
-                                      FontAwesomeIcons.star,
-                                      color: Colors.yellow,
-                                      size: 20,
-                                    ),
-                                    Text(e.rating.toString()),
-                                    const Text(
-                                      '120 Reviews',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Color(0xFF828282)),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: const [
-                                    Text(
-                                      'Consultation price:',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Color(0xFF828282)),
-                                    ),
-                                    Text('100.000 VND',
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    e.doctorName,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,),
+                                  ),
+                                  const SizedBox(height: 6,),
+                                  Text(
+                                    e.doctorSpecialization,
+                                    style: const TextStyle(
+                                        fontSize: 16, color: Color(0xFF828282)),
+                                  ),
+                                  const SizedBox(height: 6,),
+
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            FontAwesomeIcons.star,
+                                            color: Colors.yellow,
+                                            size: 20,
+                                          ),
+                                          const SizedBox(
+                                            width: 4,
+                                          ),
+                                          const Icon(
+                                            FontAwesomeIcons.star,
+                                            color: Colors.yellow,
+                                            size: 20,
+                                          ),
+                                          const SizedBox(
+                                            width: 4,
+                                          ),
+                                          const Icon(
+                                            FontAwesomeIcons.star,
+                                            color: Colors.yellow,
+                                            size: 20,
+                                          ),
+                                          const SizedBox(
+                                            width: 4,
+                                          ),
+                                          const Icon(
+                                            FontAwesomeIcons.star,
+                                            color: Colors.yellow,
+                                            size: 20,
+                                          ),
+                                          const SizedBox(
+                                            width: 4,
+                                          ),
+                                          const Icon(
+                                            FontAwesomeIcons.star,
+                                            color: Colors.yellow,
+                                            size: 20,
+                                          ),
+                                          const SizedBox(
+                                            width: 4,
+                                          ),
+                                          Text(e.rating.toString()),
+                                        ],
+                                      ),
+                                      const Text(
+                                        '120 Reviews',
                                         style: TextStyle(
                                             fontSize: 16,
-                                            fontWeight: FontWeight.w600)),
-                                  ],
-                                ),
-                              ],
-                            )
+                                            color: Color(0xFF828282)),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Text(
+                              'Consultation price:',
+                              style: TextStyle(
+                                  fontSize: 16, color: Color(0xFF828282)),
+                            ),
+                            Text('100.000 VND',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600)),
                           ],
                         ),
                       ]),

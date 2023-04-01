@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../screens/Doctor/homePageDoctor.dart';
 import '../../screens/Doctor/doctorInformation.dart';
 import '../../screens/Patient/homePage.dart';
 import '../../screens/Patient/medicalReminder.dart';
@@ -16,6 +17,7 @@ class _MyWidgetState extends State<PatientMainPage> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
+    // HomePageDoctor(),
     MedicalReminder(), 
     SchedulePage(),
     // DoctorInformation(),
