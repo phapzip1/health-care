@@ -61,10 +61,57 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Expanded(
                       child: Center(
-                        child: Image.asset(
-                          "assets/images/logo.png",
-                          width: dwidth / 2,
+                        child: Container(
+                          width: 258,
+                          height: dwidth/4,
+                          decoration: const BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(0xFFBDBDBD),
+                                blurRadius: 10.0,
+                              ),
+                            ],
+                          ),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/logo_app.png",
+                                      width: 32,
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    const Text(
+                                      'Health meeting',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                const Text(
+                                  'Your health is our care',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ]),
+                            ),
+                          ),
                         ),
+                        //
                       ),
                     ),
                     Container(
