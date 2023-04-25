@@ -1,25 +1,18 @@
-
 import 'package:flutter/material.dart';
 import 'package:health_care/widgets/appointment_list_patient.dart';
+import 'package:health_care/widgets/header_section.dart';
+import 'package:intl/intl.dart';
 import '../../models/appointment_patient.dart';
 import '../../models/doctor_info.dart';
 import '../../models/reivew.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _MyWidgetState();
-}
-
-class Symptoms {
-  // late FontAwesomeIcons icon;
-  late String icon;
-  late String name;
-
-  Symptoms({required this.icon, required this.name});
-  // Symptoms({required this.name});
 }
 
 class _MyWidgetState extends State<HomePage> {
@@ -34,7 +27,7 @@ class _MyWidgetState extends State<HomePage> {
         name: 'khanh',
         timePosted: new DateTime(2023, 6, 25, 9, 30),
         rating: 4.5,
-        context: 'a')
+        context: 'contextcontextcontextcontextcontextcontextcontext')
   ]);
 
   final List<Doctor> appointmentList = [
@@ -46,7 +39,7 @@ class _MyWidgetState extends State<HomePage> {
           name: 'khanh',
           timePosted: new DateTime(2023, 6, 25, 9, 30),
           rating: 4.5,
-          context: 'a')
+          context: 'contextcontextcontextcontextcontextcontextcontext')
     ]),
     Doctor('123', 'Dr. Chris Frazier', 'Pediatrician', 4.5, 20, 198, [
       new DateTime(2023, 6, 25, 9, 30),
@@ -56,7 +49,7 @@ class _MyWidgetState extends State<HomePage> {
           name: 'khanh',
           timePosted: new DateTime(2023, 6, 25, 9, 30),
           rating: 4.5,
-          context: 'a')
+          context: 'contextcontextcontextcontextcontextcontextcontext')
     ]),
     Doctor('123', 'Dr. Chris Frazier', 'Pediatrician', 4.5, 20, 198, [
       new DateTime(2023, 6, 25, 9, 30),
@@ -66,23 +59,18 @@ class _MyWidgetState extends State<HomePage> {
           name: 'khanh',
           timePosted: new DateTime(2023, 6, 25, 9, 30),
           rating: 4.5,
-          context: 'a')
+          context: 'contextcontextcontextcontextcontextcontextcontext')
     ])
   ];
+  final String formattedTime = DateFormat.jm().format(DateTime.now());
+  final String formattedDate = DateFormat.yMd().format(DateTime.now());
 
   late PatientAppointment appointment1 =
-      PatientAppointment(new DateTime(2023, 6, 25, 9, 30), doctor1, 1);
-
-  final List<Symptoms> listSymtoms = [
-    Symptoms(icon: 'assets/images/headache.png', name: 'Headache'),
-    Symptoms(icon: 'assets/images/sneezing.png', name: 'Snuffle'),
-    Symptoms(icon: 'assets/images/stomachache.png', name: 'Stomachache'),
-    Symptoms(icon: 'assets/images/all.png', name: 'All'),
-  ];
+      PatientAppointment(formattedTime, doctor1, 1, formattedDate);
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context).size;
+    // final mediaQuery = MediaQuery.of(context).size;
     final cardAppointment = Container(
       constraints: BoxConstraints(
         maxWidth: MediaQuery.of(context).size.width * 0.7,
@@ -141,6 +129,7 @@ class _MyWidgetState extends State<HomePage> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(
                         FontAwesomeIcons.clock,
@@ -149,7 +138,9 @@ class _MyWidgetState extends State<HomePage> {
                       const SizedBox(
                         width: 8,
                       ),
-                      Text(appointment1.timeAppointment.toString())
+                      Text(appointment1.time.toString()),
+                      const SizedBox(width: 8,),
+                      Text(appointment1.day.toString())
                     ],
                   ),
                 ),
@@ -175,37 +166,11 @@ class _MyWidgetState extends State<HomePage> {
           child: SingleChildScrollView(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 32.0,
-                    backgroundImage:
-                        AssetImage('assets/images/avatartUser.jpg'),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Good Morning,',
-                        style: TextStyle(
-                          color: Color(0xFF828282),
-                          fontSize: 16,
-                        ),
-                      ),
-                      Text(
-                        'Do Pham Huy Khanh',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              // ignore: prefer_const_constructors
+              HeaderSection(
+                  url: 'assets/images/avatartUser.jpg',
+                  userName: 'Do Pham Huy Khanh'),
+
               Container(
                 margin: const EdgeInsets.only(top: 32, bottom: 32),
                 child: TextField(
@@ -232,7 +197,8 @@ class _MyWidgetState extends State<HomePage> {
               // Appointment list
               const Text(
                 'My Appointment',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
+                style: TextStyle(
+                    fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
               ),
               const SizedBox(
                 height: 16,
@@ -261,63 +227,10 @@ class _MyWidgetState extends State<HomePage> {
                 height: 24,
               ),
               const Text(
-                'What are your Symptoms ?',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
+                'Typical Doctor',
+                style: TextStyle(
+                    fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
               ),
-              const SizedBox(
-                height: 16,
-              ),
-
-              Container(
-                height: mediaQuery.height > 600 ? 50 : mediaQuery.height * 0.06,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) => const SizedBox(
-                    width: 16,
-                  ),
-                  itemCount: listSymtoms.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xFFBDBDBD),
-                              blurRadius: 3.0,
-                              spreadRadius: 1,
-                            ),
-                          ],
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: ElevatedButton.icon(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.white),
-                              foregroundColor:
-                                  MaterialStateProperty.all(Colors.black),
-                              textStyle: MaterialStateProperty.all(
-                                  const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600)),
-                              padding: MaterialStateProperty.all(
-                                  const EdgeInsets.all(8)),
-                              elevation: MaterialStateProperty.all<double>(0)),
-                          onPressed: () {},
-                          icon: Image.asset(
-                            listSymtoms[index].icon,
-                            width: 16,
-                          ),
-                          label: Text('${listSymtoms[index].name}'),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-
 
               AppointmentListPatient(appointmentList),
             ]),

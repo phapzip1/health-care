@@ -1,5 +1,6 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,10 @@ class _MyWidgetState extends State<BottomNavBar> {
           icon: ImageIcon(
             AssetImage("assets/images/pill.png")),
           label: 'Medicine',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(FontAwesomeIcons.solidComments),
+          label: 'Q&A',
         ),
         BottomNavigationBarItem(
           icon: ImageIcon(

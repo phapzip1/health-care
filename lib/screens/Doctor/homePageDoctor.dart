@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/models/appointment_doctor.dart';
+import 'package:health_care/widgets/header_section.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../models/patient_info.dart';
 import '../../widgets/appointment_list_doctor.dart';
@@ -95,36 +96,7 @@ class _HomePageDoctor extends State<HomePageDoctor> {
         child: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(
-              children: [
-                const CircleAvatar(
-                  radius: 32.0,
-                  backgroundImage: AssetImage('assets/images/avatartUser.jpg'),
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      'Good Morning,',
-                      style: TextStyle(
-                        color: Color(0xFF828282),
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(
-                      'Dr. Anna Baker',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            HeaderSection(url: 'assets/images/avatartUser.jpg', userName: 'Anna Baker'),
             Container(
               margin: const EdgeInsets.only(top: 32, bottom: 32),
               child: TextField(

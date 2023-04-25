@@ -20,8 +20,8 @@ class MyWidget extends StatelessWidget {
     
     return MaterialApp(
       theme: getDefaultTheme(),
-      // home: PatientMainPage(),
-      home: LoginScreen(),
+      home: PatientMainPage(),
+      // home: LoginScreen(),
     );
   }
 }

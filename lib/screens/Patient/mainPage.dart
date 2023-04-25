@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_care/screens/communityQA.dart';
 import '../../screens/Doctor/homePageDoctor.dart';
 import '../../screens/Doctor/doctorInformation.dart';
 import '../../screens/Patient/homePage.dart';
@@ -19,6 +20,7 @@ class _MyWidgetState extends State<PatientMainPage> {
     HomePage(),
     // HomePageDoctor(),
     MedicalReminder(), 
+    CommunityQA(),
     SchedulePage(),
     // DoctorInformation(),
     PatientInformation()
