@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:health_care/widgets/appointment_list_patient.dart';
+import 'package:health_care/widgets/home_page/personal_appointment.dart';
+import 'package:health_care/widgets/search.dart';
+import '../../widgets/home_page/appointment_list_patient.dart';
 import 'package:health_care/widgets/header_section.dart';
-import 'package:intl/intl.dart';
-import '../../models/appointment_patient.dart';
-import '../../models/doctor_info.dart';
-import '../../models/reivew.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,227 +15,91 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<HomePage> {
+  final user = FirebaseAuth.instance.currentUser;
+
   final TextEditingController _searchController = TextEditingController();
-
-  final Doctor doctor1 =
-      Doctor('123', 'Dr. Chris Frazier', 'Pediatrician', 4.5, 20, 198, [
-    new DateTime(2023, 6, 25, 9, 30),
-    new DateTime(2023, 6, 15, 8, 30)
-  ], [
-    Review(
-        name: 'khanh',
-        timePosted: new DateTime(2023, 6, 25, 9, 30),
-        rating: 4.5,
-        context: 'contextcontextcontextcontextcontextcontextcontext')
-  ]);
-
-  final List<Doctor> appointmentList = [
-    Doctor('123', 'Dr. Chris Frazier', 'Pediatrician', 4.5, 20, 198, [
-      new DateTime(2023, 6, 25, 9, 30),
-      new DateTime(2023, 6, 15, 8, 30)
-    ], [
-      Review(
-          name: 'khanh',
-          timePosted: new DateTime(2023, 6, 25, 9, 30),
-          rating: 4.5,
-          context: 'contextcontextcontextcontextcontextcontextcontext')
-    ]),
-    Doctor('123', 'Dr. Chris Frazier', 'Pediatrician', 4.5, 20, 198, [
-      new DateTime(2023, 6, 25, 9, 30),
-      new DateTime(2023, 6, 15, 8, 30)
-    ], [
-      Review(
-          name: 'khanh',
-          timePosted: new DateTime(2023, 6, 25, 9, 30),
-          rating: 4.5,
-          context: 'contextcontextcontextcontextcontextcontextcontext')
-    ]),
-    Doctor('123', 'Dr. Chris Frazier', 'Pediatrician', 4.5, 20, 198, [
-      new DateTime(2023, 6, 25, 9, 30),
-      new DateTime(2023, 6, 15, 8, 30)
-    ], [
-      Review(
-          name: 'khanh',
-          timePosted: new DateTime(2023, 6, 25, 9, 30),
-          rating: 4.5,
-          context: 'contextcontextcontextcontextcontextcontextcontext')
-    ])
-  ];
-  final String formattedTime = DateFormat.jm().format(DateTime.now());
-  final String formattedDate = DateFormat.yMd().format(DateTime.now());
-
-  late PatientAppointment appointment1 =
-      PatientAppointment(formattedTime, doctor1, 1, formattedDate);
 
   @override
   Widget build(BuildContext context) {
     // final mediaQuery = MediaQuery.of(context).size;
-    final cardAppointment = Container(
-      constraints: BoxConstraints(
-        maxWidth: MediaQuery.of(context).size.width * 0.7,
-      ),
-
-      // ignore: sort_child_properties_last
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        color: Color(0xFFAEE6FF),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CircleAvatar(
-                    radius: 28.0,
-                    backgroundImage:
-                        AssetImage('assets/images/avatartUser.jpg'),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        appointment1.doctor.doctorName,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      Text(
-                        appointment1.doctor.doctorSpecialization,
-                        style: const TextStyle(
-                            color: Color(0xFF828282), fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                  color: Colors.white,
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        FontAwesomeIcons.clock,
-                        size: 20,
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Text(appointment1.time.toString()),
-                      const SizedBox(width: 8,),
-                      Text(appointment1.day.toString())
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-      decoration: const BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Color(0xFFE0E0E9),
-            blurRadius: 10.0,
-          ),
-        ],
-      ),
-    );
 
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
+          padding: const EdgeInsets.only(top: 24),
           child: SingleChildScrollView(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              // ignore: prefer_const_constructors
-              HeaderSection(
-                  url: 'assets/images/avatartUser.jpg',
-                  userName: 'Do Pham Huy Khanh'),
+            child: FutureBuilder(
+              future: Future.value(user),
+              builder: (ctx, futureSnapShot) {
+                if (futureSnapShot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-              Container(
-                margin: const EdgeInsets.only(top: 32, bottom: 32),
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: 'Search...',
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () => _searchController.clear(),
-                    ),
-                    prefixIcon: IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {
-                        // Perform the search here
-                      },
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50.0),
-                    ),
-                  ),
-                ),
-              ),
+                return StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('patient')
+                        .doc(user!.uid)
+                        .snapshots(),
+                    builder: (ctx, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
-              // Appointment list
-              const Text(
-                'My Appointment',
-                style: TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              //Sẽ cần 1 vòng lặp lấy ra các appointment
-              //     ListView.builder(
-              //   itemCount: products.length,
-              //   itemBuilder: (context, index) {
-              //     return ListTile(
-              //       title: Text('${products[index]}'),
-              //     );
-              //   },
-              // ),
-              SingleChildScrollView(
-                clipBehavior: Clip.none,
-                scrollDirection: Axis.horizontal,
-                child: Row(children: [
-                  cardAppointment,
-                  cardAppointment,
-                  cardAppointment,
-                ]),
-              ),
+                      final userDocs = snapshot.data!;
 
-              //Doctoc list and symptoms sections
-              const SizedBox(
-                height: 24,
-              ),
-              const Text(
-                'Typical Doctor',
-                style: TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
-              ),
-
-              AppointmentListPatient(appointmentList),
-            ]),
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                HeaderSection(
+                                    url: userDocs['image_url'],
+                                    userName: userDocs['patient_name']),
+                                Search(_searchController),
+                                const Text(
+                                  'My Appointment',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.1),
+                                ),
+                                SingleChildScrollView(
+                                  clipBehavior: Clip.none,
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(children: [
+                                    PersonalAppointment(),
+                                  ]),
+                                ),
+                                const SizedBox(
+                                  height: 24,
+                                ),
+                                const Text(
+                                  'Typical Doctor',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.1),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: AppointmentListPatient(),
+                          ),
+                        ],
+                      );
+                    });
+              },
+            ),
           ),
         ),
       ),
     );
   }
 }
+

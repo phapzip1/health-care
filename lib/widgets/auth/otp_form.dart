@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/utils/formstage.dart';
-import 'package:health_care/widgets/opt_input.dart';
+import '../../widgets/auth/opt_input.dart';
 
 class OTPForm extends StatelessWidget {
   final String email;

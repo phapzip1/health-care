@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UpdatePatientInfo extends StatefulWidget {
   const UpdatePatientInfo({super.key});

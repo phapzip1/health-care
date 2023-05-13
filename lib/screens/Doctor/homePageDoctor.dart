@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/models/appointment_doctor.dart';
 import 'package:health_care/widgets/header_section.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../models/patient_info.dart';
-import '../../widgets/appointment_list_doctor.dart';
+import '../../widgets/home_page/appointment_list_doctor.dart';
 import 'package:intl/intl.dart';
 
 class HomePageDoctor extends StatefulWidget {
@@ -33,7 +32,7 @@ class _HomePageDoctor extends State<HomePageDoctor> {
             '26/04/2002',
             'khanhdph2604@gmail.com',
           ),
-          1,
+          0,
           'headache'),
       DoctorAppointment(
           formattedDate.toString(),
@@ -72,7 +71,7 @@ class _HomePageDoctor extends State<HomePageDoctor> {
             '26/04/2002',
             'khanhdph2604@gmail.com',
           ),
-          1,
+          2,
           'headache'),
       DoctorAppointment(
           formattedDate.toString(),
@@ -92,39 +91,49 @@ class _HomePageDoctor extends State<HomePageDoctor> {
     return Scaffold(
         body: SafeArea(
       child: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
+        padding: const EdgeInsets.only(top: 24),
         child: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            HeaderSection(url: 'assets/images/avatartUser.jpg', userName: 'Anna Baker'),
-            Container(
-              margin: const EdgeInsets.only(top: 32, bottom: 32),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: 'Search...',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () => _searchController.clear(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  HeaderSection(
+                      url: 'assets/images/avatartUser.jpg',
+                      userName: 'Anna Baker'),
+                  Container(
+                    margin: const EdgeInsets.only(top: 24, bottom: 24),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search...',
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () => _searchController.clear(),
+                        ),
+                        prefixIcon: IconButton(
+                          icon: const Icon(Icons.search),
+                          onPressed: () {
+                            // Perform the search here
+                          },
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                      ),
+                    ),
                   ),
-                  prefixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      // Perform the search here
-                    },
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
-                ),
-              ),
-            ),
 
-            // Appointment list
-            const Text(
-              'My Appointment',
-              style: TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
+                  // Appointment list
+                  const Text(
+                    'My Appointment',
+                    style: TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
+                  ),
+                ],
+              ),
             ),
             AppointmentListDoctor(appointmentList: appointmentList)
           ]),

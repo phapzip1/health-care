@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:health_care/widgets/change_password_form.dart';
-import 'package:health_care/widgets/otp_form.dart';
+import 'package:health_care/widgets/auth/change_password_form.dart';
+import '../widgets/auth/otp_form.dart';
 
 // forms
 import '../widgets/doctor_register_form.dart';
-import '../widgets/register_form.dart';
-import '../widgets/login_form.dart';
+import '../widgets/auth/register_form.dart';
+import '../widgets/auth/login_form.dart';
 
 // utils
 import '../utils/formstage.dart';

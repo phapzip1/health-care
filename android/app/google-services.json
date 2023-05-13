@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "581889576664",
+    "project_id": "health-meeting",
+    "storage_bucket": "health-meeting.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581889576664:android:a0b1c8bb491cc3326091ad",
+        "android_client_info": {
+          "package_name": "com.example.health_care"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "581889576664-9n389p6k86bqpcdnki4u177pd8v6fkc9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBF8VL7v8cVFj9CFRcsbo9rbKOLpI7iBb8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "581889576664-9n389p6k86bqpcdnki4u177pd8v6fkc9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "581889576664-0rrjta3gdsch3nnupgd3h6uvc2gu0ti1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.healthCare"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

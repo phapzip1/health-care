@@ -1,23 +1,65 @@
 import 'package:flutter/material.dart';
-import '../utils/formstage.dart';
+import '../../utils/formstage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final Function setFormStage;
+
+  LoginForm({required this.formKey, required this.setFormStage});
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
   bool forgot = false;
+  final _auth = FirebaseAuth.instance;
+  var _isLoading = false;
 
   final Map<String, dynamic> formData = {
     "Email": "",
     "Password": "",
   };
 
-  LoginForm({required this.formKey, required this.setFormStage });
-  
-  void formSubmit() {
+  void _formSubmit() async {
     forgot = false;
-    final valid = formKey.currentState!.validate();
+    final valid = widget.formKey.currentState!.validate();
+    UserCredential authResult;
+
     if (valid) {
-      // login 
+      // login
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+
+        authResult = await _auth.signInWithEmailAndPassword(
+            email: formData['Email'], password: formData['Password']);
+      } on PlatformException catch (err) {
+        var message = 'An error occured, please check your credential';
+        if (err.message != null) {
+          message = err.message.toString();
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Theme.of(context).errorColor,
+          ),
+        );
+        setState(() {
+          _isLoading = false;
+        });
+      } catch (err) {
+        print(err);
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -25,7 +67,7 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Form(
-        key: formKey,
+        key: widget.formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -46,7 +88,8 @@ class LoginForm extends StatelessWidget {
             TextFormField(
               decoration: const InputDecoration(hintText: "abc@gmail.com"),
               validator: (value) {
-                final pattern = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+                final pattern = RegExp(
+                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
                 if (value == null || value.isEmpty) {
                   return "Email field is required!";
                 }
@@ -70,8 +113,7 @@ class LoginForm extends StatelessWidget {
               obscureText: true,
               obscuringCharacter: "•",
               validator: (value) {
-                if (forgot) 
-                  return null;
+                if (forgot) return null;
                 if (value == null || value.isEmpty) {
                   return "Password field is required!";
                 }
@@ -105,9 +147,10 @@ class LoginForm extends StatelessWidget {
                   ),
                   onPressed: () {
                     forgot = true;
-                    bool isValid = formKey.currentState!.validate();
+                    bool isValid = widget.formKey.currentState!.validate();
                     if (isValid) {
-                      setFormStage(FormStage.OTP, email: formData["Email"]);
+                      widget.setFormStage(FormStage.OTP,
+                          email: formData["Email"]);
                     }
                   },
                   child: const Text(
@@ -118,7 +161,7 @@ class LoginForm extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed: formSubmit,
+              onPressed: _formSubmit,
               child: const Text(
                 "Login",
                 style: TextStyle(
@@ -135,7 +178,8 @@ class LoginForm extends StatelessWidget {
                   style: TextStyle(),
                 ),
                 TextButton(
-                  onPressed: () => setFormStage(FormStage.PatientRegister),
+                  onPressed: () =>
+                      widget.setFormStage(FormStage.PatientRegister),
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsets>(
                       const EdgeInsets.all(0),

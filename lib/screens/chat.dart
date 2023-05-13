@@ -1,17 +1,28 @@
+import '../widgets/chat/messages.dart';
+import '../widgets/chat/new_message.dart';
 import 'package:flutter/material.dart';
 
-class Chat extends StatefulWidget {
-  const Chat({super.key});
+class ChatScreen extends StatelessWidget {
+  ChatScreen(this.chatId, this.username, this.userImage, {super.key});
+  final String chatId;
+  final String username;
+  final String userImage;
 
-  @override
-  State<Chat> createState() => _ChatState();
-}
-
-class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: const Text('data'),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('Chat App'),
+      ),
+      body: Container(
+        child: Column(children: [
+          Expanded(
+            child: Messages(chatId, username, userImage),
+          ),
+          NewMessage(chatId),
+        ]),
+      ),
     );
   }
 }

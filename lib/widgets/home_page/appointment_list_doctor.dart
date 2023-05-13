@@ -15,14 +15,20 @@ class AppointmentListDoctor extends StatelessWidget {
       children: appointmentList
           .map(
             (e) => Container(
-              margin: const EdgeInsets.only(top: 16.0),
+              margin: const EdgeInsets.only(top: 16.0, right: 16.0, left: 16),
+              decoration: const BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xFFC9C9C9),
+                    blurRadius: 1,
+                    spreadRadius: 0.8,
+                  ),
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
               // ignore: sort_child_properties_last
-              child: Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Padding(
+              child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
@@ -44,18 +50,25 @@ class AppointmentListDoctor extends StatelessWidget {
                                 Text(
                                   e.patient.patientName,
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 16),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
                                 ),
                                 const SizedBox(
                                   height: 12,
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
-                                        const Icon(FontAwesomeIcons.calendar, size: 20,),
-                                        const SizedBox(width: 4,),
+                                        const Icon(
+                                          FontAwesomeIcons.calendar,
+                                          size: 20,
+                                        ),
+                                        const SizedBox(
+                                          width: 4,
+                                        ),
                                         Text(
                                           e.day,
                                           style: const TextStyle(fontSize: 16),
@@ -64,8 +77,13 @@ class AppointmentListDoctor extends StatelessWidget {
                                     ),
                                     Row(
                                       children: [
-                                        const Icon(FontAwesomeIcons.clock, size: 20,),
-                                        const SizedBox(width: 4,),
+                                        const Icon(
+                                          FontAwesomeIcons.clock,
+                                          size: 20,
+                                        ),
+                                        const SizedBox(
+                                          width: 4,
+                                        ),
                                         Text(
                                           e.time,
                                           style: const TextStyle(fontSize: 16),
@@ -88,27 +106,21 @@ class AppointmentListDoctor extends StatelessWidget {
                             'Issues:',
                             style: TextStyle(fontSize: 16),
                           ),
-                          const SizedBox(width: 4,),
+                          const SizedBox(
+                            width: 4,
+                          ),
                           Text(
                             e.issues,
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
                     ],
                   ),
                 ),
-              ),
-              decoration: const BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFFE0E0E0),
-                        blurRadius: 6,
-                        spreadRadius: 1,
-                      ),
-                    ],
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
+            
+              
             ),
           )
           .toList(),

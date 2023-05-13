@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/widgets/comment_card.dart';
 import 'package:intl/intl.dart';
-import '../models/doctor_info.dart';
+import '../../models/doctor_info.dart';
 
 class InfoDoctorViewPage extends StatefulWidget {
   final Doctor doctor;
@@ -22,7 +22,7 @@ const List<String> time = [
 ];
 
 Widget header(context) => Container(
-      padding: EdgeInsets.only(top: 8, right: 16, left: 16),
+      padding: const EdgeInsets.only(top: 8, right: 16, left: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

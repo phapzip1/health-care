@@ -4,7 +4,7 @@ import '../../screens/Doctor/homePageDoctor.dart';
 import '../../screens/Doctor/doctorInformation.dart';
 import '../../screens/Patient/homePage.dart';
 import '../../screens/Patient/medicalReminder.dart';
-import '../../screens/Patient/schedulePage.dart';
+import './patientSchedulePage.dart';
 import '../../components/bottomNavigation.dart';
 import '../../screens/Patient/patientInformation.dart';
 
@@ -21,7 +21,7 @@ class _MyWidgetState extends State<PatientMainPage> {
     // HomePageDoctor(),
     MedicalReminder(), 
     CommunityQA(),
-    SchedulePage(),
+    PatientSchedulePage(),
     // DoctorInformation(),
     PatientInformation()
   ];
