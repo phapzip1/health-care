@@ -146,7 +146,7 @@ class DoctorRegisterForm extends StatelessWidget {
                 children: <Widget>[
                   const Text("Are you a patient?"),
                   TextButton(
-                    onPressed: () =>setFormStage(FormStage.DoctorRegister),
+                    onPressed: () =>setFormStage(FormStage.PatientRegister),
                     child: const Text("Register for patient"),
                   ),
                 ],
