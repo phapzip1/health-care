@@ -7,6 +7,7 @@ import '../../screens/Patient/medicalReminder.dart';
 import './patientSchedulePage.dart';
 import '../../components/bottomNavigation.dart';
 import '../../screens/Patient/patientInformation.dart';
+import '../drug_reminder_screen.dart';
 
 class PatientMainPage extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _MyWidgetState extends State<PatientMainPage> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     // HomePageDoctor(),
-    MedicalReminder(), 
+    DrugReminderScreen(), 
     CommunityQA(),
     PatientSchedulePage(),
     // DoctorInformation(),

@@ -66,50 +66,6 @@ class PillList extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/images/morning.png",
-                          width: 24,
-                        ),
-                        const Text(
-                          "08:00 AM",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/images/noon.png",
-                          width: 24,
-                        ),
-                        const Text(
-                          "11:00 AM",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/images/evening.png",
-                          width: 24,
-                        ),
-                        const Text(
-                          "08:00 PM",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
