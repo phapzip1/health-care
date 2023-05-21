@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:math';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:health_care/widgets/user_image_picker.dart';
@@ -13,6 +13,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 class RegisterForm extends StatefulWidget {
   final GlobalKey<FormState> formkey;
   final Function setFormStage;
+
   const RegisterForm({required this.formkey, required this.setFormStage});
 
   @override
@@ -20,6 +21,14 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
+  TextEditingController dateinput = TextEditingController();
+
+  @override
+  void initState() {
+    dateinput.text = '';
+    super.initState();
+  }
+
   final _auth = FirebaseAuth.instance;
   File? _selectedImage;
   var _enteredEmail = "";
@@ -32,7 +41,15 @@ class _RegisterFormState extends State<RegisterForm> {
 
   void _submit() async {
     try {
+      setState(() {
+        _isLoading = true;
+      });
       final isValid = widget.formkey.currentState!.validate();
+
+      if (isValid) {
+        widget.formkey.currentState?.save();
+      }
+
       UserCredential authResult;
 
       if (!isValid || _selectedImage == null) {
@@ -51,17 +68,17 @@ class _RegisterFormState extends State<RegisterForm> {
       final ref = FirebaseStorage.instance
           .ref()
           .child('user_image')
-          .child(authResult.user!.uid + '.jpg');
+          .child('${authResult.user!.uid}.jpg');
 
       await ref.putFile(File(_selectedImage!.path));
 
       final url = await ref.getDownloadURL();
 
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patient')
           .doc(authResult.user!.uid)
           .set({
-        'user_name': _enteredUsername,
+        'patient_name': _enteredUsername,
         'email': _enteredEmail,
         'phone_number': _enteredPhone,
         'gender': _enteredGender,
@@ -113,67 +130,110 @@ class _RegisterFormState extends State<RegisterForm> {
                   _selectedImage = pickedImage;
                 },
               ),
-              Text(
-                "Email",
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
-              const SizedBox(height: 8),
+              // Text(
+              //   "Email",
+              //   style: Theme.of(context).textTheme.displayMedium,
+              // ),
+              // const SizedBox(height: 8),
               TextFormField(
-                decoration: const InputDecoration(hintText: "abc@gmail.com"),
+                key: ValueKey('email'),
+                decoration: InputDecoration(
+                  hintText: "abc@gmail.com",
+                  labelText: 'Email',
+                  labelStyle: Theme.of(context).textTheme.displayMedium,
+                ),
+                keyboardType: TextInputType.emailAddress,
+                onSaved: (value) {
+                  _enteredEmail = value.toString();
+                },
+                validator: (value) {
+                  if (value!.isEmpty || !value.contains('@'))
+                    return 'Please enter a valid email address';
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
               //
-              Text(
-                "Password",
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
-              const SizedBox(height: 8),
+              // Text(
+              //   "Password",
+              //   style: Theme.of(context).textTheme.displayMedium,
+              // ),
+              // const SizedBox(height: 8),
               TextFormField(
-                decoration: const InputDecoration(hintText: "Password"),
+                key: ValueKey('password'),
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  labelStyle: Theme.of(context).textTheme.displayMedium,
+                ),
+                obscureText: true,
+                obscuringCharacter: "•",
+                onChanged: (value) {
+                  _enteredPassword = value.toString();
+                },
+              ),
+              const SizedBox(height: 16),
+              //
+              // Text(
+              //   "Retype-password",
+              //   style: Theme.of(context).textTheme.displayMedium,
+              // ),
+              // const SizedBox(height: 8),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Retype-password',
+                  labelStyle: Theme.of(context).textTheme.displayMedium,
+                ),
                 obscureText: true,
                 obscuringCharacter: "•",
               ),
               const SizedBox(height: 16),
               //
-              Text(
-                "Retype-password",
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
-              const SizedBox(height: 8),
+              // Text(
+              //   "Name",
+              //   style: Theme.of(context).textTheme.displayMedium,
+              // ),
+              // const SizedBox(height: 8),
               TextFormField(
-                decoration: const InputDecoration(hintText: "Retype Password"),
-                obscureText: true,
-                obscuringCharacter: "•",
+                key: ValueKey('username'),
+                decoration: InputDecoration(
+                  hintText: "Enter your name",
+                  labelText: 'Name',
+                  labelStyle: Theme.of(context).textTheme.displayMedium,
+                ),
+                onSaved: (value) {
+                  _enteredUsername = value.toString();
+                },
               ),
               const SizedBox(height: 16),
               //
-              Text(
-                "Name",
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
-              const SizedBox(height: 8),
+              // Text(
+              //   "Phone number",
+              //   style: Theme.of(context).textTheme.displayMedium,
+              // ),
+              // const SizedBox(height: 8),
               TextFormField(
-                decoration: const InputDecoration(hintText: "Enter your name"),
+                decoration: InputDecoration(
+                  hintText: "0123456789",
+                  labelText: 'Phone number',
+                  labelStyle: Theme.of(context).textTheme.displayMedium,
+                ),
+                keyboardType: TextInputType.phone,
+                onSaved: (value) {
+                  _enteredPhone = value.toString();
+                },
               ),
               const SizedBox(height: 16),
               //
-              Text(
-                "Phone number",
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                decoration: const InputDecoration(hintText: "0123456789"),
-              ),
-              const SizedBox(height: 16),
-              //
-              Text(
-                "Gender",
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
-              const SizedBox(height: 8),
+              // Text(
+              //   "Gender",
+              //   style: Theme.of(context).textTheme.displayMedium,
+              // ),
+              // const SizedBox(height: 8),
               DropdownButtonFormField(
-                decoration: const InputDecoration(hintText: "Sex"),
+                decoration: InputDecoration(
+                  labelText: 'Gender',
+                  labelStyle: Theme.of(context).textTheme.displayMedium,
+                ),
                 items: const <DropdownMenuItem<dynamic>>[
                   DropdownMenuItem(
                     value: 0,
@@ -184,17 +244,24 @@ class _RegisterFormState extends State<RegisterForm> {
                     child: Text("Women"),
                   ),
                 ],
-                onChanged: (value) {},
+                onChanged: (value) {
+                  _enteredGender = value == 0 ? 'Men' : 'Women';
+                },
               ),
               const SizedBox(height: 16),
               //
-              Text(
-                "Birthday",
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
-              const SizedBox(height: 8),
+              // Text(
+              //   "Birthday",
+              //   style: Theme.of(context).textTheme.displayMedium,
+              // ),
+              // const SizedBox(height: 8),
               TextFormField(
-                decoration: const InputDecoration(hintText: "0123456789"),
+                controller: dateinput,
+                decoration: InputDecoration(
+                  hintText: "26/05/2002",
+                  labelText: 'Birthday',
+                  labelStyle: Theme.of(context).textTheme.displayMedium,
+                ),
                 onTap: () async {
                   // prevent keyboard showing up
                   FocusScope.of(context).requestFocus(new FocusNode());
@@ -204,6 +271,15 @@ class _RegisterFormState extends State<RegisterForm> {
                       initialDate: now,
                       firstDate: DateTime(1975, 1, 1),
                       lastDate: now);
+
+                  if (result != null) {
+                    String formattedDate = DateFormat('dd/MM/y').format(result);
+
+                    _enteredBirthday = formattedDate;
+                    setState(() {
+                      dateinput.text = formattedDate;
+                    });
+                  }
                 },
               ),
               const SizedBox(height: 16),
@@ -216,21 +292,11 @@ class _RegisterFormState extends State<RegisterForm> {
                     fontWeight: FontWeight.w700,
                   )),
                 ),
-                onPressed: () {},
+                onPressed: _submit,
                 child: const Text("Sign up"),
               ),
               const SizedBox(height: 10),
-              //
-              // Row(
-              //   children: <Widget>[
-              //     const Text("Are you a doctor?"),
-              //     TextButton(
-              //       onPressed: () => widget.setFormStage(FormStage.DoctorRegister),
-              //       child: const Text("Register for doctor"),
-              //     ),
-              //   ],
-              // ),
-              //
+
               Row(
                 children: <Widget>[
                   const Text("Already has account?"),

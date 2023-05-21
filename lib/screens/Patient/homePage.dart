@@ -26,7 +26,7 @@ class _MyWidgetState extends State<HomePage> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(top: 24),
+          padding: const EdgeInsets.only(top: 16),
           child: SingleChildScrollView(
             child: FutureBuilder(
               future: Future.value(user),
@@ -46,6 +46,8 @@ class _MyWidgetState extends State<HomePage> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
                       }
+
+                      if (!snapshot.hasData) return Container();
 
                       final userDocs = snapshot.data!;
 
@@ -67,12 +69,15 @@ class _MyWidgetState extends State<HomePage> {
                                       fontWeight: FontWeight.bold,
                                       height: 1.1),
                                 ),
-                                SingleChildScrollView(
-                                  clipBehavior: Clip.none,
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(children: [
-                                    PersonalAppointment(),
-                                  ]),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Container(
+                                  child: const SizedBox(
+                                    width: double.infinity,
+                                    height: 140,
+                                    child: PersonalAppointment(),
+                                  ),
                                 ),
                                 const SizedBox(
                                   height: 24,
@@ -102,4 +107,3 @@ class _MyWidgetState extends State<HomePage> {
     );
   }
 }
-

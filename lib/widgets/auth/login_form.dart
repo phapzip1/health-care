@@ -28,15 +28,13 @@ class _LoginFormState extends State<LoginForm> {
   void _formSubmit() async {
     forgot = false;
     final valid = widget.formKey.currentState!.validate();
-    UserCredential authResult;
 
     if (valid) {
-      // login
       try {
         setState(() {
           _isLoading = true;
         });
-
+        UserCredential authResult;
         authResult = await _auth.signInWithEmailAndPassword(
             email: formData['Email'], password: formData['Password']);
       } on PlatformException catch (err) {

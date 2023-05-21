@@ -45,7 +45,6 @@ class _PatientSectionState extends State<PatientSection> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                ///here
                 if (!snapshot.hasData ||
                     snapshot.data == null ||
                     snapshot.data!.docs.isEmpty) {
@@ -55,7 +54,7 @@ class _PatientSectionState extends State<PatientSection> {
                 final scheduleDocs = snapshot.data!.docs;
 
                 return ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     itemCount: scheduleDocs.length,
                     itemBuilder: (ctx, index) => Container(
                           margin: const EdgeInsets.only(bottom: 8.0, top: 8.0),
@@ -71,15 +70,15 @@ class _PatientSectionState extends State<PatientSection> {
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           child: InkWell(
-                            onTap: () => {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ChatScreen(
-                                          scheduleDocs[index]['chatId'],
-                                          scheduleDocs[index]['name'],
-                                          scheduleDocs[index]['image_url'])))
-                            },
+                            // onTap: () => {
+                            //   Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (context) => ChatScreen(
+                            //               scheduleDocs[index]['chatId'],
+                            //               scheduleDocs[index]['name'],
+                            //               scheduleDocs[index]['image_url'])))
+                            // },
                             child: Padding(
                               padding: const EdgeInsets.all(16),
                               child: Column(
@@ -92,7 +91,7 @@ class _PatientSectionState extends State<PatientSection> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              scheduleDocs[index]['name'],
+                                              scheduleDocs[index]['doctor_name'],
                                               style: const TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w600,

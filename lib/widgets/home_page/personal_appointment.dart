@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
 class PersonalAppointment extends StatefulWidget {
   const PersonalAppointment({super.key});
 
@@ -43,19 +42,24 @@ class _PersonalAppointmentState extends State<PersonalAppointment> {
                 final appointmentDocs = snapShot.data!.docs;
 
                 return ListView.builder(
+                  scrollDirection: Axis.horizontal,
                   itemCount: appointmentDocs.length,
                   itemBuilder: (ctx, index) => Container(
-                    constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.7,
+                    decoration: const BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xFFC9C9C9),
+                          blurRadius: 1,
+                          spreadRadius: 1,
+                        ),
+                      ],
+                      color: Color(0xFFAEE6FF),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                
                     // ignore: sort_child_properties_last
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      color: const Color(0xFFAEE6FF),
-                      child: Padding(
+                    child: IntrinsicWidth(
+                      child:
+                          Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
@@ -64,8 +68,8 @@ class _PersonalAppointmentState extends State<PersonalAppointment> {
                               children: [
                                 CircleAvatar(
                                   radius: 28.0,
-                                  backgroundImage:
-                                      NetworkImage(appointmentDocs[index]['image_url']),
+                                  backgroundImage: NetworkImage(
+                                      appointmentDocs[index]['image_url']),
                                 ),
                                 const SizedBox(
                                   width: 16,
@@ -85,7 +89,8 @@ class _PersonalAppointmentState extends State<PersonalAppointment> {
                                     Text(
                                       appointmentDocs[index]['specialization'],
                                       style: const TextStyle(
-                                          color: Color(0xFF828282), fontSize: 16),
+                                          color: Color(0xFF828282),
+                                          fontSize: 16),
                                     ),
                                   ],
                                 ),
@@ -113,7 +118,8 @@ class _PersonalAppointmentState extends State<PersonalAppointment> {
                                     const SizedBox(
                                       width: 8,
                                     ),
-                                    Text(appointmentDocs[index]['time_meeting']),
+                                    Text(
+                                        appointmentDocs[index]['time_meeting']),
                                     const SizedBox(
                                       width: 8,
                                     ),
@@ -125,14 +131,6 @@ class _PersonalAppointmentState extends State<PersonalAppointment> {
                           ],
                         ),
                       ),
-                    ),
-                    decoration: const BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xFFE0E0E9),
-                          blurRadius: 10.0,
-                        ),
-                      ],
                     ),
                   ),
                 );

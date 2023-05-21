@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Center(
                         child: Container(
                           width: 258,
-                          height: dwidth/4,
+                          height: dwidth/3.5,
                           decoration: const BoxDecoration(
                             boxShadow: [
                               BoxShadow(
