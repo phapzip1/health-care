@@ -44,6 +44,7 @@ dependencies:
   image_picker: ^0.8.7+4
   firebase_storage: ^11.1.1
   firebase_messaging: ^14.4.1
+  flutter_local_notifications: ^14.1.0
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +86,17 @@ flutter:
     - assets/images/stomachache.png
     - assets/images/headache.png
     - assets/images/all.png
+    - assets/images/firstaidbox.png
+    - assets/images/onlinemeeting.png
+    - assets/images/clock.png
+    - assets/images/stethoscope.png
+    - assets/images/visa.png
+    - assets/images/paypal.png
+    - assets/images/alipay.png
+    - assets/images/pill_colored.png
+    - assets/images/morning.png
+    - assets/images/noon.png
+    - assets/images/evening.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
