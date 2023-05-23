@@ -21,7 +21,9 @@ class CardsAndWalletsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       FloatingActionButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                         backgroundColor: Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                         elevation: 1,

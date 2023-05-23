@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:health_care/screens/cards_and_wallets_screen.dart";
 
 
 class PaymentScreen extends StatelessWidget {
@@ -66,7 +67,7 @@ class PaymentScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         ListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
                           leading: Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: Image.asset(
@@ -88,7 +89,7 @@ class PaymentScreen extends StatelessWidget {
                           height: 1,
                         ),
                         ListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
                           leading: Padding(
                             padding: const EdgeInsets.only(top: 6),
                             child: Image.asset(
@@ -110,7 +111,7 @@ class PaymentScreen extends StatelessWidget {
                           height: 1,
                         ),
                         ListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
                           leading: Padding(
                             padding: const EdgeInsets.only(top: 6),
                             child: Image.asset(
@@ -132,7 +133,7 @@ class PaymentScreen extends StatelessWidget {
                           height: 1,
                         ),
                         ListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
                           leading: Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: Image.asset(
@@ -159,7 +160,13 @@ class PaymentScreen extends StatelessWidget {
                 left: 20,
                 right: 20,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          CardsAndWalletsScreen()));
+                  },
                   child: const Padding(
                     padding: EdgeInsetsDirectional.symmetric(vertical: 5),
                     child: Text(

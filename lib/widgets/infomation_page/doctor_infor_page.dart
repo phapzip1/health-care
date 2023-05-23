@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_care/screens/chat.dart';
 import 'package:health_care/widgets/comment_card.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,6 +22,36 @@ const List<String> time = [
   '11:00 AM',
   '11:45 AM'
 ];
+
+final user = FirebaseAuth.instance.currentUser;
+
+void _navigateChatScreen(context) async {
+  var _chatId;
+  var _doctor_name;
+  var _doctor_img;
+
+  await FirebaseFirestore.instance
+      .collection('patient')
+      .doc(user!.uid)
+      .collection('chats')
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    querySnapshot.docs.forEach((doc) {
+      _chatId = doc["chatId"];
+      _doctor_name = doc["doctor_name"];
+      _doctor_img = doc["doctor_img"];
+    });
+  });
+
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ChatScreen(
+                _chatId,
+                _doctor_name,
+                _doctor_img,
+              )));
+}
 
 Widget header(context) => Container(
       padding: const EdgeInsets.only(top: 8, right: 16, left: 16),
@@ -53,7 +85,8 @@ Widget header(context) => Container(
             ),
             child: Card(
               child: IconButton(
-                  onPressed: () {}, icon: const Icon(FontAwesomeIcons.message)),
+                  onPressed: () => _navigateChatScreen(context),
+                  icon: const Icon(FontAwesomeIcons.message)),
             ),
           ),
         ],
@@ -273,7 +306,9 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
 
                       return Column(
                         children: [
-                          header(context),
+                          header(
+                            context,
+                          ),
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
@@ -453,61 +488,52 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                               const SizedBox(
                                                 height: 16,
                                               ),
-                                              
-                                             StreamBuilder(
-                                                        stream: FirebaseFirestore
-                                                            .instance
-                                                            .collection('doctor')
-                                                            .doc(widget.doctorId)
-                                                            .collection('reviews')
-                                                            .snapshots(),
-                                                        builder:
-                                                            (ctx, snapshot) {
-                                                          if (snapshot
-                                                                  .connectionState ==
-                                                              ConnectionState
-                                                                  .waiting) {
-                                                            return const Center(
-                                                                child:
-                                                                    CircularProgressIndicator());
-                                                          }
+                                              StreamBuilder(
+                                                  stream: FirebaseFirestore
+                                                      .instance
+                                                      .collection('doctor')
+                                                      .doc(widget.doctorId)
+                                                      .collection('reviews')
+                                                      .snapshots(),
+                                                  builder: (ctx, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return const Center(
+                                                          child:
+                                                              CircularProgressIndicator());
+                                                    }
 
-                                                          if (!snapshot
-                                                                  .hasData ||
-                                                              snapshot.data ==
-                                                                  null ||
-                                                              snapshot
-                                                                  .data!
-                                                                  .docs
-                                                                  .isEmpty) {
-                                                            return Container();
-                                                          }
+                                                    if (!snapshot.hasData ||
+                                                        snapshot.data == null ||
+                                                        snapshot.data!.docs
+                                                            .isEmpty) {
+                                                      return Container();
+                                                    }
 
-                                                          final comment =
-                                                              snapshot
-                                                                  .data!.docs;
+                                                    final comment =
+                                                        snapshot.data!.docs;
 
-                                                          return Container(
-                                                            width:
-                                                                double.infinity,
-                                                            height: mediaQuery
-                                                                    .width *
-                                                                0.5,
-                                                            child: ListView
-                                                                .builder(
-                                                                    itemCount:
-                                                                        comment
-                                                                            .length,
-                                                                    itemBuilder:
-                                                                        (context,
-                                                                            index) {
-                                                                      return CommendCard(comment[index]['reviewId'], 
-                                                                      comment[index]['patient_name'],
-                                                                      comment[index]['image_url']);
-                                                                    }),
-                                                          );
-                                                        })
-                                                  
+                                                    return Container(
+                                                      width: double.infinity,
+                                                      height: mediaQuery.width *
+                                                          0.5,
+                                                      child: ListView.builder(
+                                                          itemCount:
+                                                              comment.length,
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            return CommendCard(
+                                                                comment[index][
+                                                                    'reviewId'],
+                                                                comment[index][
+                                                                    'patient_name'],
+                                                                comment[index][
+                                                                    'image_url']);
+                                                          }),
+                                                    );
+                                                  })
                                             ]),
                                       ),
                                     ]),
