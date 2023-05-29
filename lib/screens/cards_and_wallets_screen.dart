@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
 
 class CardsAndWalletsScreen extends StatelessWidget {
-  const CardsAndWalletsScreen({super.key});
+  final String price;
+  const CardsAndWalletsScreen(this.price, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class CardsAndWalletsScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
-            vertical: 24,
+            vertical: 16,
           ),
           child: Stack(
             children: <Widget>[
@@ -21,16 +22,21 @@ class CardsAndWalletsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       FloatingActionButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                         backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
                         elevation: 1,
-                        child: const Icon(Icons.arrow_back, color: Colors.black),
+                        child:
+                            const Icon(Icons.arrow_back, color: Colors.black),
                       ),
                       const SizedBox(width: 22),
                       const Text(
                         "Payment method",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -39,8 +45,8 @@ class CardsAndWalletsScreen extends StatelessWidget {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const <Widget>[
-                      Text(
+                    children: <Widget>[
+                      const Text(
                         "Fee of consultance:",
                         style: TextStyle(
                           fontSize: 20,
@@ -49,8 +55,8 @@ class CardsAndWalletsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "150000VND",
-                        style: TextStyle(
+                        price,
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
                           color: Color(0xFFEB5757),
@@ -62,9 +68,7 @@ class CardsAndWalletsScreen extends StatelessWidget {
                     height: 24,
                   ),
                   ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: screenHeight * 0.45
-                    ),
+                    constraints: BoxConstraints(maxHeight: screenHeight * 0.45),
                     child: ListView(
                       children: <Widget>[
                         const Padding(
@@ -104,7 +108,7 @@ class CardsAndWalletsScreen extends StatelessWidget {
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 8),
-                          child:  Text(
+                          child: Text(
                             "E-Wallets",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -167,7 +171,8 @@ class CardsAndWalletsScreen extends StatelessWidget {
                       flex: 3,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.grey),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.grey),
                         ),
                         onPressed: () {},
                         child: const Padding(
@@ -189,7 +194,8 @@ class CardsAndWalletsScreen extends StatelessWidget {
                       flex: 7,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.blue),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.blue),
                         ),
                         onPressed: () {},
                         child: const Padding(

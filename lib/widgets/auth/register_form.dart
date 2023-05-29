@@ -116,6 +116,7 @@ class _RegisterFormState extends State<RegisterForm> {
       child: Form(
         key: widget.formkey,
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[

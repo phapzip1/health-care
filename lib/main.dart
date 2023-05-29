@@ -273,6 +273,7 @@ class MyWidget extends StatelessWidget {
         builder: (ctx, userSnapShot) {
           if (userSnapShot.hasData) {
             return PatientMainPage();
+            // return PaymentScreen();
           }
           return LoginScreen();
         },

@@ -1,8 +1,12 @@
 import "package:flutter/material.dart";
+import "package:health_care/screens/cards_and_wallets_screen.dart";
 
 
 class PaymentScreen extends StatelessWidget {
-  const PaymentScreen({super.key});
+  final String price;
+  // final String name;
+  // final String patient_img;
+  const PaymentScreen(this.price, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +70,7 @@ class PaymentScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         ListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
                           leading: Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: Image.asset(
@@ -88,7 +92,7 @@ class PaymentScreen extends StatelessWidget {
                           height: 1,
                         ),
                         ListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
                           leading: Padding(
                             padding: const EdgeInsets.only(top: 6),
                             child: Image.asset(
@@ -110,7 +114,7 @@ class PaymentScreen extends StatelessWidget {
                           height: 1,
                         ),
                         ListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
                           leading: Padding(
                             padding: const EdgeInsets.only(top: 6),
                             child: Image.asset(
@@ -122,9 +126,9 @@ class PaymentScreen extends StatelessWidget {
                             "Cost",
                             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
                           ),
-                          subtitle: const Text(
-                            "100000VND",
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                          subtitle: Text(
+                            price + " vnd",
+                            style:const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
                           ),
                         ),
                         const Divider(
@@ -132,7 +136,7 @@ class PaymentScreen extends StatelessWidget {
                           height: 1,
                         ),
                         ListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
                           leading: Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: Image.asset(
@@ -159,7 +163,13 @@ class PaymentScreen extends StatelessWidget {
                 left: 20,
                 right: 20,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          CardsAndWalletsScreen(price)));
+                  },
                   child: const Padding(
                     padding: EdgeInsetsDirectional.symmetric(vertical: 5),
                     child: Text(

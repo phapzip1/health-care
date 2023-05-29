@@ -12,8 +12,43 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Chat App'),
+        titleSpacing: 0,
+        backgroundColor: Colors.white,
+        title: Row(
+          children: [
+            CircleAvatar(
+              backgroundImage: NetworkImage(userImage),
+            ),
+            const SizedBox(
+              width: 4,
+            ),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.only(left: 4),
+                child: Text(
+                  username,
+                  style: const TextStyle(color: Colors.black, fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
+        ///////// here
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.phone),
+            color: Colors.black,
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.camera),
+            color: Colors.black,
+          ),
+        ],
+        leading: const BackButton(
+          color: Colors.black,
+        ),
       ),
       body: Container(
         child: Column(children: [

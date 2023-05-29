@@ -5,6 +5,9 @@ import '../../models/patient_info.dart';
 import '../../widgets/home_page/appointment_list_doctor.dart';
 import 'package:intl/intl.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 class HomePageDoctor extends StatefulWidget {
   const HomePageDoctor({super.key});
 
@@ -20,6 +23,8 @@ class _HomePageDoctor extends State<HomePageDoctor> {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     final List<DoctorAppointment> appointmentList = [
       DoctorAppointment(
           formattedDate.toString(),
@@ -93,50 +98,83 @@ class _HomePageDoctor extends State<HomePageDoctor> {
       child: Padding(
         padding: const EdgeInsets.only(top: 24),
         child: SingleChildScrollView(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  HeaderSection(
-                      url: 'assets/images/avatartUser.jpg',
-                      userName: 'Anna Baker'),
-                  Container(
-                    margin: const EdgeInsets.only(top: 24, bottom: 24),
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: 'Search...',
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.clear),
-                          onPressed: () => _searchController.clear(),
-                        ),
-                        prefixIcon: IconButton(
-                          icon: const Icon(Icons.search),
-                          onPressed: () {
-                            // Perform the search here
-                          },
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                      ),
-                    ),
-                  ),
+          child: FutureBuilder(
+              future: Future.value(user!.uid),
+              builder: (ctx, futureSnapshot) {
+                if (futureSnapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-                  // Appointment list
-                  const Text(
-                    'My Appointment',
-                    style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
-                  ),
-                ],
-              ),
-            ),
-            AppointmentListDoctor(appointmentList: appointmentList)
-          ]),
+                return StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('doctor')
+                        .doc(user.uid)
+                        .snapshots(),
+                    builder: (ctx, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (!snapshot.hasData) return Container();
+
+                      final userDocs = snapshot.data!;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                HeaderSection(
+                                    url: userDocs['image_url'],
+                                    userName: userDocs['doctor_name']),
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 24, bottom: 24),
+                                  child: TextField(
+                                    controller: _searchController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Search...',
+                                      suffixIcon: IconButton(
+                                        icon: const Icon(Icons.clear),
+                                        onPressed: () =>
+                                            _searchController.clear(),
+                                      ),
+                                      prefixIcon: IconButton(
+                                        icon: const Icon(Icons.search),
+                                        onPressed: () {
+                                          // Perform the search here
+                                        },
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                // Appointment list
+                                const Text(
+                                  'My Appointment',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.1),
+                                ),
+                              ],
+                            ),
+                          ),
+                          AppointmentListDoctor(
+                              appointmentList: appointmentList)
+                        ],
+                      );
+                    });
+              }),
         ),
       ),
     ));

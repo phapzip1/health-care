@@ -91,7 +91,8 @@ class _PatientSectionState extends State<PatientSection> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              scheduleDocs[index]['doctor_name'],
+                                              scheduleDocs[index]
+                                                  ['doctor_name'],
                                               style: const TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w600,
@@ -197,7 +198,14 @@ class _PatientSectionState extends State<PatientSection> {
                                                     const Color(0xFFE0E0E0),
                                                 elevation: 0,
                                               ),
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                FirebaseFirestore.instance
+                                                    .collection('patient')
+                                                    .doc(user!.uid)
+                                                    .collection('schedule')
+                                                    .doc(scheduleDocs[index].id)
+                                                    .delete();
+                                              },
                                               child: Container(
                                                 width: double.infinity,
                                                 child: Row(
