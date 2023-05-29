@@ -3,7 +3,10 @@ import "package:health_care/screens/cards_and_wallets_screen.dart";
 
 
 class PaymentScreen extends StatelessWidget {
-  const PaymentScreen({super.key});
+  final String price;
+  // final String name;
+  // final String patient_img;
+  const PaymentScreen(this.price, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -123,9 +126,9 @@ class PaymentScreen extends StatelessWidget {
                             "Cost",
                             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
                           ),
-                          subtitle: const Text(
-                            "100000VND",
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                          subtitle: Text(
+                            price + " vnd",
+                            style:const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
                           ),
                         ),
                         const Divider(
@@ -165,7 +168,7 @@ class PaymentScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          CardsAndWalletsScreen()));
+                                          CardsAndWalletsScreen(price)));
                   },
                   child: const Padding(
                     padding: EdgeInsetsDirectional.symmetric(vertical: 5),

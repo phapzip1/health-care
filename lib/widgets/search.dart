@@ -8,7 +8,7 @@ class Search extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 32, bottom: 32),
+      margin: const EdgeInsets.only(top: 16, bottom: 16),
       child: TextField(
         controller: searchController,
         decoration: InputDecoration(

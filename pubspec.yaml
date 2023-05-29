@@ -82,7 +82,9 @@ flutter:
     - assets/images/calendar.png
     - assets/images/user.png
     - assets/images/clock_outline.png
-    - assets/images/sneezing.png
+    - assets/images/brain.png
+    - assets/images/bone.png
+    - assets/images/joint.png
     - assets/images/stomachache.png
     - assets/images/headache.png
     - assets/images/all.png
@@ -97,6 +99,11 @@ flutter:
     - assets/images/morning.png
     - assets/images/noon.png
     - assets/images/evening.png
+    - assets/images/doctor.png
+    - assets/images/chat.png
+    - assets/images/question.png
+    - assets/images/insurance.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,14 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_care/screens/cards_and_wallets_screen.dart';
 import 'package:health_care/screens/chat.dart';
+import 'package:health_care/screens/payment_screen.dart';
 import 'package:health_care/widgets/comment_card.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DoctorInforPage extends StatefulWidget {
   const DoctorInforPage(this.doctorId, {super.key});
-  final doctorId;
+  final String doctorId;
+  // final String userName;
 
   @override
   State<DoctorInforPage> createState() => _DoctorInforPageState();
@@ -24,74 +27,6 @@ const List<String> time = [
 ];
 
 final user = FirebaseAuth.instance.currentUser;
-
-void _navigateChatScreen(context) async {
-  var _chatId;
-  var _doctor_name;
-  var _doctor_img;
-
-  await FirebaseFirestore.instance
-      .collection('patient')
-      .doc(user!.uid)
-      .collection('chats')
-      .get()
-      .then((QuerySnapshot querySnapshot) {
-    querySnapshot.docs.forEach((doc) {
-      _chatId = doc["chatId"];
-      _doctor_name = doc["doctor_name"];
-      _doctor_img = doc["doctor_img"];
-    });
-  });
-
-  Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ChatScreen(
-                _chatId,
-                _doctor_name,
-                _doctor_img,
-              )));
-}
-
-Widget header(context) => Container(
-      padding: const EdgeInsets.only(top: 8, right: 16, left: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(FontAwesomeIcons.chevronLeft)),
-          const Text(
-            'Doctor Profile',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xFFE0E0E0),
-                  blurRadius: 6,
-                  spreadRadius: 1,
-                ),
-              ],
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-            ),
-            child: Card(
-              child: IconButton(
-                  onPressed: () => _navigateChatScreen(context),
-                  icon: const Icon(FontAwesomeIcons.message)),
-            ),
-          ),
-        ],
-      ),
-    );
 
 Widget upperPart(doctor) => StreamBuilder(
     stream: FirebaseFirestore.instance
@@ -281,6 +216,23 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
     final mediaQuery = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Doctor Profile',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: const BackButton(
+          color: Colors.black, // <-- SEE HERE
+        ),
+      ),
       body: SafeArea(
           child: FutureBuilder(
               future: Future.value(widget.doctorId),
@@ -306,9 +258,6 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
 
                       return Column(
                         children: [
-                          header(
-                            context,
-                          ),
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
@@ -468,6 +417,30 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                               );
                                             }),
                                       ),
+                                      const SizedBox(
+                                        height: 16,
+                                      ),
+                                      ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 16, vertical: 12),
+                                          ),
+                                          onPressed: () {
+                                            //payment screen
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PaymentScreen(
+                                                            userDocs['price']
+                                                                .toString())));
+                                          },
+                                          child: const Text(
+                                            'Make appointment',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
+                                          )),
                                       const SizedBox(
                                         height: 16,
                                       ),

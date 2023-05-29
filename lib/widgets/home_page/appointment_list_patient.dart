@@ -123,12 +123,6 @@ class AppointmentListPatient extends StatelessWidget {
                                                       .toString()),
                                                 ],
                                               ),
-                                              // Text(
-                                              //   doctorList[index]['reviews'],
-                                              //   style: TextStyle(
-                                              //       fontSize: 16,
-                                              //       color: Color(0xFF828282)),
-                                              // ), 
                                             ],
                                           ),
                                         ],
