@@ -13,7 +13,7 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<BottomNavBar> {
-  static const a = true;
+  
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(

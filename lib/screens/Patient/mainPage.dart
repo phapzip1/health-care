@@ -8,6 +8,8 @@ import '../../components/bottomNavigation.dart';
 import '../../screens/Patient/patientInformation.dart';
 
 class PatientMainPage extends StatefulWidget {
+  final String id;
+  PatientMainPage(this.id);
   @override
   State<PatientMainPage> createState() => _MyWidgetState();
 }
@@ -15,14 +17,24 @@ class PatientMainPage extends StatefulWidget {
 class _MyWidgetState extends State<PatientMainPage> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    // HomePageDoctor(),
-    // CommunityQA(),
-    PatientSchedulePage(),
-    // DoctorInformation(),
-    PatientInformation()
-  ];
+  // final List<Widget> _widgetOptions = <Widget>[
+  //   HomePage(),
+  //   PatientSchedulePage(),
+  //   PatientInformation()
+  // ];
+  
+  Widget currentPage(int index) {
+    switch (index) {
+      case 0:
+        return HomePage(widget.id);
+      case 1:
+        return PatientSchedulePage(widget.id);
+      case 2:
+        return PatientInformation(widget.id);
+      default:
+        return HomePage(widget.id);
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -34,7 +46,7 @@ class _MyWidgetState extends State<PatientMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: currentPage(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavBar(_selectedIndex, _onItemTapped),
     );

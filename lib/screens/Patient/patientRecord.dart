@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class PatientRecords extends StatefulWidget {
-  const PatientRecords({super.key});
+  final String id;
+  const PatientRecords(this.id, {super.key});
 
   @override
   State<PatientRecords> createState() => _PatientRecordsState();
@@ -39,8 +40,6 @@ class _PatientRecordsState extends State<PatientRecords> {
 
               if (!snapshot.hasData) return Container();
 
-              // final userDocs = snapshot.data!;
-              
               return Container();
             });
           },

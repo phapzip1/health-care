@@ -11,8 +11,11 @@ class DoctorModel {
   Gender gender;
   DateTime birthdate;
   String email;
+  String field;
   int experience;
   int price;
+  String workplace;
+  String specialization;
   Map<String, dynamic> availableTime;
 
   static final CollectionReference _ref = FirebaseFirestore.instance.collection("doctor");
@@ -21,12 +24,15 @@ class DoctorModel {
     this.id,
     this.name,
     this.phoneNumber,
-    this.image,
     this.gender,
     this.birthdate,
     this.email,
+    this.field,
     this.experience,
     this.price,
+    this.workplace,
+    this.specialization,
+    this.image,
     this.availableTime,
   );
 
@@ -38,11 +44,47 @@ class DoctorModel {
         "gender": gender.name,
         "birthdate": Timestamp.fromDate(birthdate),
         "email": email,
+        "field": field,
+        "experience": experience,
+        "price": price,
+        "workplace": workplace,
+        "specialization": specialization,
         "image": image,
         "available_time": availableTime,
       });
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  static Gender toGenderEnum(String val) {
+    switch (val) {
+      case "male":
+        return Gender.male;
+      case "female":
+        return Gender.female;
+      default:
+        return Gender.other;
+    }
+  }
+
+  static Future<DoctorModel> getById(String id) async {
+    final snapshot = await _ref.doc(id).get();
+
+    return DoctorModel(
+      snapshot.id,
+      snapshot.get("name"),
+      snapshot.get("phone_number"),
+      toGenderEnum(snapshot.get("gender") as String),
+      (snapshot.get("birthdate") as Timestamp).toDate(),
+      snapshot.get("email"),
+      snapshot.get("field"),
+      snapshot.get("experience"),
+      snapshot.get("price"),
+      snapshot.get("workplace"),
+      snapshot.get("specialization"),
+      snapshot.get("image"),
+      snapshot.get("available_time"),
+    );
   }
 }

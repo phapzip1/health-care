@@ -59,9 +59,9 @@ class HeaderSection extends StatelessWidget {
                     value: 'logout',
                   )
                 ],
-                onChanged: (itemIdentifier) {
+                onChanged: (itemIdentifier) async {
                   if (itemIdentifier == 'logout') {
-                    FirebaseAuth.instance.signOut();
+                    await FirebaseAuth.instance.signOut();
                   }
                 },
               ),

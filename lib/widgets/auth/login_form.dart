@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../../utils/formstage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class LoginForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
@@ -35,8 +33,12 @@ class _LoginFormState extends State<LoginForm> {
           _isLoading = true;
         });
         UserCredential authResult;
+
         authResult = await _auth.signInWithEmailAndPassword(
             email: formData['Email'], password: formData['Password']);
+
+        print(authResult.user!.uid);
+
       } on PlatformException catch (err) {
         var message = 'An error occured, please check your credential';
         if (err.message != null) {
