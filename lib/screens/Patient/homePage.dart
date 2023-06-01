@@ -11,9 +11,8 @@ import 'package:health_care/widgets/header_section.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage(this.id, {super.key});
+  HomePage({super.key});
 
-  final String id;
 
   final user = FirebaseAuth.instance.currentUser;
 
@@ -41,6 +40,15 @@ class HomePage extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   );
                 }
+
+                final patient = PatientModel(
+                    user!.uid,
+                    futureSnapShot.data!.name,
+                    futureSnapShot.data!.phoneNumber,
+                    futureSnapShot.data!.gender,
+                    futureSnapShot.data!.birthdate,
+                    futureSnapShot.data!.email,
+                    futureSnapShot.data!.image);
 
                 return Column(
                   children: [

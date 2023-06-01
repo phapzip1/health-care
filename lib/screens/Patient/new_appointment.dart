@@ -37,9 +37,17 @@ class _NewAppointmentState extends State<NewAppointment> {
       appBar: AppBar(
         title: const Text(
           'Make Appointment',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
         ),
         centerTitle: true,
+        backgroundColor: Colors.white,
+        leading: const BackButton(
+          color: Colors.black,
+        ),
       ),
       body: Column(
         children: [

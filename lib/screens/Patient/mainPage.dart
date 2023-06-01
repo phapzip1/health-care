@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:health_care/screens/communityQA.dart';
-import '../../screens/Doctor/homePageDoctor.dart';
-import '../../screens/Doctor/doctorInformation.dart';
 import '../../screens/Patient/homePage.dart';
 import './patientSchedulePage.dart';
 import '../../components/bottomNavigation.dart';
@@ -26,13 +23,13 @@ class _MyWidgetState extends State<PatientMainPage> {
   Widget currentPage(int index) {
     switch (index) {
       case 0:
-        return HomePage(widget.id);
+        return HomePage();
       case 1:
         return PatientSchedulePage(widget.id);
       case 2:
         return PatientInformation(widget.id);
       default:
-        return HomePage(widget.id);
+        return HomePage();
     }
   }
 

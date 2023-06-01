@@ -1,8 +1,52 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
+import "package:health_care/models/appointment_model.dart";
+import "package:health_care/models/doctor_model.dart";
+import "package:health_care/models/patient_model.dart";
+import 'package:fluttertoast/fluttertoast.dart';
+import "package:health_care/screens/Patient/homePage.dart";
 
 class CardsAndWalletsScreen extends StatelessWidget {
-  final String price;
-  const CardsAndWalletsScreen(this.price, {super.key});
+  final DoctorModel doctor;
+  final PatientModel patient;
+
+  const CardsAndWalletsScreen(this.doctor, this.patient, {super.key});
+
+  void _makeAppointment(context) async {
+    final currentAppointment = AppointmentModel.create(
+        doctor.id.toString(),
+        doctor.name,
+        doctor.phoneNumber,
+        doctor.image,
+        patient.id.toString(),
+        patient.name,
+        patient.phoneNumber,
+        patient.image,
+        doctor.specialization,
+        DateTime.now(),
+        false);
+
+    await currentAppointment.save().then((value) {
+      Fluttertoast.showToast(
+        msg: "Make appointment successfully",
+        toastLength: Toast.LENGTH_LONG,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.greenAccent,
+        textColor: Colors.black,
+      );
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
+    }).catchError((error) {
+      Fluttertoast.showToast(
+        msg: "Failed to make appointment",
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +99,7 @@ class CardsAndWalletsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        price,
+                        "${doctor.price} vnd",
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
@@ -197,7 +241,9 @@ class CardsAndWalletsScreen extends StatelessWidget {
                           backgroundColor:
                               MaterialStateProperty.all(Colors.blue),
                         ),
-                        onPressed: () {},
+
+                        /// make appointment successfully
+                        onPressed: () => _makeAppointment(context),
                         child: const Padding(
                           padding: EdgeInsetsDirectional.symmetric(vertical: 5),
                           child: Text(

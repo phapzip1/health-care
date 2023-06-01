@@ -13,6 +13,8 @@ import 'package:flutter/services.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 
+import 'package:fluttertoast/fluttertoast.dart';
+
 class RegisterForm extends StatefulWidget {
   final GlobalKey<FormState> formkey;
   final Function setFormStage;
@@ -86,6 +88,16 @@ class _RegisterFormState extends State<RegisterForm> {
 
     } on PlatformException catch (err) {
       var message = 'An error occured, please check your credential';
+
+      Fluttertoast.showToast(
+          msg: message,
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
       if (err.message != null) {
         message = err.message.toString();
       }
@@ -97,6 +109,14 @@ class _RegisterFormState extends State<RegisterForm> {
         ),
       );
     } catch (err) {
+      Fluttertoast.showToast(
+          msg: "Register unsuccessfully!",
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       print(err);
     }
   }

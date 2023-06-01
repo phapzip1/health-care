@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:health_care/models/patient_model.dart';
 import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class UpdatePatientInfo extends StatefulWidget {
   const UpdatePatientInfo({super.key});
@@ -107,13 +108,21 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
           'gender': _enteredGender,
           'birthday': _enteredBirthday
         })
-        .then((value) => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Update successfully'),
-                backgroundColor: Colors.grey,
-              ),
+        .then((value) => Fluttertoast.showToast(
+              msg: "Update successfully",
+              toastLength: Toast.LENGTH_SHORT,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.greenAccent,
+              textColor: Colors.black,
             ))
-        .catchError((error) => print("Failed to update user: $error"));
+        // ignore: invalid_return_type_for_catch_error, avoid_print
+        .catchError((error) => Fluttertoast.showToast(
+              msg: "Failed to update user",
+              toastLength: Toast.LENGTH_SHORT,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+            ));
     ;
   }
 
@@ -269,8 +278,7 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
                           //   _enteredBirthday = value.toString();
                           // },
                           onTap: () async {
-                            FocusScope.of(context)
-                                .requestFocus(new FocusNode());
+                            FocusScope.of(context).requestFocus(FocusNode());
 
                             final result = await showDatePicker(
                                 context: context,

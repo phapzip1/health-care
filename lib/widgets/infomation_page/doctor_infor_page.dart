@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/models/doctor_model.dart';
+import 'package:health_care/models/patient_model.dart';
 import 'package:health_care/screens/payment_screen.dart';
 import 'package:health_care/widgets/comment_card.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +11,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class DoctorInforPage extends StatefulWidget {
   const DoctorInforPage(this.doctorId, {super.key});
   final String doctorId;
-  // final String userName;
 
   @override
   State<DoctorInforPage> createState() => _DoctorInforPageState();
@@ -38,11 +38,11 @@ Widget upperPart(doctor) => Card(
               backgroundColor: Colors.white,
               child: CircleAvatar(
                 radius: 48.0,
-                backgroundImage: NetworkImage(doctor['image']),
+                backgroundImage: NetworkImage(doctor.image),
               ),
             ),
             Text(
-              doctor['doctor_name'],
+              doctor.name,
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -99,7 +99,7 @@ Widget upperPart(doctor) => Card(
               height: 16,
             ),
             Text(
-              doctor['workplace'],
+              doctor.workplace,
               style: const TextStyle(
                   fontWeight: FontWeight.bold, color: Color(0xFF828282)),
             ),
@@ -114,7 +114,7 @@ Widget upperPart(doctor) => Card(
                 color: const Color(0xFFAEE6FF).withOpacity(0.5),
               ),
               child: Text(
-                doctor['specialization'],
+                doctor.specialization,
                 style: const TextStyle(
                     fontWeight: FontWeight.w600, color: Color(0xFF3A86FF)),
               ),
@@ -132,7 +132,7 @@ Widget upperPart(doctor) => Card(
                   ),
                 ),
                 Text(
-                  doctor['price'].toString(),
+                  doctor.price.toString(),
                   style: const TextStyle(
                       color: Color(0xFF3A86FF), fontWeight: FontWeight.bold),
                 )
@@ -141,7 +141,7 @@ Widget upperPart(doctor) => Card(
             const SizedBox(
               height: 16,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Column(
@@ -161,15 +161,15 @@ Widget upperPart(doctor) => Card(
                 ),
                 Column(
                   children: [
-                    const Text(
+                    Text(
                       'Consultations',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF828282)),
                     ),
                     Text(
-                      doctor['patient_checked'].toString(),
-                      style: const TextStyle(
+                      '1',
+                      style: TextStyle(
                           fontWeight: FontWeight.w600, color: Colors.red),
                     )
                   ],
@@ -221,10 +221,7 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
       ),
       body: SafeArea(
           child: FutureBuilder(
-              future: FirebaseFirestore.instance
-                  .collection('doctor')
-                  .doc(widget.doctorId)
-                  .get(),
+              future: DoctorModel.getById(widget.doctorId),
               builder: (ctx, futureSnapShot) {
                 if (futureSnapShot.connectionState == ConnectionState.waiting) {
                   return const Center(
@@ -235,6 +232,22 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                 if (!futureSnapShot.hasData) return Container();
 
                 final userDocs = futureSnapShot.data!;
+
+                final doctor = DoctorModel(
+                    userDocs.id,
+                    userDocs.name,
+                    userDocs.phoneNumber,
+                    userDocs.gender,
+                    userDocs.birthdate,
+                    userDocs.email,
+                    userDocs.field,
+                    userDocs.experience,
+                    userDocs.price,
+                    userDocs.workplace,
+                    userDocs.specialization,
+                    userDocs.image,
+                    userDocs.availableTime);
+                
 
                 return Column(
                   children: [
@@ -274,7 +287,7 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                             style: TextStyle(),
                                           ),
                                           Text(
-                                            '${userDocs['experience']} years',
+                                            '${userDocs.experience} years',
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.bold),
                                           )
@@ -401,15 +414,13 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  PaymentScreen(
-                                                      userDocs['price']
-                                                          .toString())));
+                                                  PaymentScreen(doctor)));
                                     },
                                     child: const Text(
                                       'Make appointment',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 20),
+                                          fontSize: 16),
                                     )),
                                 const SizedBox(
                                   height: 16,
