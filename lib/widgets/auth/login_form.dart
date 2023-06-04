@@ -70,8 +70,8 @@ class _LoginFormState extends State<LoginForm> {
           msg: "Login unsuccessfully!",
           toastLength: Toast.LENGTH_SHORT,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.greenAccent,
-          textColor: Colors.black,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
           fontSize: 16.0,
         );
 

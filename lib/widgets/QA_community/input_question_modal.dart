@@ -1,12 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health_care/models/post_model.dart';
 import 'package:health_care/models/symptom.dart';
 import 'package:health_care/screens/communityQA.dart';
-import 'package:health_care/widgets/button_section.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class InputQuestionModal extends StatefulWidget {
   const InputQuestionModal({super.key});
@@ -17,11 +19,17 @@ class InputQuestionModal extends StatefulWidget {
 
 class _InputQuestionModalState extends State<InputQuestionModal> {
   final _textController = TextEditingController();
+  final userId = FirebaseAuth.instance.currentUser!;
+  int _gender = 0;
+
   dynamic _selectedValue;
   List<bool> _isSelected = [true, false, false];
   double _value = 20;
   File? _pickImageFile;
   bool _light = false;
+  bool _isLoading = false;
+
+  List<File> _fileImage = [];
 
   @override
   void initState() {
@@ -37,12 +45,52 @@ class _InputQuestionModalState extends State<InputQuestionModal> {
   ];
 
   void _submitData() async {
-    // await PostModel(postId, specialization, doctorId, doctorName, doctorImage, closed)
-    // await PostModel.post().then((value) => Navigator.push(
-    //     context, MaterialPageRoute(builder: (context) => CommunityQA())));
-  }
+    setState(() {
+      _isLoading = true;
+    });
+    List<String>? images = [];
+    for (int i = 0; i < _fileImage.length; i++) {
+      final ref_img = FirebaseStorage.instance
+          .ref()
+          .child('user_image')
+          .child('${userId.uid}/${userId.email}')
+          .child('post_image_${userId.uid}_${i}.jpg');
 
-  List<File> _fileImage = [];
+      await ref_img.putFile(File(_fileImage[i].path));
+
+      final url = await ref_img.getDownloadURL();
+      images.add(url);
+    }
+
+    await PostModel.create(
+            userId.uid,
+            _selectedValue,
+            _value.round(),
+            _textController.text,
+            _gender,
+            "",
+            "",
+            "",
+            _light,
+            DateTime.now(),
+            images)
+        .post()
+        .onError((error, stackTrace) => Fluttertoast.showToast(
+              msg: "Post unsuccessfully!",
+              toastLength: Toast.LENGTH_SHORT,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0,
+            ))
+        .then((value) {
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => CommunityQA()));
+    });
+  }
 
   void _pickImage() async {
     final ImagePicker picker = ImagePicker();
@@ -127,7 +175,8 @@ class _InputQuestionModalState extends State<InputQuestionModal> {
                         borderRadius: BorderRadius.circular(30),
                         children: const [
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 16),
                             child: Text('Men'),
                           ),
                           Padding(
@@ -135,12 +184,12 @@ class _InputQuestionModalState extends State<InputQuestionModal> {
                             child: Text('Women'),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 16),
                             child: Text('Other'),
                           ),
                         ],
                         onPressed: (int newIndex) {
-                          //return choice
                           setState(() {
                             for (int index = 0;
                                 index < _isSelected.length;
@@ -151,6 +200,7 @@ class _InputQuestionModalState extends State<InputQuestionModal> {
                                 _isSelected[index] = false;
                               }
                             }
+                            _gender = newIndex;
                           });
                         },
                       ),
@@ -345,21 +395,32 @@ class _InputQuestionModalState extends State<InputQuestionModal> {
                       )),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 4)),
-                      onPressed: () {},
-                      child: const Row(
-                        children: [
-                          Text(
-                            'Send',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Icon(Icons.send)
-                        ],
-                      )),
+                        backgroundColor: _textController.text.isNotEmpty
+                            ? const Color(0xFF3A86FF)
+                            : const Color(0xFF3A86FF).withOpacity(0.5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 4),
+                      ),
+                      onPressed:
+                          _textController.text.isNotEmpty ? _submitData : null,
+                      child: _isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Row(
+                              children: [
+                                Text(
+                                  'Send',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Icon(Icons.send)
+                              ],
+                            )),
                 ],
               ),
             ),

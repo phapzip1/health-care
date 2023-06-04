@@ -81,7 +81,8 @@ flutter:
     - assets/images/edit.png
     - assets/images/gender.png
     - assets/images/birthday.png
-    - assets/images/avatartUser.jpg
+    # - assets/images/avatartUser.jpg
+    - assets/images/avatartUser.png
     - assets/images/calendar.png
     - assets/images/user.png
     - assets/images/clock_outline.png

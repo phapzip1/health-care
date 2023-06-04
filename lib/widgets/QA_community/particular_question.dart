@@ -1,90 +1,105 @@
 import 'package:flutter/material.dart';
-import 'package:health_care/screens/communityQA.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_care/models/post_model.dart';
+import 'package:health_care/screens/chat.dart';
+import 'package:intl/intl.dart';
 
 class ParticularQuestion extends StatelessWidget {
   const ParticularQuestion(this.question, {super.key});
-  final QuestionCard question;
+  final PostModel question;
 
-  Widget questionSection(question) => Padding(
-        padding:
-            const EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 10),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(
-            children: [
-              const CircleAvatar(
-                radius: 26.0,
-                backgroundImage: AssetImage('assets/images/avatartUser.jpg'),
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    question.gender + ", " + question.age.toString() + " aged",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    question.date,
-                    style: TextStyle(color: Color(0xFF828282)),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Text(question.mainContext),
-          const SizedBox(
-            height: 16,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-            decoration: BoxDecoration(
-                color: Color(0xFFAEE6FF).withOpacity(0.5),
-                borderRadius: BorderRadius.all(Radius.circular(20))),
-            child: Text(
-              question.relativeField,
-              style: TextStyle(
-                  color: Color(0xFF3A86FF), fontWeight: FontWeight.w600),
+  Widget questionSection(PostModel question) {
+    String gender = question.gender == 0
+        ? "Male"
+        : question.gender == 1
+            ? "Female"
+            : "Other";
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 10),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(
+          children: [
+            const CircleAvatar(
+              radius: 26.0,
+              backgroundImage: AssetImage('assets/images/avatartUser.png'),
             ),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Container(
-            padding: EdgeInsets.all(8),
-            color: Color(0xFFAEE6FF).withOpacity(0.5),
-            child: Row(
+            const SizedBox(
+              width: 16,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CircleAvatar(
-                  radius: 24.0,
-                  backgroundImage: AssetImage('assets/images/avatartUser.jpg'),
+                Text(
+                  "$gender, ${question.age} aged",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Answered by'),
-                    Text(
-                      question.doctorAnswered,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                Text(
+                  DateFormat('dd/MM/y').format(question.time),
+                  style: const TextStyle(color: Color(0xFF828282)),
                 ),
               ],
             ),
+            const SizedBox(
+              width: 16,
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Text(question.descriptions),
+        const SizedBox(
+          height: 16,
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+          decoration: BoxDecoration(
+              color: const Color(0xFFAEE6FF).withOpacity(0.5),
+              borderRadius: const BorderRadius.all(Radius.circular(20))),
+          child: Text(
+            question.specialization,
+            style: const TextStyle(
+                color: Color(0xFF3A86FF), fontWeight: FontWeight.w600),
           ),
-        ]),
-      );
+        ),
+        question.doctorId != ""
+            ? Column(
+                children: [
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    color: const Color(0xFFAEE6FF).withOpacity(0.5),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 24.0,
+                          backgroundImage: NetworkImage(question.doctorImage),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Answered by'),
+                            Text(
+                              question.doctorName,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            : Container()
+      ]),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,11 +124,12 @@ class ParticularQuestion extends StatelessWidget {
             thickness: 0.3,
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, right: 16, left: 16, bottom: 16),
+            padding:
+                const EdgeInsets.only(top: 10, right: 16, left: 16, bottom: 16),
             child: Column(children: [
-              const Text(
-                '16:01 20/04/2023',
-                style: TextStyle(
+              Text(
+                DateFormat('hh:mm dd/MM/y').format(DateTime.now()),
+                style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF828282),
                 ),
@@ -121,30 +137,9 @@ class ParticularQuestion extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              ...question.messageDoctor.map(
-                (e) => Container(
-                  padding: const EdgeInsets.all(8),
-                  margin: EdgeInsets.only(bottom: 4),
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFE0E0E0),
-                    borderRadius: BorderRadius.all(Radius.circular(8))
-                  ),
-                  child: Text(e),
-                ),
-              ),
-              const SizedBox(height: 16,),
-              ...question.messagePatient.map(
-                (e) => Container(
-                  padding: EdgeInsets.all(8),
-                  margin: EdgeInsets.only(bottom: 4),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFAEE6FF),
-                    borderRadius: BorderRadius.all(Radius.circular(8))
-                  ),
-                  child: Text(e),
-                ),
-              ),
+              // ChatScreen(),
             ]),
+
           ),
         ],
       ),

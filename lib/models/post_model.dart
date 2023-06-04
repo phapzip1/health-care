@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import './chat_model.dart';
 
@@ -29,6 +31,7 @@ class PostModel {
         "patient_id": patientId,
         "age": age,
         "specialization": specialization,
+        "descriptions": descriptions,
         "gender": gender,
         "doctor_id": "",
         "doctor_name": "",
@@ -54,9 +57,10 @@ class PostModel {
   }
 
   static Future<List<PostModel>> getPublic(int offset) async {
-    final querySnapshot = await _ref.where("private", isEqualTo: false).orderBy("time", descending: true).startAt([offset]).limit(POST_PER_LOAD).get();
+    final querySnapshot = await _ref.orderBy("time", descending: true).limit(POST_PER_LOAD).get();
+    print(querySnapshot.docs.length.toString());
     return querySnapshot.docs.map((e) {
-      return PostModel(e.id, e.get("patientId"), e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctorId"), e.get("doctorName"), e.get("doctorImage"),
+      return PostModel(e.id, e.get("patient_id"), e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctor_id"), e.get("doctor_name"), e.get("doctor_image"),
           e.get("private"), (e.get("time") as Timestamp).toDate(), []);
     }).toList();
   }
@@ -66,7 +70,7 @@ class PostModel {
 
     return querySnapshot.docs
         .map(
-          (e) => PostModel(e.id, patientId, e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctorId"), e.get("doctorName"), e.get("doctorImage"),
+          (e) => PostModel(e.id, patientId, e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctor_id"), e.get("doctor_name"), e.get("doctor_image"),
               e.get("private"), (e.get("time") as Timestamp).toDate(), []),
         )
         .toList();

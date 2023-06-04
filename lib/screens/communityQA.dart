@@ -60,188 +60,145 @@ Widget headerNavigateSection(click, changedPage, mediaQuery) => Padding(
       ),
     );
 
-class QuestionCard {
-  final String gender;
-  final int age;
-  final String date;
-  final String mainContext;
-  final String doctorAnswered;
-  final String relativeField;
-  final List<String> messageDoctor;
-  final List<String> messagePatient;
-
-  QuestionCard(
-      this.gender,
-      this.age,
-      this.date,
-      this.mainContext,
-      this.doctorAnswered,
-      this.relativeField,
-      this.messageDoctor,
-      this.messagePatient);
-}
-
 final String formattedDate = DateFormat.yMd().format(DateTime.now());
 
-final List<QuestionCard> questions = [
-  QuestionCard(
-      'Man',
-      32,
-      formattedDate,
-      'mainContextmainContextmainContextmainContextmainContextmainContext',
-      'Dr.Anna Baker',
-      'Heart surgeon specialist',
-      ['Text Text Text Text Text Text', 'Text Text Text Text Text'],
-      ['Text Text Text Text Text', 'Text', 'Text Text']),
-  QuestionCard(
-      'Woman',
-      24,
-      formattedDate,
-      'mainContextmainContextmainContextmainContextmainContextmainContext',
-      'Dr.Anna Baker',
-      'Heart surgeon specialist',
-      ['Text Text Text Text Text Text', 'Text Text Text Text Text'],
-      ['Text Text Text Text Text', 'Text', 'Text Text']),
-  QuestionCard(
-      'Man',
-      28,
-      formattedDate,
-      'mainContextmainContextmainContextmainContextmainContextmainContext',
-      'Dr.Anna Baker',
-      'Heart surgeon specialist',
-      ['Text Text Text Text Text Text', 'Text Text Text Text Text'],
-      ['Text Text Text Text Text', 'Text', 'Text Text']),
-];
+Widget questionCard(PostModel question, context) {
+  String gender = question.gender == 0
+      ? "Male"
+      : question.gender == 1
+          ? "Female"
+          : "Other";
 
-Widget questionCard(question, context) => InkWell(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ParticularQuestion(question)));
-      },
-      child: Container(
-        margin: const EdgeInsets.only(top: 16),
-        decoration: const BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Color(0xFFC9C9C9),
-              blurRadius: 1,
-              spreadRadius: 1,
+  return InkWell(
+    onTap: () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ParticularQuestion(question)));
+    },
+    child: Container(
+      margin: const EdgeInsets.only(top: 16),
+      decoration: const BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xFFC9C9C9),
+            blurRadius: 1,
+            spreadRadius: 1,
+          ),
+        ],
+        color: Colors.white,
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(
+          children: [
+            const CircleAvatar(
+              radius: 26.0,
+              backgroundImage: AssetImage('assets/images/avatartUser.png'),
             ),
-          ],
-          color: Colors.white,
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Column(children: [
-          Row(
-            children: [
-              const CircleAvatar(
-                radius: 26.0,
-                backgroundImage: AssetImage('assets/images/avatartUser.jpg'),
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    question.gender + ", " + question.age.toString() + " aged",
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    question.date,
-                    style: const TextStyle(color: Color(0xFF828282)),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Text(question.mainContext),
-          const SizedBox(
-            height: 16,
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: const Color(0xFFAEE6FF).withOpacity(0.5),
-            child: Row(
+            const SizedBox(
+              width: 16,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CircleAvatar(
-                  radius: 24.0,
-                  backgroundImage: AssetImage('assets/images/avatartUser.jpg'),
+                Text(
+                  "$gender, ${question.age} aged",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Answered by'),
-                    Text(
-                      question.doctorAnswered,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                Text(
+                  DateFormat('dd/MM/y').format(question.time),
+                  style: const TextStyle(color: Color(0xFF828282)),
                 ),
               ],
             ),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-                decoration: BoxDecoration(
-                    color: const Color(0xFFAEE6FF).withOpacity(0.5),
-                    borderRadius: const BorderRadius.all(Radius.circular(20))),
-                child: Text(
-                  question.relativeField,
-                  style: const TextStyle(
-                      color: Color(0xFF3A86FF), fontWeight: FontWeight.w600),
-                ),
-              ),
-              Row(
-                children: [
-                  const Icon(FontAwesomeIcons.comment),
-                  const SizedBox(
-                    width: 4,
+            const SizedBox(
+              width: 16,
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Text(question.descriptions),
+        const SizedBox(
+          height: 16,
+        ),
+        question.doctorId != ""
+            ? Column(children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  color: const Color(0xFFAEE6FF).withOpacity(0.5),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 24.0,
+                        backgroundImage: NetworkImage(question.doctorImage),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Answered by'),
+                          Text(
+                            question.doctorName,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  Text((question.messageDoctor.length +
-                          question.messagePatient.length)
-                      .toString())
-                ],
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+              ])
+            : Container(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+              decoration: BoxDecoration(
+                  color: const Color(0xFFFFE6A1).withOpacity(0.5),
+                  borderRadius: const BorderRadius.all(Radius.circular(20))),
+              child: Text(
+                question.specialization,
+                style: const TextStyle(
+                    color: Color(0xFFFFBE0B), fontWeight: FontWeight.w600),
               ),
-            ],
-          ),
-        ]),
-      ),
-    );
+            ),
+            const Row(
+              children: [
+                Icon(FontAwesomeIcons.comment),
+                SizedBox(
+                  width: 4,
+                ),
+                Text('4')
+              ],
+            ),
+          ],
+        ),
+      ]),
+    ),
+  );
+}
 
 class _CommunityQAState extends State<CommunityQA> {
-  static int page = 0;
   bool isLoading = false;
   bool _changedPage = true;
-  List<PostModel> users = [];
-  ScrollController _controller = new ScrollController();
+  List<PostModel> posts = [];
+  ScrollController _controller = ScrollController();
 
   @override
   void initState() {
-    _getMoreData(page);
     super.initState();
+    _getMoreData(posts.length);
     _controller.addListener(() {
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-        _getMoreData(page);
+        _getMoreData(posts.length);
       }
     });
   }
@@ -259,23 +216,16 @@ class _CommunityQAState extends State<CommunityQA> {
   }
 
   void _getMoreData(int index) async {
-    if (!isLoading) {
-      setState(() {
-        isLoading = true;
-      });
+    setState(() {
+      isLoading = true;
+    });
 
-      // final response = await dio.get(url);
-      // List tList = new List();
-      // for (int i = 0; i < response.data['results'].length; i++) {
-      //   tList.add(response.data['results'][i]);
-      // }
+    final newPost = await PostModel.getPublic(index);
 
-      setState(() {
-        isLoading = false;
-        // users.addAll(tList);
-        page++;
-      });
-    }
+    setState(() {
+      isLoading = false;
+      posts.addAll(newPost);
+    });
   }
 
   @override
@@ -298,16 +248,7 @@ class _CommunityQAState extends State<CommunityQA> {
       body: Column(
         children: [
           headerNavigateSection(_click, _changedPage, mediaQuery),
-          _changedPage
-              ? Expanded(
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: questions.length,
-                    itemBuilder: (context, index) =>
-                        questionCard(questions[index], context),
-                  ),
-                )
-              : Container(),
+          _changedPage ? _buildList(posts) : Container(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -324,32 +265,26 @@ class _CommunityQAState extends State<CommunityQA> {
     );
   }
 
-  // Widget _buildList() {
-  //   return ListView.builder(
-  //     itemCount: users.length + 1, 
-  //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-  //     itemBuilder: (BuildContext context, int index) {
-  //       if (index == users.length) {
-  //         return _buildProgressIndicator();
-  //       } else {
-  //         return ListTile(
-  //           leading: CircleAvatar(
-  //             radius: 30.0,
-  //             backgroundImage: NetworkImage(),
-  //           ),
-  //           title: Text(),
-  //           subtitle: Text(),
-  //         );
-  //       }
-  //     },
-  //     controller: _controller,
-  //   );
-  // }
+  Widget _buildList(socialPost) {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: socialPost.length + 1,
+        itemBuilder: (context, index) {
+          if (index == socialPost.length) {
+            return _buildProgressIndicator();
+          } else {
+            return questionCard(socialPost[index], context);
+          }
+        },
+        controller: _controller,
+      ),
+    );
+  }
 
   Widget _buildProgressIndicator() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child:  Center(
+      child: Center(
         child: Opacity(
           opacity: isLoading ? 1.0 : 00,
           child: const CircularProgressIndicator(),
