@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_care/models/post_model.dart';
+import 'package:health_care/widgets/QA_community/input_question_modal.dart';
 import 'package:health_care/widgets/button_section.dart';
 import 'package:health_care/widgets/QA_community/particular_question.dart';
 import 'package:intl/intl.dart';
@@ -119,7 +121,7 @@ Widget questionCard(question, context) => InkWell(
                 builder: (context) => ParticularQuestion(question)));
       },
       child: Container(
-        margin: EdgeInsets.only(top: 16),
+        margin: const EdgeInsets.only(top: 16),
         decoration: const BoxDecoration(
           boxShadow: [
             BoxShadow(
@@ -130,7 +132,7 @@ Widget questionCard(question, context) => InkWell(
           ],
           color: Colors.white,
         ),
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(children: [
           Row(
             children: [
@@ -146,11 +148,11 @@ Widget questionCard(question, context) => InkWell(
                 children: [
                   Text(
                     question.gender + ", " + question.age.toString() + " aged",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
                     question.date,
-                    style: TextStyle(color: Color(0xFF828282)),
+                    style: const TextStyle(color: Color(0xFF828282)),
                   ),
                 ],
               ),
@@ -167,8 +169,8 @@ Widget questionCard(question, context) => InkWell(
             height: 16,
           ),
           Container(
-            padding: EdgeInsets.all(8),
-            color: Color(0xFFAEE6FF).withOpacity(0.5),
+            padding: const EdgeInsets.all(8),
+            color: const Color(0xFFAEE6FF).withOpacity(0.5),
             child: Row(
               children: [
                 const CircleAvatar(
@@ -181,10 +183,10 @@ Widget questionCard(question, context) => InkWell(
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Answered by'),
+                    const Text('Answered by'),
                     Text(
                       question.doctorAnswered,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -198,19 +200,20 @@ Widget questionCard(question, context) => InkWell(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
                 decoration: BoxDecoration(
-                    color: Color(0xFFAEE6FF).withOpacity(0.5),
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                    color: const Color(0xFFAEE6FF).withOpacity(0.5),
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
                 child: Text(
                   question.relativeField,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Color(0xFF3A86FF), fontWeight: FontWeight.w600),
                 ),
               ),
               Row(
                 children: [
-                  Icon(FontAwesomeIcons.comment),
+                  const Icon(FontAwesomeIcons.comment),
                   const SizedBox(
                     width: 4,
                   ),
@@ -226,12 +229,53 @@ Widget questionCard(question, context) => InkWell(
     );
 
 class _CommunityQAState extends State<CommunityQA> {
+  static int page = 0;
+  bool isLoading = false;
   bool _changedPage = true;
+  List<PostModel> users = [];
+  ScrollController _controller = new ScrollController();
+
+  @override
+  void initState() {
+    _getMoreData(page);
+    super.initState();
+    _controller.addListener(() {
+      if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+        _getMoreData(page);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   void _click(value) {
     setState(() {
       _changedPage = value;
     });
+  }
+
+  void _getMoreData(int index) async {
+    if (!isLoading) {
+      setState(() {
+        isLoading = true;
+      });
+
+      // final response = await dio.get(url);
+      // List tList = new List();
+      // for (int i = 0; i < response.data['results'].length; i++) {
+      //   tList.add(response.data['results'][i]);
+      // }
+
+      setState(() {
+        isLoading = false;
+        // users.addAll(tList);
+        page++;
+      });
+    }
   }
 
   @override
@@ -248,7 +292,7 @@ class _CommunityQAState extends State<CommunityQA> {
         centerTitle: true,
         backgroundColor: Colors.white,
         leading: const BackButton(
-          color: Colors.black, 
+          color: Colors.black,
         ),
       ),
       body: Column(
@@ -268,8 +312,48 @@ class _CommunityQAState extends State<CommunityQA> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF3A86FF),
-        onPressed: () => {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const InputQuestionModal(),
+              ));
+        },
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  // Widget _buildList() {
+  //   return ListView.builder(
+  //     itemCount: users.length + 1, 
+  //     padding: const EdgeInsets.symmetric(vertical: 8.0),
+  //     itemBuilder: (BuildContext context, int index) {
+  //       if (index == users.length) {
+  //         return _buildProgressIndicator();
+  //       } else {
+  //         return ListTile(
+  //           leading: CircleAvatar(
+  //             radius: 30.0,
+  //             backgroundImage: NetworkImage(),
+  //           ),
+  //           title: Text(),
+  //           subtitle: Text(),
+  //         );
+  //       }
+  //     },
+  //     controller: _controller,
+  //   );
+  // }
+
+  Widget _buildProgressIndicator() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child:  Center(
+        child: Opacity(
+          opacity: isLoading ? 1.0 : 00,
+          child: const CircularProgressIndicator(),
+        ),
       ),
     );
   }

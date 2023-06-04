@@ -58,13 +58,13 @@ class RadioItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: _isSelected ? Color(0xFF3A86FF) : Color(0xFFE0E0E0),
+        color: _isSelected ? const Color(0xFF3A86FF) : const Color(0xFFE0E0E0),
         borderRadius: _item.value == 0
-            ? BorderRadius.only(
+            ? const BorderRadius.only(
                 bottomLeft: Radius.circular(10), topLeft: Radius.circular(10))
-            : BorderRadius.only(
+            : const BorderRadius.only(
                 bottomRight: Radius.circular(10),
                 topRight: Radius.circular(10)),
       ),
@@ -72,7 +72,7 @@ class RadioItem extends StatelessWidget {
         child: Text(
           _item.buttonText,
           style: TextStyle(
-            color: _isSelected ? Colors.white : Color(0xFF828282),
+            color: _isSelected ? Colors.white : const Color(0xFF828282),
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),

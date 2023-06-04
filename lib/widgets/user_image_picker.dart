@@ -16,18 +16,41 @@ class _UserImagePickerState extends State<UserImagePicker> {
   File? _pickImageFile;
 
   void _pickImage() async {
-    final pickImage = await ImagePicker().pickImage(
-      source: ImageSource.camera,
-      imageQuality: 50,
-      maxWidth: 150,
+        final ImagePicker picker = ImagePicker();
+    final option = await showDialog<int>(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        title: const Text("Source"),
+        children: <Widget>[
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(ctx, 1),
+            child: const Text("Camera"),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(ctx, 2),
+            child: const Text("Gallery"),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+        ],
+      ),
     );
 
-    if (pickImage == null) return;
-    setState(() {
-      _pickImageFile = File(pickImage.path);
-    });
+    if (option == null) {
+      return;
+    }
+    final XFile? image = await picker.pickImage(
+        source: option == 1 ? ImageSource.camera : ImageSource.gallery);
 
-    widget.onPickImage(_pickImageFile!);
+    if (image != null) {
+      setState(() {
+        _pickImageFile = File(image.path);
+      });
+    }
   }
 
   @override

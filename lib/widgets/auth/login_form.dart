@@ -35,8 +35,17 @@ class _LoginFormState extends State<LoginForm> {
         });
         UserCredential authResult;
 
-        authResult = await _auth.signInWithEmailAndPassword(
-            email: formData['Email'], password: formData['Password']);
+        authResult = await _auth
+            .signInWithEmailAndPassword(
+                email: formData['Email'], password: formData['Password'])
+            .whenComplete(() => Fluttertoast.showToast(
+                  msg: "Login successfully!",
+                  toastLength: Toast.LENGTH_SHORT,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.greenAccent,
+                  textColor: Colors.black,
+                  fontSize: 16.0,
+                ));
       } on PlatformException catch (err) {
         var message = 'An error occured, please check your credential';
 

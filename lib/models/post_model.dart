@@ -21,7 +21,10 @@ class PostModel {
       (e) => ChatModel(
         postId,
         e.get("sender_id"),
+        e.get('gender'),
+        e.get('age'),
         (e.get("time") as Timestamp).toDate(),
+        e.get('image_readable'),
         image: e.data()["image"],
         text: e.data()["text"],
       ),
