@@ -54,28 +54,61 @@ class PostModel {
   }
 
   static Future<List<PostModel>> getPublic(int offset) async {
-    final querySnapshot = await _ref.where("private", isEqualTo: false).orderBy("time", descending: true).startAt([offset]).limit(POST_PER_LOAD).get();
+    if (offset != 0) {
+      final docs = await _ref.orderBy("time", descending: true).limit(offset).get();
+      final querySnapshot = await _ref.orderBy("time", descending: true).startAfter([docs.docs.length - 1]).limit(POST_PER_LOAD).get();
+
+      return querySnapshot.docs.map((e) {
+        return PostModel(e.id, e.get("patient_id"), e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctor_id"), e.get("doctor_name"), e.get("doctor_image"),
+            e.get("private"), (e.get("time") as Timestamp).toDate(), []);
+      }).toList();
+    }
+
+    final querySnapshot = await _ref.orderBy("time", descending: true).limit(POST_PER_LOAD).get();
+
     return querySnapshot.docs.map((e) {
-      return PostModel(e.id, e.get("patientId"), e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctorId"), e.get("doctorName"), e.get("doctorImage"),
+      return PostModel(e.id, e.get("patient_id"), e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctor_id"), e.get("doctor_name"), e.get("doctor_image"),
           e.get("private"), (e.get("time") as Timestamp).toDate(), []);
     }).toList();
   }
 
-  static Future<List<PostModel>> getAsDoctor(int offset) async {
-    final querySnapshot = await _ref.where("doctor_id", isEqualTo: "").orderBy("time", descending: true).startAt([offset]).limit(POST_PER_LOAD).get();
+  static Future<List<PostModel>> getAsDoctor(int offset, String id) async {
+    if (offset != 0) {
+      final docs = await _ref.where("doctor_id", whereIn: ["", id]).orderBy("time", descending: true).limit(offset).get();
+      final querySnapshot = await _ref.where("doctor_id", whereIn: ["", id]).orderBy("time", descending: true).startAt([docs.docs[docs.size - 1]]).limit(POST_PER_LOAD).get();
+
+      return querySnapshot.docs.map((e) {
+        return PostModel(e.id, e.get("patient_id"), e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctor_id"), e.get("doctor_name"), e.get("doctor_image"),
+            e.get("private"), (e.get("time") as Timestamp).toDate(), []);
+      }).toList();
+    }
+
+    final querySnapshot = await _ref.where("doctor_id", whereIn: ["", id]).orderBy("time", descending: true).limit(POST_PER_LOAD).get();
+
     return querySnapshot.docs.map((e) {
-      return PostModel(e.id, e.get("patientId"), e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctorId"), e.get("doctorName"), e.get("doctorImage"),
+      return PostModel(e.id, e.get("patient_id"), e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctor_id"), e.get("doctor_name"), e.get("doctor_image"),
           e.get("private"), (e.get("time") as Timestamp).toDate(), []);
     }).toList();
   }
 
-  static Future<List<PostModel>> getByPatientId(String patientId, int offset) async {
-    final querySnapshot = await _ref.where("patientId", isEqualTo: patientId).orderBy("time", descending: true).startAt([offset]).limit(POST_PER_LOAD).get();
+  static Future<List<PostModel>> getAsPatient(int offset, String id) async {
+    if (offset != 0) {
+      final docs = await _ref.where("doctor_id", whereIn: ["", id]).orderBy("time", descending: true).limit(offset).get();
+      final querySnapshot = await _ref.where("patient_id", isEqualTo: id).orderBy("time", descending: true).startAt([docs.docs[docs.size - 1]]).limit(POST_PER_LOAD).get();
+
+      return querySnapshot.docs
+          .map(
+            (e) => PostModel(e.id, id, e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctor_id"), e.get("doctor_name"), e.get("doctor_image"), e.get("private"),
+                (e.get("time") as Timestamp).toDate(), []),
+          )
+          .toList();
+    }
+    final querySnapshot = await _ref.where("patient_id", isEqualTo: id).orderBy("time", descending: true).limit(POST_PER_LOAD).get();
 
     return querySnapshot.docs
         .map(
-          (e) => PostModel(e.id, patientId, e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctorId"), e.get("doctorName"), e.get("doctorImage"),
-              e.get("private"), (e.get("time") as Timestamp).toDate(), []),
+          (e) => PostModel(e.id, id, e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctor_id"), e.get("doctor_name"), e.get("doctor_image"), e.get("private"),
+              (e.get("time") as Timestamp).toDate(), []),
         )
         .toList();
   }
