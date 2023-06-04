@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/models/post_model.dart';
@@ -191,14 +192,15 @@ class _CommunityQAState extends State<CommunityQA> {
   bool _changedPage = true;
   List<PostModel> posts = [];
   ScrollController _controller = ScrollController();
+  final userId = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   void initState() {
     super.initState();
-    _getMoreData(posts.length);
+    _getMoreData("");
     _controller.addListener(() {
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-        _getMoreData(posts.length);
+        _getMoreData(posts[posts.length - 1].id!);
       }
     });
   }
@@ -212,15 +214,17 @@ class _CommunityQAState extends State<CommunityQA> {
   void _click(value) {
     setState(() {
       _changedPage = value;
+      posts = [];
+      _getMoreData("");
     });
   }
 
-  void _getMoreData(int index) async {
+  void _getMoreData(String id) async {
     setState(() {
       isLoading = true;
     });
 
-    final newPost = await PostModel.getPublic(index);
+    final newPost =  _changedPage ? await PostModel.getPublic(id) : await PostModel.getAsPatient(id, userId);
 
     setState(() {
       isLoading = false;
@@ -248,7 +252,7 @@ class _CommunityQAState extends State<CommunityQA> {
       body: Column(
         children: [
           headerNavigateSection(_click, _changedPage, mediaQuery),
-          _changedPage ? _buildList(posts) : Container(),
+           _buildListAll(posts),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -265,7 +269,7 @@ class _CommunityQAState extends State<CommunityQA> {
     );
   }
 
-  Widget _buildList(socialPost) {
+  Widget _buildListAll(socialPost) {
     return Expanded(
       child: ListView.builder(
         itemCount: socialPost.length + 1,

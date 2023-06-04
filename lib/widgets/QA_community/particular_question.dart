@@ -137,7 +137,7 @@ class ParticularQuestion extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              // ChatScreen(),
+              // ChatScreen(chatId, username, userImage),
             ]),
 
           ),

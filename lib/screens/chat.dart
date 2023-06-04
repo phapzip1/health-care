@@ -10,53 +10,13 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 0,
-        backgroundColor: Colors.white,
-        title: Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(userImage),
-            ),
-            const SizedBox(
-              width: 4,
-            ),
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.only(left: 4),
-                child: Text(
-                  username,
-                  style: const TextStyle(color: Colors.black, fontSize: 16),
-                ),
-              ),
-            ),
-          ],
+    return Container(
+      child: Column(children: [
+        Expanded(
+          child: Messages(chatId, username, userImage),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.phone),
-            color: Colors.black,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.camera),
-            color: Colors.black,
-          ),
-        ],
-        leading: const BackButton(
-          color: Colors.black,
-        ),
-      ),
-      body: Container(
-        child: Column(children: [
-          Expanded(
-            child: Messages(chatId, username, userImage),
-          ),
-          NewMessage(chatId),
-        ]),
-      ),
+        NewMessage(chatId),
+      ]),
     );
   }
 }
