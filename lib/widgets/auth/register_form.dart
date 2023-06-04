@@ -75,28 +75,38 @@ class _RegisterFormState extends State<RegisterForm> {
 
       final url = await ref_img.getDownloadURL();
 
-      final user = PatientModel(
-          authResult.user!.uid,
-          _enteredUsername,
-          _enteredPhone,
-          _enteredGender,
-          _enteredBirthday,
-          _enteredEmail,
-          url);
+      final user = PatientModel(authResult.user!.uid, _enteredUsername,
+          _enteredPhone, _enteredGender, _enteredBirthday, _enteredEmail, url);
 
-      await user.save();
-
+      await user
+          .save()
+          .onError((error, stackTrace) => Fluttertoast.showToast(
+                msg: "Register unsuccessfully!",
+                toastLength: Toast.LENGTH_SHORT,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              ))
+          .whenComplete(() => Fluttertoast.showToast(
+                msg: "Register successfully!",
+                toastLength: Toast.LENGTH_SHORT,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.greenAccent,
+                textColor: Colors.black,
+                fontSize: 16.0,
+              ));
     } on PlatformException catch (err) {
       var message = 'An error occured, please check your credential';
 
       Fluttertoast.showToast(
-          msg: message,
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
 
       if (err.message != null) {
         message = err.message.toString();
@@ -110,13 +120,13 @@ class _RegisterFormState extends State<RegisterForm> {
       );
     } catch (err) {
       Fluttertoast.showToast(
-          msg: "Register unsuccessfully!",
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        msg: "Register unsuccessfully!",
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
       print(err);
     }
   }
@@ -261,7 +271,8 @@ class _RegisterFormState extends State<RegisterForm> {
 
                     _enteredBirthday = formattedDate;
                     setState(() {
-                      dateinput.text = DateFormat('dd/MM/y').format(formattedDate);
+                      dateinput.text =
+                          DateFormat('dd/MM/y').format(formattedDate);
                     });
                   }
                 },
