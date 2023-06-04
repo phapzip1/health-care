@@ -61,6 +61,14 @@ class PostModel {
     }).toList();
   }
 
+  static Future<List<PostModel>> getAsDoctor(int offset) async {
+    final querySnapshot = await _ref.where("doctor_id", isEqualTo: "").orderBy("time", descending: true).startAt([offset]).limit(POST_PER_LOAD).get();
+    return querySnapshot.docs.map((e) {
+      return PostModel(e.id, e.get("patientId"), e.get("specialization"), e.get("age"), e.get("descriptions"), e.get("gender"), e.get("doctorId"), e.get("doctorName"), e.get("doctorImage"),
+          e.get("private"), (e.get("time") as Timestamp).toDate(), []);
+    }).toList();
+  }
+
   static Future<List<PostModel>> getByPatientId(String patientId, int offset) async {
     final querySnapshot = await _ref.where("patientId", isEqualTo: patientId).orderBy("time", descending: true).startAt([offset]).limit(POST_PER_LOAD).get();
 
