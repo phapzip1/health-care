@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:health_care/models/patient_model.dart';
+// import 'package:provider/provider.dart';
+// import 'package:health_care/provider.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
@@ -7,8 +10,10 @@ import '../../utils/formstage.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
+
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterForm extends StatefulWidget {
   final GlobalKey<FormState> formkey;
@@ -35,15 +40,11 @@ class _RegisterFormState extends State<RegisterForm> {
   var _enteredPassword = "";
   var _enteredUsername = "";
   var _enteredPhone = "";
-  var _enteredGender = "";
-  var _enteredBirthday = "";
-  var _isLoading = false;
+  Gender _enteredGender = Gender.male;
+  DateTime _enteredBirthday = DateTime.now();
 
   void _submit() async {
     try {
-      setState(() {
-        _isLoading = true;
-      });
       final isValid = widget.formkey.currentState!.validate();
 
       if (isValid) {
@@ -65,28 +66,38 @@ class _RegisterFormState extends State<RegisterForm> {
       authResult = await _auth.createUserWithEmailAndPassword(
           email: _enteredEmail, password: _enteredPassword);
 
-      final ref = FirebaseStorage.instance
+      final ref_img = FirebaseStorage.instance
           .ref()
           .child('user_image')
           .child('${authResult.user!.uid}.jpg');
 
-      await ref.putFile(File(_selectedImage!.path));
+      await ref_img.putFile(File(_selectedImage!.path));
 
-      final url = await ref.getDownloadURL();
+      final url = await ref_img.getDownloadURL();
 
-      await FirebaseFirestore.instance
-          .collection('patient')
-          .doc(authResult.user!.uid)
-          .set({
-        'patient_name': _enteredUsername,
-        'email': _enteredEmail,
-        'phone_number': _enteredPhone,
-        'gender': _enteredGender,
-        'birthday': _enteredBirthday,
-        'image_url': url,
-      });
+      final user = PatientModel(
+          authResult.user!.uid,
+          _enteredUsername,
+          _enteredPhone,
+          _enteredGender,
+          _enteredBirthday,
+          _enteredEmail,
+          url);
+
+      await user.save();
+
     } on PlatformException catch (err) {
       var message = 'An error occured, please check your credential';
+
+      Fluttertoast.showToast(
+          msg: message,
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
       if (err.message != null) {
         message = err.message.toString();
       }
@@ -97,14 +108,16 @@ class _RegisterFormState extends State<RegisterForm> {
           backgroundColor: Theme.of(context).errorColor,
         ),
       );
-      setState(() {
-        _isLoading = false;
-      });
     } catch (err) {
+      Fluttertoast.showToast(
+          msg: "Register unsuccessfully!",
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       print(err);
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
@@ -131,11 +144,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   _selectedImage = pickedImage;
                 },
               ),
-              // Text(
-              //   "Email",
-              //   style: Theme.of(context).textTheme.displayMedium,
-              // ),
-              // const SizedBox(height: 8),
+
               TextFormField(
                 key: ValueKey('email'),
                 decoration: InputDecoration(
@@ -154,12 +163,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 },
               ),
               const SizedBox(height: 16),
-              //
-              // Text(
-              //   "Password",
-              //   style: Theme.of(context).textTheme.displayMedium,
-              // ),
-              // const SizedBox(height: 8),
+
               TextFormField(
                 key: ValueKey('password'),
                 decoration: InputDecoration(
@@ -173,12 +177,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 },
               ),
               const SizedBox(height: 16),
-              //
-              // Text(
-              //   "Retype-password",
-              //   style: Theme.of(context).textTheme.displayMedium,
-              // ),
-              // const SizedBox(height: 8),
+
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Retype-password',
@@ -188,12 +187,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 obscuringCharacter: "•",
               ),
               const SizedBox(height: 16),
-              //
-              // Text(
-              //   "Name",
-              //   style: Theme.of(context).textTheme.displayMedium,
-              // ),
-              // const SizedBox(height: 8),
+
               TextFormField(
                 key: ValueKey('username'),
                 decoration: InputDecoration(
@@ -206,12 +200,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 },
               ),
               const SizedBox(height: 16),
-              //
-              // Text(
-              //   "Phone number",
-              //   style: Theme.of(context).textTheme.displayMedium,
-              // ),
-              // const SizedBox(height: 8),
+
               TextFormField(
                 decoration: InputDecoration(
                   hintText: "0123456789",
@@ -224,12 +213,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 },
               ),
               const SizedBox(height: 16),
-              //
-              // Text(
-              //   "Gender",
-              //   style: Theme.of(context).textTheme.displayMedium,
-              // ),
-              // const SizedBox(height: 8),
+
               DropdownButtonFormField(
                 decoration: InputDecoration(
                   labelText: 'Gender',
@@ -237,25 +221,24 @@ class _RegisterFormState extends State<RegisterForm> {
                 ),
                 items: const <DropdownMenuItem<dynamic>>[
                   DropdownMenuItem(
-                    value: 0,
-                    child: Text("Men"),
+                    value: Gender.male,
+                    child: Text("Male"),
                   ),
                   DropdownMenuItem(
-                    value: 1,
-                    child: Text("Women"),
+                    value: Gender.female,
+                    child: Text("Female"),
+                  ),
+                  DropdownMenuItem(
+                    value: Gender.other,
+                    child: Text("Other"),
                   ),
                 ],
                 onChanged: (value) {
-                  _enteredGender = value == 0 ? 'Men' : 'Women';
+                  _enteredGender = value;
                 },
               ),
               const SizedBox(height: 16),
-              //
-              // Text(
-              //   "Birthday",
-              //   style: Theme.of(context).textTheme.displayMedium,
-              // ),
-              // const SizedBox(height: 8),
+
               TextFormField(
                 controller: dateinput,
                 decoration: InputDecoration(
@@ -274,11 +257,11 @@ class _RegisterFormState extends State<RegisterForm> {
                       lastDate: now);
 
                   if (result != null) {
-                    String formattedDate = DateFormat('dd/MM/y').format(result);
+                    DateTime formattedDate = result;
 
                     _enteredBirthday = formattedDate;
                     setState(() {
-                      dateinput.text = formattedDate;
+                      dateinput.text = DateFormat('dd/MM/y').format(formattedDate);
                     });
                   }
                 },

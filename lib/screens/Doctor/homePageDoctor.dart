@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:health_care/models/appointment_doctor.dart';
 import 'package:health_care/widgets/header_section.dart';
-import '../../models/patient_info.dart';
 import '../../widgets/home_page/appointment_list_doctor.dart';
 import 'package:intl/intl.dart';
 
@@ -24,74 +22,6 @@ class _HomePageDoctor extends State<HomePageDoctor> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-
-    final List<DoctorAppointment> appointmentList = [
-      DoctorAppointment(
-          formattedDate.toString(),
-          formattedTime.toString(),
-          new Patient(
-            '123456',
-            'Nguyen Huynh Tuan Khang',
-            'Male',
-            0886667068,
-            '26/04/2002',
-            'khanhdph2604@gmail.com',
-          ),
-          0,
-          'headache'),
-      DoctorAppointment(
-          formattedDate.toString(),
-          formattedTime.toString(),
-          new Patient(
-            '123456',
-            'Nguyen Huynh Tuan Khang',
-            'Male',
-            0886667068,
-            '26/04/2002',
-            'khanhdph2604@gmail.com',
-          ),
-          1,
-          'headache'),
-      DoctorAppointment(
-          formattedDate.toString(),
-          formattedTime.toString(),
-          new Patient(
-            '123456',
-            'Nguyen Huynh Tuan Khang',
-            'Male',
-            0886667068,
-            '26/04/2002',
-            'khanhdph2604@gmail.com',
-          ),
-          1,
-          'headache'),
-      DoctorAppointment(
-          formattedDate.toString(),
-          formattedTime.toString(),
-          new Patient(
-            '123456',
-            'Nguyen Huynh Tuan Khang',
-            'Male',
-            0886667068,
-            '26/04/2002',
-            'khanhdph2604@gmail.com',
-          ),
-          2,
-          'headache'),
-      DoctorAppointment(
-          formattedDate.toString(),
-          formattedTime.toString(),
-          new Patient(
-            '123456',
-            'Nguyen Huynh Tuan Khang',
-            'Male',
-            0886667068,
-            '26/04/2002',
-            'khanhdph2604@gmail.com',
-          ),
-          1,
-          'headache'),
-    ];
 
     return Scaffold(
         body: SafeArea(
@@ -169,8 +99,8 @@ class _HomePageDoctor extends State<HomePageDoctor> {
                               ],
                             ),
                           ),
-                          AppointmentListDoctor(
-                              appointmentList: appointmentList)
+                          // AppointmentListDoctor(
+                          //     appointmentList: appointmentList)
                         ],
                       );
                     });

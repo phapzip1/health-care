@@ -5,6 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:health_care/models/patient_model.dart';
+import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class UpdatePatientInfo extends StatefulWidget {
   const UpdatePatientInfo({super.key});
@@ -17,13 +20,21 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
   final user = FirebaseAuth.instance.currentUser;
   final _formKey = GlobalKey<FormState>();
 
+  TextEditingController dateinput = TextEditingController();
+
+  @override
+  void initState() {
+    dateinput.text = '';
+    super.initState();
+  }
+
   var currentUrl;
   File? _selectedImage;
 
   var _enteredUsername = "";
   var _enteredPhone = "";
-  var _enteredGender = "";
-  var _enteredBirthday = "";
+  Gender _enteredGender = Gender.male;
+  DateTime _enteredBirthday = DateTime.now();
 
   void _pickImage() async {
     final pickImage = await ImagePicker().pickImage(
@@ -97,15 +108,25 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
           'gender': _enteredGender,
           'birthday': _enteredBirthday
         })
-        .then((value) => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Update successfully'),
-                backgroundColor: Colors.grey,
-              ),
+        .then((value) => Fluttertoast.showToast(
+              msg: "Update successfully",
+              toastLength: Toast.LENGTH_SHORT,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.greenAccent,
+              textColor: Colors.black,
             ))
-        .catchError((error) => print("Failed to update user: $error"));
+        // ignore: invalid_return_type_for_catch_error, avoid_print
+        .catchError((error) => Fluttertoast.showToast(
+              msg: "Failed to update user",
+              toastLength: Toast.LENGTH_SHORT,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+            ));
     ;
   }
+
+  var changed = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +158,7 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
           ],
         ),
         body: FutureBuilder(
-            future: Future.value(user),
+            future: PatientModel.getById(user!.uid),
             builder: (ctx, futureSnapShot) {
               if (futureSnapShot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -145,137 +166,143 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
                 );
               }
 
-              return StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('patient')
-                      .doc(user!.uid)
-                      .snapshots(),
-                  builder: (ctx, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    if (!snapshot.hasData) return Container();
-
-                    final userDocs = snapshot.data!;
-
-                    _enteredGender = userDocs['gender'];
-                    currentUrl = userDocs['image_url'];
-
-                    return Form(
-                      key: _formKey,
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(children: [
-                          circleAvatar(userDocs['image_url']),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Name',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              TextFormField(
-                                controller: TextEditingController(
-                                    text: userDocs['patient_name']),
-                                style: const TextStyle(fontSize: 16),
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 16, horizontal: 20),
-                                ),
-                                onSaved: (value) {
-                                  _enteredUsername = value.toString();
-                                },
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              const Text('Phone number',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              TextFormField(
-                                controller: TextEditingController(
-                                    text: userDocs['phone_number']),
-                                style: const TextStyle(fontSize: 16),
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 16, horizontal: 20),
-                                ),
-                                onSaved: (value) {
-                                  _enteredPhone = value.toString();
-                                },
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              const Text('Gender',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              DropDownTextField(
-                                initialValue: userDocs['gender'].toString(),
-                                clearOption: false,
-                                dropDownItemCount: 2,
-                                dropDownList: const [
-                                  DropDownValueModel(name: 'Men', value: 'Men'),
-                                  DropDownValueModel(
-                                      name: 'Women', value: 'Women'),
-                                ],
-                                textFieldDecoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 16, horizontal: 20),
-                                ),
-                                onChanged: (value) {
-                                  _enteredGender = value.name.toString();
-                                },
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              const Text('Birthday',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              TextFormField(
-                                controller: TextEditingController(
-                                    text: userDocs['birthday']),
-                                style: const TextStyle(fontSize: 16),
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 16, horizontal: 20),
-                                ),
-                                onSaved: (value) {
-                                  _enteredBirthday = value.toString();
-                                },
-                              ),
-                            ],
+              return Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(children: [
+                    circleAvatar(futureSnapShot.data!.image),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Name',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        TextFormField(
+                          controller: TextEditingController(
+                              text: futureSnapShot.data!.name),
+                          style: const TextStyle(fontSize: 16),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 20),
                           ),
-                        ]),
-                      ),
-                    );
-                  });
+                          onSaved: (value) {
+                            _enteredUsername = value.toString();
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text('Phone number',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        TextFormField(
+                          controller: TextEditingController(
+                              text: futureSnapShot.data!.phoneNumber),
+                          style: const TextStyle(fontSize: 16),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 20),
+                          ),
+                          onSaved: (value) {
+                            _enteredPhone = value.toString();
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text('Gender',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        DropDownTextField(
+                          initialValue: futureSnapShot.data!.gender
+                              .toString()
+                              .substring(7),
+                          clearOption: false,
+                          dropDownItemCount: 2,
+                          dropDownList: const [
+                            DropDownValueModel(
+                                name: 'male', value: Gender.male),
+                            DropDownValueModel(
+                                name: 'female', value: Gender.female),
+                            DropDownValueModel(
+                                name: 'other', value: Gender.other),
+                          ],
+                          textFieldDecoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 20),
+                          ),
+                          onChanged: (value) {
+                            _enteredGender = value;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text('Birthday',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        TextFormField(
+                          controller: changed != 1
+                              ? dateinput
+                              : TextEditingController(
+                                  text: DateFormat('dd/MM/y')
+                                      .format(futureSnapShot.data!.birthdate)),
+                          style: const TextStyle(fontSize: 16),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 20),
+                          ),
+                          // onSaved: (value) {
+                          //   _enteredBirthday = value.toString();
+                          // },
+                          onTap: () async {
+                            FocusScope.of(context).requestFocus(FocusNode());
+
+                            final result = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1975, 1, 1),
+                                lastDate: DateTime.now());
+
+                            if (result != null) {
+                              DateTime formattedDate = result;
+
+                              _enteredBirthday = formattedDate;
+                              setState(() {
+                                ++changed;
+                                dateinput.text =
+                                    DateFormat('dd/MM/y').format(formattedDate);
+                              });
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ]),
+                ),
+              );
             }));
   }
 }

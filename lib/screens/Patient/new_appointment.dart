@@ -5,7 +5,8 @@ import 'package:health_care/widgets/search.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 
 class NewAppointment extends StatefulWidget {
-  const NewAppointment({super.key});
+  final String id;
+  const NewAppointment(this.id, {super.key});
 
   @override
   State<NewAppointment> createState() => _NewAppointmentState();
@@ -36,9 +37,17 @@ class _NewAppointmentState extends State<NewAppointment> {
       appBar: AppBar(
         title: const Text(
           'Make Appointment',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
         ),
         centerTitle: true,
+        backgroundColor: Colors.white,
+        leading: const BackButton(
+          color: Colors.black,
+        ),
       ),
       body: Column(
         children: [

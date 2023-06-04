@@ -39,7 +39,7 @@ class PatientModel {
 
   Future<void> save() async {
     try {
-      if (id == null) {
+      if (id != null) {
         await _ref.doc(id).set({
           "name": name,
           "phone_number": phoneNumber,

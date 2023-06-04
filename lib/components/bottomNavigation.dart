@@ -1,4 +1,3 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -13,7 +12,7 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<BottomNavBar> {
-  static const a = true;
+  
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(

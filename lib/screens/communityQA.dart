@@ -240,15 +240,16 @@ class _CommunityQAState extends State<CommunityQA> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Align(
-          alignment: Alignment.center,
-          child: Text(
-            'Q&A community',
-            style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-          ),
+        title: const Text(
+          'Q&A community',
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
         ),
+        centerTitle: true,
         backgroundColor: Colors.white,
+        leading: const BackButton(
+          color: Colors.black, 
+        ),
       ),
       body: Column(
         children: [
@@ -266,7 +267,7 @@ class _CommunityQAState extends State<CommunityQA> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFF3A86FF),
+        backgroundColor: const Color(0xFF3A86FF),
         onPressed: () => {},
         child: const Icon(Icons.add),
       ),

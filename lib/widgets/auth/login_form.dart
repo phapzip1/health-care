@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import '../../utils/formstage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
@@ -35,24 +34,39 @@ class _LoginFormState extends State<LoginForm> {
           _isLoading = true;
         });
         UserCredential authResult;
+
         authResult = await _auth.signInWithEmailAndPassword(
             email: formData['Email'], password: formData['Password']);
       } on PlatformException catch (err) {
         var message = 'An error occured, please check your credential';
+
+        Fluttertoast.showToast(
+          msg: message,
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
         if (err.message != null) {
           message = err.message.toString();
         }
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(message),
-            backgroundColor: Theme.of(context).errorColor,
-          ),
-        );
         setState(() {
           _isLoading = false;
         });
       } catch (err) {
+        Fluttertoast.showToast(
+          msg: "Login unsuccessfully!",
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.greenAccent,
+          textColor: Colors.black,
+          fontSize: 16.0,
+        );
+
+        // ignore: avoid_print
         print(err);
         setState(() {
           _isLoading = false;
@@ -67,7 +81,7 @@ class _LoginFormState extends State<LoginForm> {
       child: Form(
         key: widget.formKey,
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -117,11 +131,11 @@ class _LoginFormState extends State<LoginForm> {
                   if (value == null || value.isEmpty) {
                     return "Password field is required!";
                   }
-        
+
                   if (value.length <= 8) {
                     return "Password must be 8 characters or more";
                   }
-        
+
                   return null;
                 },
                 onChanged: (value) {
