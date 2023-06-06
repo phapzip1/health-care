@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:health_care/models/post_model.dart';
 
 class NewMessage extends StatefulWidget {
-  NewMessage(this.chatId, {super.key});
-  final String chatId;
+  NewMessage(this.post, {super.key});
+  final PostModel post;
 
   @override
   State<NewMessage> createState() => _NewMessageState();
@@ -13,25 +14,15 @@ class NewMessage extends StatefulWidget {
 class _NewMessageState extends State<NewMessage> {
   String _enterMessage = '';
 
-  final _controller = new TextEditingController();
+  final _controller = TextEditingController();
 
   void _sendMessage() async {
     FocusScope.of(context).unfocus();
-    final user = await FirebaseAuth.instance.currentUser;
-    // final userData = await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(user!.uid)
-    //     .get();
+    final user = FirebaseAuth.instance.currentUser;
 
-    final ref = await FirebaseFirestore.instance
-        .collection('chat')
-        .doc(widget.chatId)
-        .collection('context')
-        .add({
-      'text': _enterMessage,
-      'senderId': user!.uid,
-      'createAt': Timestamp.now(),
-    });
+    final isDoctor = widget.post.id == user!.uid ? false : true;
+
+    await widget.post.reply(_enterMessage, isDoctor);
 
     _controller.clear();
   }
@@ -57,7 +48,7 @@ class _NewMessageState extends State<NewMessage> {
             child: TextField(
               decoration: const InputDecoration(
                 border: InputBorder.none,
-                hintText: 'Text your message',
+                hintText: 'Text your comment',
               ),
               controller: _controller,
               onChanged: (value) {

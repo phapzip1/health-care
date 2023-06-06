@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:health_care/screens/chat.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DoctorSection extends StatefulWidget {
@@ -72,16 +71,16 @@ class _DoctorSectionState extends State<DoctorSection> {
                           ),
                           child: InkWell(
                             onTap: () => {
-                              widget.changedPage
-                                  ? Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ChatScreen(
-                                              scheduleDocs[index]['chatId'],
-                                              scheduleDocs[index]['name'],
-                                              scheduleDocs[index]
-                                                  ['image_url'])))
-                                  : null
+                              // widget.changedPage
+                              //     ? Navigator.push(
+                              //         context,
+                              //         MaterialPageRoute(
+                              //             builder: (context) => ChatScreen(
+                              //                 scheduleDocs[index]['chatId'],
+                              //                 scheduleDocs[index]['name'],
+                              //                 scheduleDocs[index]
+                              //                     ['image_url'])))
+                              //     : null
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(16),

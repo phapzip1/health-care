@@ -41,14 +41,14 @@ class HomePage extends StatelessWidget {
                   );
                 }
 
-                final patient = PatientModel(
-                    user!.uid,
-                    futureSnapShot.data!.name,
-                    futureSnapShot.data!.phoneNumber,
-                    futureSnapShot.data!.gender,
-                    futureSnapShot.data!.birthdate,
-                    futureSnapShot.data!.email,
-                    futureSnapShot.data!.image);
+                // final patient = PatientModel(
+                //     user!.uid,
+                //     futureSnapShot.data!.name,
+                //     futureSnapShot.data!.phoneNumber,
+                //     futureSnapShot.data!.gender,
+                //     futureSnapShot.data!.birthdate,
+                //     futureSnapShot.data!.email,
+                //     futureSnapShot.data!.image);
 
                 return Column(
                   children: [

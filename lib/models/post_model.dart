@@ -64,7 +64,7 @@ class PostModel {
     }
   }
 
-  Future<void> reply(String message, {bool isDoctor = false}) async {
+  Future<void> reply(String message, bool isDoctor) async {
     if (id != null) {
       _ref.doc(id).collection("chat").add({
         "message": message,

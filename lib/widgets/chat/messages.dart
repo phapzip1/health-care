@@ -1,32 +1,19 @@
-// import './widgets/chat/message_bubble.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:health_care/models/post_model.dart';
+
 import 'message_bubble.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class Messages extends StatelessWidget {
-  Messages(this.chatId, this.username, this.userImage, {super.key});
-  final String chatId;
-  final String username;
-  final String userImage;
+  Messages(this.post, {super.key});
+  PostModel post;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: Future.value(FirebaseAuth.instance.currentUser),
-      builder: (ctx, futureSnapShot) {
-        if (futureSnapShot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('chat')
-              .doc(chatId)
-              .collection('context')
-              .orderBy('createAt', descending: true)
-              .snapshots(),
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+
+    return StreamBuilder(
+          stream: post.getStreamChat(),
           builder: (ctx, chatSnapShot) {
             if (chatSnapShot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -40,19 +27,18 @@ class Messages extends StatelessWidget {
             }
 
             final chatDocs = chatSnapShot.data!.docs;
+
             return ListView.builder(
               reverse: true,
               itemCount: chatDocs.length,
               itemBuilder: (ctx, index) => MessageBubble(
-                  chatDocs[index]['text'],
-                  username,
-                  userImage,
-                  chatDocs[index]['senderId'] == futureSnapShot.data!.uid,
+                  chatDocs[index]['message'],
+                  post.id == userId ? false : true,
                   ValueKey(chatDocs[index].id)),
             );
           },
         );
-      },
-    );
+      
+    
   }
 }

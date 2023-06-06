@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/models/post_model.dart';
-import 'package:health_care/screens/chat.dart';
+import 'package:health_care/widgets/chat/messages.dart';
+import 'package:health_care/widgets/chat/new_message.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ParticularQuestion extends StatelessWidget {
   const ParticularQuestion(this.question, {super.key});
@@ -54,12 +56,12 @@ class ParticularQuestion extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
           decoration: BoxDecoration(
-              color: const Color(0xFFAEE6FF).withOpacity(0.5),
+              color: const Color(0xFFFFE6A1).withOpacity(0.5),
               borderRadius: const BorderRadius.all(Radius.circular(20))),
           child: Text(
             question.specialization,
             style: const TextStyle(
-                color: Color(0xFF3A86FF), fontWeight: FontWeight.w600),
+                color: Color(0xFFFFBE0B), fontWeight: FontWeight.w600),
           ),
         ),
         question.doctorId != ""
@@ -103,6 +105,8 @@ class ParticularQuestion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -116,32 +120,42 @@ class ParticularQuestion extends StatelessWidget {
               fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
         ),
       ),
-      body: Column(
-        children: [
-          questionSection(question),
-          const Divider(
-            color: Colors.black,
-            thickness: 0.3,
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.only(top: 10, right: 16, left: 16, bottom: 16),
-            child: Column(children: [
-              Text(
-                DateFormat('hh:mm dd/MM/y').format(DateTime.now()),
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF828282),
+      body: SafeArea(
+        child: Column(
+          children: [
+            questionSection(question),
+            const Divider(
+              color: Colors.black,
+              thickness: 0.3,
+            ),
+            Expanded(
+              child: Column(children: [
+                Text(
+                  DateFormat('hh:mm dd/MM/y').format(DateTime.now()),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF828282),
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              // ChatScreen(chatId, username, userImage),
-            ]),
-
-          ),
-        ],
+                const SizedBox(
+                  height: 16,
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Messages(question),
+                      ),
+                      question.patientId == userId
+                          ? NewMessage(question)
+                          : Container(),
+                    ],
+                  ),
+                )
+              ]),
+            ),
+          ],
+        ),
       ),
     );
   }

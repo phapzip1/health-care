@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:health_care/models/appointment_model.dart';
-import 'package:health_care/screens/chat.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PatientSection extends StatefulWidget {
