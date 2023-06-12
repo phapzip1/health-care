@@ -263,6 +263,21 @@ class MyWidget extends StatelessWidget {
   static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();
 
+  Widget _render(String collection, String uid, bool isDoctor) {
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection(collection)
+            .doc(uid)
+            .snapshots(),
+        builder: (ctx, snapShot) {
+          if (snapShot.hasData) {
+            return MainPage(isDoctor);
+          }
+          return const Scaffold(
+              body: Center(child: CircularProgressIndicator()));
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -271,17 +286,26 @@ class MyWidget extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (ctx, userSnapShot) {
           if (userSnapShot.hasData) {
+            String uid = userSnapShot.data!.uid;
+
             return StreamBuilder(
                 stream: FirebaseFirestore.instance
-                    .collection('patient')
-                    .doc(userSnapShot.data!.uid)
-                    .snapshots(),
-                builder: (ctx, snapShot) {
-                  if (snapShot.hasData) {
-                    return PatientMainPage(userSnapShot.data!.uid);
+                    .collection('doctor')
+                    .doc(uid)
+                    .snapshots()
+                    .map((snapshot) => snapshot.exists),
+                builder: (ctx, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data!) {
+                      //isDoctor = true
+                      return _render('doctor', uid, true);
+                    } else {
+                      return _render('patient', uid, false);
+                    }
+                  } else {
+                    return const Scaffold(
+                        body: Center(child: CircularProgressIndicator()));
                   }
-                  return const Scaffold(
-                      body: Center(child: CircularProgressIndicator()));
                 });
           }
           return LoginScreen();

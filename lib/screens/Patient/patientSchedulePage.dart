@@ -5,8 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_care/widgets/schedule_screen/patient_section.dart';
 
 class PatientSchedulePage extends StatefulWidget {
-  const PatientSchedulePage(this.id, {super.key});
-  final String id;
+  const PatientSchedulePage({super.key});
 
   @override
   State<PatientSchedulePage> createState() => _PatientSchedulePageState();

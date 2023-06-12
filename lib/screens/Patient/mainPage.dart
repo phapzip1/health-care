@@ -1,35 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:health_care/screens/Doctor/doctorInformation.dart';
+import 'package:health_care/screens/Doctor/doctorSchedulePage.dart';
+import 'package:health_care/screens/Doctor/homePageDoctor.dart';
 import '../../screens/Patient/homePage.dart';
 import './patientSchedulePage.dart';
 import '../../components/bottomNavigation.dart';
 import '../../screens/Patient/patientInformation.dart';
 
-class PatientMainPage extends StatefulWidget {
-  final String id;
-  PatientMainPage(this.id);
+class MainPage extends StatefulWidget {
+  final bool isDoctor;
+  MainPage(this.isDoctor);
   @override
-  State<PatientMainPage> createState() => _MyWidgetState();
+  State<MainPage> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<PatientMainPage> {
+class _MyWidgetState extends State<MainPage> {
   int _selectedIndex = 0;
-
-  // final List<Widget> _widgetOptions = <Widget>[
-  //   HomePage(),
-  //   PatientSchedulePage(),
-  //   PatientInformation()
-  // ];
   
-  Widget currentPage(int index) {
+  Widget currentPagePatient(int index) {
     switch (index) {
       case 0:
         return HomePage();
       case 1:
-        return PatientSchedulePage(widget.id);
+        return PatientSchedulePage();
       case 2:
-        return PatientInformation(widget.id);
+        return PatientInformation();
       default:
         return HomePage();
+    }
+  }
+
+  Widget currentPageDoctor(int index) {
+    switch (index) {
+      case 0:
+        return HomePageDoctor();
+      case 1:
+        return DoctorSchedulePage();
+      case 2:
+        return DoctorInformation();
+      default:
+        return HomePageDoctor();
     }
   }
 
@@ -43,7 +53,7 @@ class _MyWidgetState extends State<PatientMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: currentPage(_selectedIndex),
+        child: widget.isDoctor ? currentPageDoctor(_selectedIndex) : currentPagePatient(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavBar(_selectedIndex, _onItemTapped),
     );
