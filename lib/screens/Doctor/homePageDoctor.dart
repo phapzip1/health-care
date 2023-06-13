@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/widgets/header_section.dart';
-import '../../widgets/home_page/appointment_list_doctor.dart';
 import 'package:intl/intl.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -60,8 +59,8 @@ class _HomePageDoctor extends State<HomePageDoctor> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 HeaderSection(
-                                    url: userDocs['image_url'],
-                                    userName: userDocs['doctor_name']),
+                                    url: userDocs['image'],
+                                    userName: userDocs['name']),
                                 Container(
                                   margin: const EdgeInsets.only(
                                       top: 24, bottom: 24),
@@ -99,8 +98,7 @@ class _HomePageDoctor extends State<HomePageDoctor> {
                               ],
                             ),
                           ),
-                          // AppointmentListDoctor(
-                          //     appointmentList: appointmentList)
+                          // AppointmentListDoctor(),
                         ],
                       );
                     });

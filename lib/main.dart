@@ -33,6 +33,21 @@ void main() async {
 class MyWidget extends StatelessWidget {
   const MyWidget({super.key});
 
+  Widget _render(String collection, String uid, bool isDoctor) {
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection(collection)
+            .doc(uid)
+            .snapshots(),
+        builder: (ctx, snapShot) {
+          if (snapShot.hasData) {
+            return MainPage(isDoctor);
+          }
+          return const Scaffold(
+              body: Center(child: CircularProgressIndicator()));
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

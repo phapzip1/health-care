@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:health_care/models/patient_model.dart';
+// import 'package:health_care/models/patient_model.dart';
 import 'package:health_care/widgets/infomation_page/doctor_infor_page.dart';
 
 class AppointmentListPatient extends StatelessWidget {

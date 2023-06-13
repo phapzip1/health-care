@@ -6,8 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class PatientInformation extends StatefulWidget {
-  const PatientInformation(this.id, {super.key});
-  final String id;
+  const PatientInformation({super.key});
 
   @override
   State<PatientInformation> createState() => _PatientInformationState();
