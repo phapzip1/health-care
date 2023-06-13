@@ -2,11 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/models/doctor_model.dart';
-import 'package:health_care/models/patient_model.dart';
+// import 'package:health_care/models/patient_model.dart';
 import 'package:health_care/screens/payment_screen.dart';
-import 'package:health_care/widgets/comment_card.dart';
+// import 'package:health_care/widgets/comment_card.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DoctorInforPage extends StatefulWidget {
   const DoctorInforPage(this.doctorId, {super.key});
@@ -191,10 +191,11 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
       firstDate: DateTime(2000),
       lastDate: DateTime(3000),
     );
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
       });
+    }
   }
 
   @override
@@ -240,14 +241,14 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                     userDocs.gender,
                     userDocs.birthdate,
                     userDocs.email,
-                    userDocs.field,
                     userDocs.experience,
                     userDocs.price,
                     userDocs.workplace,
                     userDocs.specialization,
+                    userDocs.identityId,
+                    userDocs.licenseId,
                     userDocs.image,
                     userDocs.availableTime);
-                
 
                 return Column(
                   children: [

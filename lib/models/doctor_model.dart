@@ -11,7 +11,8 @@ class DoctorModel {
   Gender gender;
   DateTime birthdate;
   String email;
-  String field;
+  String identityId;
+  String licenseId;
   int experience;
   int price;
   String workplace;
@@ -27,11 +28,12 @@ class DoctorModel {
     this.gender,
     this.birthdate,
     this.email,
-    this.field,
     this.experience,
     this.price,
     this.workplace,
     this.specialization,
+    this.identityId,
+    this.licenseId,
     this.image,
     this.availableTime,
   );
@@ -44,7 +46,6 @@ class DoctorModel {
         "gender": gender.name,
         "birthdate": Timestamp.fromDate(birthdate),
         "email": email,
-        "field": field,
         "experience": experience,
         "price": price,
         "workplace": workplace,
@@ -78,11 +79,12 @@ class DoctorModel {
       toGenderEnum(snapshot.get("gender") as String),
       (snapshot.get("birthdate") as Timestamp).toDate(),
       snapshot.get("email"),
-      snapshot.get("field"),
       snapshot.get("experience"),
       snapshot.get("price"),
       snapshot.get("workplace"),
       snapshot.get("specialization"),
+      snapshot.get("identityId"),
+      snapshot.get("licenseId"),
       snapshot.get("image"),
       snapshot.get("available_time"),
     );

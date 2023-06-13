@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 // screens
-import '../screens/page_not_found_screen.dart';
-import '../screens/call_screen.dart';
-import '../screens/Doctor/homePageDoctor.dart';
+// import '../screens/page_not_found_screen.dart';
+// import '../screens/call_screen.dart';
+// import '../screens/Doctor/homePageDoctor.dart';
 import '../screens/communityQA.dart';
 
 class NavigationService {
@@ -25,17 +25,19 @@ class NavigationService {
         {
           final data = settings.arguments as Map<String, dynamic>;
           return MaterialPageRoute(
-            builder: (_) => CallScreen(
-              token: data["token"],
-              channelId: data["channel_id"],
-              remotename: data["remote_name"],
-              remotecover: data["remote_cover"],
-              caller: false,
-            ),
+            // builder: (_) => CallScreen(
+            //   token: data["token"],
+            //   channelId: data["channel_id"],
+            //   remotename: data["remote_name"],
+            //   remotecover: data["remote_cover"],
+            //   caller: false,
+            // ),
+            builder: (_) => Container(),
           );
         }
       default:
-        return MaterialPageRoute(builder: (_) => PageNotFoundScreen(settings.name!));
+        // return MaterialPageRoute(builder: (_) => PageNotFoundScreen(settings.name!));
+        return MaterialPageRoute(builder: (_) => Container());
     }
   }
 }

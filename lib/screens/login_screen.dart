@@ -3,7 +3,7 @@ import 'package:health_care/widgets/auth/change_password_form.dart';
 import '../widgets/auth/otp_form.dart';
 
 // forms
-import '../widgets/doctor_register_form.dart';
+import '../widgets/auth/doctor_register_form.dart';
 import '../widgets/auth/register_form.dart';
 import '../widgets/auth/login_form.dart';
 

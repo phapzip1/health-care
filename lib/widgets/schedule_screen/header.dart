@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/widgets/button_section.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Header extends StatefulWidget {
   const Header(this.click, this.changedPage ,{super.key});
 

@@ -1,30 +1,30 @@
-import 'dart:io';
-import 'package:health_care/models/patient_model.dart';
+// ignore_for_file: unused_field
 
-import 'package:intl/intl.dart';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:health_care/widgets/user_image_picker.dart';
-import '../../utils/formstage.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:health_care/models/doctor_model.dart';
+import 'package:health_care/models/patient_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
+
+import '../../utils/formstage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 
-import 'package:fluttertoast/fluttertoast.dart';
-
-class RegisterForm extends StatefulWidget {
+class DoctorRegisterForm extends StatefulWidget {
   final GlobalKey<FormState> formkey;
   final Function setFormStage;
 
-  const RegisterForm({super.key, required this.formkey, required this.setFormStage});
+  DoctorRegisterForm({required this.formkey, required this.setFormStage});
 
   @override
-  State<RegisterForm> createState() => _RegisterFormState();
+  State<DoctorRegisterForm> createState() => _DoctorRegisterFormState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
+class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
   TextEditingController dateinput = TextEditingController();
 
   @override
@@ -39,8 +39,18 @@ class _RegisterFormState extends State<RegisterForm> {
   var _enteredPassword = "";
   var _enteredUsername = "";
   var _enteredPhone = "";
+  var _enteredExp = 0;
+  var _enteredPrice = 0;
+  var _enteredIdentityId = "";
+  var _enteredLicenseId = "";
+  var _enteredWorkplace = "";
+  var _enteredSpecialization = "";
   Gender _enteredGender = Gender.male;
   DateTime _enteredBirthday = DateTime.now();
+  final now = DateTime.now();
+
+  Map<String, dynamic> available_time =[] as Map<String, dynamic>;
+
 
   void _submit() async {
     try {
@@ -74,8 +84,21 @@ class _RegisterFormState extends State<RegisterForm> {
 
       final url = await ref_img.getDownloadURL();
 
-      final user = PatientModel(authResult.user!.uid, _enteredUsername,
-          _enteredPhone, _enteredGender, _enteredBirthday, _enteredEmail, url);
+      final user = DoctorModel(
+          authResult.user!.uid,
+          _enteredUsername,
+          _enteredPhone,
+          _enteredGender,
+          _enteredBirthday,
+          _enteredEmail,
+          _enteredExp,
+          _enteredPrice,
+          _enteredWorkplace,
+          _enteredSpecialization,
+          _enteredIdentityId,
+          _enteredLicenseId,
+          url,
+          available_time);
 
       await user
           .save()
@@ -132,13 +155,11 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.6,
       child: Form(
         key: widget.formkey,
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -147,13 +168,28 @@ class _RegisterFormState extends State<RegisterForm> {
                 style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(height: 20),
-              //
-              UserImagePicker(
-                onPickImage: (pickedImage) {
-                  _selectedImage = pickedImage;
+
+              TextFormField(
+                key: const ValueKey('identity'),
+                decoration: InputDecoration(
+                  hintText: "...",
+                  labelText: 'Identity Id',
+                  labelStyle: Theme.of(context).textTheme.displayMedium,
+                ),
+                keyboardType: TextInputType.emailAddress,
+                onSaved: (value) {
+                  _enteredIdentityId = value.toString();
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your identity id';
+                  }
+                  return null;
                 },
               ),
+              const SizedBox(height: 16),
 
+              //
               TextFormField(
                 key: const ValueKey('email'),
                 decoration: InputDecoration(
@@ -174,6 +210,7 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
               const SizedBox(height: 16),
 
+              //
               TextFormField(
                 key: const ValueKey('password'),
                 decoration: InputDecoration(
@@ -194,6 +231,7 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
               const SizedBox(height: 16),
 
+              //
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Retype-password',
@@ -212,6 +250,7 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
               const SizedBox(height: 16),
 
+              //
               TextFormField(
                 key: const ValueKey('username'),
                 decoration: InputDecoration(
@@ -231,6 +270,7 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
               const SizedBox(height: 16),
 
+              //
               TextFormField(
                 decoration: InputDecoration(
                   hintText: "0123456789",
@@ -250,6 +290,7 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
               const SizedBox(height: 16),
 
+              //
               DropdownButtonFormField(
                 decoration: InputDecoration(
                   labelText: 'Gender',
@@ -275,6 +316,7 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
               const SizedBox(height: 16),
 
+              //
               TextFormField(
                 controller: dateinput,
                 decoration: InputDecoration(
@@ -304,7 +346,110 @@ class _RegisterFormState extends State<RegisterForm> {
                 },
               ),
               const SizedBox(height: 16),
+
               //
+              TextFormField(
+                key: const ValueKey('license'),
+                decoration: InputDecoration(
+                  labelText: 'Your license id',
+                  hintText: "...",
+                  labelStyle: Theme.of(context).textTheme.displayMedium,
+                ),
+                onSaved: (value) {
+                  _enteredLicenseId = value.toString();
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your license id';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              //
+              TextFormField(
+                key: const ValueKey('workplace'),
+                decoration: InputDecoration(
+                  hintText: "...",
+                  labelText: 'Workplace',
+                  labelStyle: Theme.of(context).textTheme.displayMedium,
+                ),
+                onSaved: (value) {
+                  _enteredWorkplace = value.toString();
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter expertise';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              //
+
+              TextFormField(
+                key: const ValueKey('specialization'),
+                decoration: InputDecoration(
+                  hintText: "Dermatology...",
+                  labelText: 'Expertise',
+                  labelStyle: Theme.of(context).textTheme.displayMedium,
+                ),
+                onSaved: (value) {
+                  _enteredSpecialization = value.toString();
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter expertise';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              //
+
+              TextFormField(
+                key: const ValueKey('experience'),
+                decoration: InputDecoration(
+                  hintText: "...",
+                  labelText: 'Experience',
+                  labelStyle: Theme.of(context).textTheme.displayMedium,
+                ),
+                keyboardType: TextInputType.number,
+                onSaved: (value) {
+                  _enteredExp = int.parse(value!);
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your experience';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              //
+
+              TextFormField(
+                key: const ValueKey('price'),
+                decoration: InputDecoration(
+                  hintText: "...",
+                  labelText: 'Price for consultant',
+                  labelStyle: Theme.of(context).textTheme.displayMedium,
+                ),
+                keyboardType: TextInputType.number,
+                onSaved: (value) {
+                  _enteredPrice = int.parse(value!);
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your price';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              //
+
               ElevatedButton(
                 style: ButtonStyle(
                   textStyle:
@@ -313,20 +458,22 @@ class _RegisterFormState extends State<RegisterForm> {
                     fontWeight: FontWeight.w700,
                   )),
                 ),
-                onPressed: _submit,
+                onPressed: () {},
                 child: const Text("Sign up"),
               ),
               const SizedBox(height: 10),
+              //
               Row(
                 children: <Widget>[
-                  const Text("Are you a doctor?"),
+                  const Text("Are you a patient?"),
                   TextButton(
                     onPressed: () =>
-                        widget.setFormStage(FormStage.DoctorRegister),
-                    child: const Text("Register for doctor"),
+                        widget.setFormStage(FormStage.PatientRegister),
+                    child: const Text("Register for patient"),
                   ),
                 ],
               ),
+              //
               Row(
                 children: <Widget>[
                   const Text("Already has account?"),
