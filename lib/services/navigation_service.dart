@@ -25,14 +25,13 @@ class NavigationService {
         {
           final data = settings.arguments as Map<String, dynamic>;
           return MaterialPageRoute(
-            // builder: (_) => CallScreen(
-            //   token: data["token"],
-            //   channelId: data["channel_id"],
-            //   remotename: data["remote_name"],
-            //   remotecover: data["remote_cover"],
-            //   caller: false,
-            // ),
-            builder: (_) => Container(),
+            builder: (_) => CallScreen(
+              token: data["token"],
+              channelId: data["channel_id"],
+              remotename: data["remote_name"],
+              remotecover: data["remote_cover"],
+              caller: data["caller"],
+            ),
           );
         }
       default:

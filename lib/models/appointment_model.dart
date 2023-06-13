@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class AppointmentModel {
   String? id;
@@ -80,6 +83,22 @@ class AppointmentModel {
       }
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  Future<bool> makeCall() async {
+    try {
+      if (id != null) {
+        final res = await http.post(Uri.parse("https://health-care-admin-production.up.railway.app/makecall/$id"));
+        final json = jsonDecode(res.body);
+        if (json["status"] != "successful!") {
+          return false;
+        }
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
     }
   }
 
