@@ -3,6 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import './patient_model.dart' show Gender;
 
+const _map = [
+  "mon",
+  "tue",
+  "wed",
+  "thu",
+  "fri",
+  "sat",
+  "sun",
+];
+
 class DoctorModel {
   String? id;
   String name;
@@ -16,7 +26,6 @@ class DoctorModel {
   int price;
   String workplace;
   String specialization;
-  Map<String, dynamic> availableTime;
 
   static final CollectionReference _ref = FirebaseFirestore.instance.collection("doctor");
 
@@ -33,7 +42,6 @@ class DoctorModel {
     this.workplace,
     this.specialization,
     this.image,
-    this.availableTime,
   );
 
   Future<void> save() async {
@@ -50,7 +58,6 @@ class DoctorModel {
         "workplace": workplace,
         "specialization": specialization,
         "image": image,
-        "available_time": availableTime,
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -84,7 +91,43 @@ class DoctorModel {
       snapshot.get("workplace"),
       snapshot.get("specialization"),
       snapshot.get("image"),
-      snapshot.get("available_time"),
     );
+  }
+
+  // 0 = Monday; 6 == Sun
+  Future<List<dynamic>> getSchedule(int weekday) async {
+    final snapshot = await _ref.doc(id).get();
+    final val = snapshot.get("available_time.${_map[weekday]}");
+    return val;
+  }
+
+  Future<void> applySchedule(int weekday, double morning, double afternoon, double evening) async {
+    await _ref.doc(id).update({
+      "available_time.${_map[weekday]}": [morning, afternoon, evening],
+    });
+  }
+
+  Future<void> applyToAllSchedule(double morning, double afternoon, double evening) async {
+    await _ref.doc(id).update({
+      "available_time.mon": [morning, afternoon, evening],
+    });
+    await _ref.doc(id).update({
+      "available_time.tue": [morning, afternoon, evening],
+    });
+    await _ref.doc(id).update({
+      "available_time.wed": [morning, afternoon, evening],
+    });
+    await _ref.doc(id).update({
+      "available_time.thu": [morning, afternoon, evening],
+    });
+    await _ref.doc(id).update({
+      "available_time.fri": [morning, afternoon, evening],
+    });
+    await _ref.doc(id).update({
+      "available_time.sat": [morning, afternoon, evening],
+    });
+    await _ref.doc(id).update({
+      "available_time.sun": [morning, afternoon, evening],
+    });
   }
 }

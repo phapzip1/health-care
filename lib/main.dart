@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:health_care/screens/doctor_schedule_screen.dart';
+import 'package:health_care/services/notification_service.dart';
 
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 //screen import
 import './screens/login_screen.dart';
-import './screens/doctor_schedule_screen.dart';
+import '../screens/page_not_found_screen.dart';
+import './screens/loading_screen.dart';
 
 //theme
 import '../utils/app_theme.dart';
@@ -21,7 +23,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  NotificationService.initialize(debug: true);
+  NotificationService.startListeningNotificationEvents();
   runApp(
     const MyWidget(),
   );
@@ -42,25 +45,16 @@ class MyWidget extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (BuildContext ctx, AsyncSnapshot<User?> auth) {
             if (auth.hasData) {
-              if (NavigationService.isDoctor) {
-                return StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection("doctor").doc(auth.data!.uid).snapshots(),
-                  builder: (BuildContext ctx2, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> data) {
-                    if (data.hasData) {
-                    }
-                    return ;
-                  },
-                );
-              } else {
-                return StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection("patient").doc(auth.data!.uid).snapshots(),
-                  builder: (BuildContext ctx2, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> data) {
-                    if (data.hasData) {
-
-                    }
-                  },
-                );
-              }
+              return FutureBuilder(
+                future: FirebaseFirestore.instance.collection("doc").doc(auth.data!.uid).get(),
+                builder: (ctx2, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const LoadingScreen("Loading...");
+                  }
+                   // if snapshot.hasData == true, then this is doctor vice versa 
+                  return const PageNotFoundScreen("/undefined");
+                },
+              );
             }
             return LoginScreen();
           },

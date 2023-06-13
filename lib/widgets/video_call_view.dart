@@ -3,33 +3,32 @@ import "package:flutter/material.dart";
 import "package:agora_rtc_engine/agora_rtc_engine.dart";
 
 class VideoCallView extends StatelessWidget {
-  const VideoCallView(
-      {super.key,
-      required this.engine,
-      required this.channelId,
-      required this.receiverName,
-      required this.receiverAva,
-      required this.localCamoff,
-      required this.remoteUid,
-      required this.remoteMute,
-      required this.remoteCamoff,
-      required this.remoteCover});
+  const VideoCallView({
+    super.key,
+    required this.engine,
+    required this.channelId,
+    required this.remoteName,
+    required this.remoteCover,
+    required this.remoteUid,
+    required this.remoteMute,
+    required this.remoteCamoff,
+    required this.localCamoff,
+  });
 
   final RtcEngine engine;
   final String channelId;
-  final String receiverName;
-  final String receiverAva;
-  final bool localCamoff;
   final int remoteUid;
+  final String remoteName;
+  final String remoteCover;
   final bool remoteMute;
   final bool remoteCamoff;
-  final String remoteCover;
+  final bool localCamoff;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        // receiver
+        // remote
         if (remoteUid != -1)
           Positioned.fill(
             child: AgoraVideoView(
@@ -52,7 +51,7 @@ class VideoCallView extends StatelessWidget {
               ),
             ),
           ),
-        // caller
+        // local
         if (remoteUid != -1 && !localCamoff)
           Positioned(
             top: 10,
@@ -71,16 +70,6 @@ class VideoCallView extends StatelessWidget {
               ),
             ),
           ),
-        // preview
-        if (remoteUid == -1)
-          Positioned.fill(
-            child: AgoraVideoView(
-              controller: VideoViewController(
-                rtcEngine: engine,
-                canvas: const VideoCanvas(uid: 0),
-              ),
-            ),
-          ),
         // remote muted
         if (remoteMute && remoteUid != -1)
           const Positioned(
@@ -89,6 +78,16 @@ class VideoCallView extends StatelessWidget {
             child: Icon(
               Icons.mic_off,
               color: Colors.red,
+            ),
+          ),
+        // local preview
+        if (remoteUid == -1)
+          Positioned.fill(
+            child: AgoraVideoView(
+              controller: VideoViewController(
+                rtcEngine: engine,
+                canvas: const VideoCanvas(uid: 0),
+              ),
             ),
           ),
         // modal
@@ -102,14 +101,14 @@ class VideoCallView extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     CircleAvatar(
-                      backgroundImage: NetworkImage(receiverAva),
+                      backgroundImage: NetworkImage(remoteCover),
                       radius: 50,
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     Text(
-                      receiverName,
+                      remoteName,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,

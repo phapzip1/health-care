@@ -30,7 +30,7 @@ class NavigationService {
               channelId: data["channel_id"],
               remotename: data["remote_name"],
               remotecover: data["remote_cover"],
-              caller: false,
+              caller: data["caller"],
             ),
           );
         }
