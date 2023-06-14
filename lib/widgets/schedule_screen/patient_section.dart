@@ -148,7 +148,7 @@ class _PatientSectionState extends State<PatientSection> {
                                     CircleAvatar(
                                       radius: 4,
                                       backgroundColor:
-                                          !scheduleDocs[index].status
+                                          scheduleDocs[index].status == 0
                                               ? const Color(0xFFE2B93B)
                                               : const Color(0xFF27AE60),
                                     ),
@@ -156,7 +156,7 @@ class _PatientSectionState extends State<PatientSection> {
                                       width: 4,
                                     ),
                                     Text(
-                                      scheduleDocs[index].status
+                                      scheduleDocs[index].status == 1
                                           ? "Confirmed"
                                           : 'Waiting',
                                       style: const TextStyle(fontSize: 16),

@@ -55,14 +55,22 @@ class DoctorModel {
         "birthdate": Timestamp.fromDate(birthdate),
         "email": email,
         "experience": experience,
+        "identityId": identityId,
+        "licenseId": licenseId,
         "price": price,
         "workplace": workplace,
         "specialization": specialization,
         "image": image,
+        "available_time": {},
       });
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  Future<bool> checkTime() async {
+    final snapshot = await _ref.doc(id).get();
+    return (snapshot.get('available_time') as Map).isEmpty ;
   }
 
   static Gender toGenderEnum(String val) {
@@ -103,33 +111,33 @@ class DoctorModel {
     return val;
   }
 
-  Future<void> applySchedule(int weekday, double morning, double afternoon, double evening) async {
+  Future<void> applySchedule(int weekday, List<double> data) async {
     await _ref.doc(id).update({
-      "available_time.${_map[weekday]}": [morning, afternoon, evening],
+      "available_time.${_map[weekday]}": data,
     });
   }
 
-  Future<void> applyToAllSchedule(double morning, double afternoon, double evening) async {
+  Future<void> applyToAllSchedule(List<double> data) async {
     await _ref.doc(id).update({
-      "available_time.mon": [morning, afternoon, evening],
+      "available_time.mon": data,
     });
     await _ref.doc(id).update({
-      "available_time.tue": [morning, afternoon, evening],
+      "available_time.tue": data,
     });
     await _ref.doc(id).update({
-      "available_time.wed": [morning, afternoon, evening],
+      "available_time.wed": data,
     });
     await _ref.doc(id).update({
-      "available_time.thu": [morning, afternoon, evening],
+      "available_time.thu": data,
     });
     await _ref.doc(id).update({
-      "available_time.fri": [morning, afternoon, evening],
+      "available_time.fri": data,
     });
     await _ref.doc(id).update({
-      "available_time.sat": [morning, afternoon, evening],
+      "available_time.sat": data,
     });
     await _ref.doc(id).update({
-      "available_time.sun": [morning, afternoon, evening],
+      "available_time.sun": data,
     });
   }
 }

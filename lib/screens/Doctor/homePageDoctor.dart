@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_care/widgets/function_category.dart';
 import 'package:health_care/widgets/header_section.dart';
 import 'package:intl/intl.dart';
 
@@ -61,31 +62,7 @@ class _HomePageDoctor extends State<HomePageDoctor> {
                                 HeaderSection(
                                     url: userDocs['image'],
                                     userName: userDocs['name']),
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                      top: 24, bottom: 24),
-                                  child: TextField(
-                                    controller: _searchController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Search...',
-                                      suffixIcon: IconButton(
-                                        icon: const Icon(Icons.clear),
-                                        onPressed: () =>
-                                            _searchController.clear(),
-                                      ),
-                                      prefixIcon: IconButton(
-                                        icon: const Icon(Icons.search),
-                                        onPressed: () {
-                                          // Perform the search here
-                                        },
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(50.0),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                FunctionCategory(userDocs.id, true),
 
                                 // Appointment list
                                 const Text(

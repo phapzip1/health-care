@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health_care/screens/Doctor/doctorInformation.dart';
 import 'package:health_care/screens/Doctor/doctorSchedulePage.dart';
+import 'package:health_care/screens/Doctor/doctor_infor_page.dart';
 import 'package:health_care/screens/Doctor/homePageDoctor.dart';
 import '../../screens/Patient/homePage.dart';
 import './patientSchedulePage.dart';
@@ -16,7 +18,9 @@ class MainPage extends StatefulWidget {
 
 class _MyWidgetState extends State<MainPage> {
   int _selectedIndex = 0;
-  
+
+  final user = FirebaseAuth.instance.currentUser!.uid;
+
   Widget currentPagePatient(int index) {
     switch (index) {
       case 0:
@@ -37,7 +41,7 @@ class _MyWidgetState extends State<MainPage> {
       case 1:
         return DoctorSchedulePage();
       case 2:
-        return DoctorInformation();
+        return DoctorInforPage(user, widget.isDoctor);
       default:
         return HomePageDoctor();
     }
@@ -53,7 +57,9 @@ class _MyWidgetState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: widget.isDoctor ? currentPageDoctor(_selectedIndex) : currentPagePatient(_selectedIndex),
+        child: widget.isDoctor
+            ? currentPageDoctor(_selectedIndex)
+            : currentPagePatient(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavBar(_selectedIndex, _onItemTapped),
     );

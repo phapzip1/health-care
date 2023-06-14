@@ -1,29 +1,47 @@
 import "package:flutter/material.dart";
 import "package:health_care/models/appointment_model.dart";
-import "package:health_care/models/doctor_model.dart";
 import "package:health_care/models/patient_model.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import "package:health_care/screens/Patient/homePage.dart";
 
 class CardsAndWalletsScreen extends StatelessWidget {
-  final DoctorModel doctor;
+  final String doctorId;
+  final String doctorName;
+  final int price;
+  final String doctorPhone;
+  final String doctorImage;
+  final String doctorSpecialization;
+  final DateTime date;
+  final double hour;
   final PatientModel patient;
 
-  const CardsAndWalletsScreen(this.doctor, this.patient, {super.key});
+  const CardsAndWalletsScreen(
+      this.doctorId,
+      this.doctorName,
+      this.price,
+      this.doctorPhone,
+      this.doctorImage,
+      this.doctorSpecialization,
+      this.date,
+      this.hour,
+      this.patient,
+      {super.key});
 
   void _makeAppointment(context) async {
+    //thay so 8
     final currentAppointment = AppointmentModel.create(
-        doctor.id.toString(),
-        doctor.name,
-        doctor.phoneNumber,
-        doctor.image,
+        doctorId,
+        doctorName,
+        doctorPhone,
+        doctorImage,
         patient.id.toString(),
         patient.name,
         patient.phoneNumber,
         patient.image,
-        doctor.specialization,
-        DateTime.now(),
-        false);
+        doctorSpecialization,
+        date,
+        hour,
+        0);
 
     await currentAppointment.save().then((value) {
       Fluttertoast.showToast(
@@ -98,7 +116,7 @@ class CardsAndWalletsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "${doctor.price} vnd",
+                        "$price vnd",
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,

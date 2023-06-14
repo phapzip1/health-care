@@ -1,12 +1,27 @@
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
-import "package:health_care/models/doctor_model.dart";
 import "package:health_care/models/patient_model.dart";
-import "package:health_care/screens/cards_and_wallets_screen.dart";
+import "package:health_care/services/navigation_service.dart";
 
 class PaymentScreen extends StatelessWidget {
-  final DoctorModel doctor;
-  const PaymentScreen(this.doctor, {super.key});
+  final String doctorId;
+  final String doctorName;
+  final int price;
+  final String doctorPhone;
+  final String doctorImage;
+  final String doctorSpecialization;
+  final DateTime date;
+  final double hour;
+  const PaymentScreen(
+      this.doctorId,
+      this.doctorName,
+      this.price,
+      this.doctorPhone,
+      this.doctorImage,
+      this.doctorSpecialization,
+      this.date,
+      this.hour,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +137,7 @@ class PaymentScreen extends StatelessWidget {
                                       color: Colors.grey),
                                 ),
                                 subtitle: Text(
-                                  doctor.name,
+                                  doctorName,
                                   style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -182,7 +197,7 @@ class PaymentScreen extends StatelessWidget {
                                       color: Colors.grey),
                                 ),
                                 subtitle: Text(
-                                  "${doctor.price} vnd",
+                                  "$price vnd",
                                   style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -212,9 +227,9 @@ class PaymentScreen extends StatelessWidget {
                                       fontWeight: FontWeight.w500,
                                       color: Colors.grey),
                                 ),
-                                subtitle: const Text(
-                                  "2023-12-11 08:00AM",
-                                  style: TextStyle(
+                                subtitle: Text(
+                                  "$date $hour",
+                                  style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black),
@@ -231,11 +246,18 @@ class PaymentScreen extends StatelessWidget {
                       right: 20,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      CardsAndWalletsScreen(doctor, patient)));
+                          NavigationService.navKey.currentState
+                              ?.pushNamed('/wallets', arguments: {
+                            'doctorId': doctorId,
+                            'doctorName': doctorName,
+                            'price': price,
+                            'doctorPhone': doctorPhone,
+                            'doctorImage': doctorImage,
+                            'doctorSpecialization': doctorSpecialization,
+                            'date': date,
+                            'hour': hour,
+                            'patient': patient
+                          });
                         },
                         child: const Padding(
                           padding: EdgeInsetsDirectional.symmetric(vertical: 5),

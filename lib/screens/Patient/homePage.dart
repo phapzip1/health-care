@@ -13,7 +13,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-
   final user = FirebaseAuth.instance.currentUser;
 
   final List<Symptom> symptoms = [
@@ -41,15 +40,6 @@ class HomePage extends StatelessWidget {
                   );
                 }
 
-                // final patient = PatientModel(
-                //     user!.uid,
-                //     futureSnapShot.data!.name,
-                //     futureSnapShot.data!.phoneNumber,
-                //     futureSnapShot.data!.gender,
-                //     futureSnapShot.data!.birthdate,
-                //     futureSnapShot.data!.email,
-                //     futureSnapShot.data!.image);
-
                 return Column(
                   children: [
                     Padding(
@@ -60,7 +50,7 @@ class HomePage extends StatelessWidget {
                           HeaderSection(
                               url: futureSnapShot.data!.image,
                               userName: futureSnapShot.data!.name),
-                          FunctionCategory(user!.uid),
+                          FunctionCategory(user!.uid, false),
                           const Text(
                             'My Appointment',
                             style: TextStyle(
@@ -71,12 +61,10 @@ class HomePage extends StatelessWidget {
                           const SizedBox(
                             height: 16,
                           ),
-                          Container(
-                            child: const SizedBox(
-                              width: double.infinity,
-                              height: 130,
-                              child: PersonalAppointment(),
-                            ),
+                          const SizedBox(
+                            width: double.infinity,
+                            height: 130,
+                            child: PersonalAppointment(),
                           ),
                           const SizedBox(
                             height: 24,
@@ -99,7 +87,7 @@ class HomePage extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 4),
                       child: Column(
                         children: [
-                          Container(
+                          SizedBox(
                             width: double.infinity,
                             height: 48,
                             child: ListView.builder(

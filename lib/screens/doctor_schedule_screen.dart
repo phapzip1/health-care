@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
-// widgets
-import '../widgets/slider_with_label.dart';
 
 // model
 import '../models/doctor_model.dart';
@@ -14,7 +10,9 @@ const map = {
 };
 
 class DoctorScheduleScreen extends StatefulWidget {
-  const DoctorScheduleScreen({
+  final String doctorId;
+  const DoctorScheduleScreen(
+    this.doctorId, {
     super.key,
   });
 
@@ -23,23 +21,19 @@ class DoctorScheduleScreen extends StatefulWidget {
 }
 
 class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
-  double _morning = 0;
-  double _afternoon = 0;
-  double _evening = 0;
-
   List<double> def = [0, 0, 0];
 
   int _weekday = 0;
 
+  // ignore: unused_field
   bool _changed = false;
 
   void _getData(int weekday) async {
     // Todo: fetch data from firebase
-    final data = await (await DoctorModel.getById("Xgh3EC9d7jVeNsaRk6dsVM2Yk9V2")).getSchedule(weekday);
+    final data =
+        await (await DoctorModel.getById(widget.doctorId)).getSchedule(weekday);
     setState(() {
-      _morning = def[0] = data[0] * 1.0;
-      _afternoon = def[1] = data[1] * 1.0;
-      _evening = def[2] = data[2] * 1.0;
+      checkedTime = def = data as List<double>;
     });
   }
 
@@ -50,46 +44,75 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
   }
 
   void _save() async {
-    final data = await DoctorModel.getById("Xgh3EC9d7jVeNsaRk6dsVM2Yk9V2");
-
+    final data = await DoctorModel.getById(widget.doctorId);
+    def = [...checkedTime];
     setState(() {
       _changed = false;
     });
 
-    await data.applySchedule(_weekday, _morning, _afternoon, _evening);
+    await data.applySchedule(_weekday, checkedTime);
   }
 
   void _saveToAll() async {
-    final data = await DoctorModel.getById("Xgh3EC9d7jVeNsaRk6dsVM2Yk9V2");
+    final data = await DoctorModel.getById(widget.doctorId);
+    def = [...checkedTime];
+
     setState(() {
       _changed = false;
     });
-    await data.applyToAllSchedule(_morning, _afternoon, _evening);
+    await data.applyToAllSchedule(checkedTime);
   }
 
   void _discard() {
     setState(() {
-      _morning = def[0];
-      _afternoon = def[1];
-      _evening = def[2];
+      checkedTime = def;
     });
   }
 
-  String _toTime(double start, double offset) {
-    final res = start + offset * 0.5;
-    final isHalf = (res - res.floor()) == 0.5;
-    return "${NumberFormat("00", "en_US").format(res.floor())}:${isHalf ? "30" : "00"}";
-  }
+  List<double> time = [
+    7,
+    7.30,
+    8,
+    8.30,
+    9,
+    9.30,
+    10,
+    10.30,
+    11,
+    11.30,
+    12,
+    12.30,
+    13,
+    13.30,
+    14,
+    14.30,
+    15,
+    15.30,
+    16,
+    16.30,
+    17,
+    17.30,
+    18,
+    18.30,
+    19,
+    19.30,
+    20,
+    20.30,
+    21,
+    21.30,
+    22,
+    22.30
+  ];
+
+  List<double> checkedTime = [];
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    //ignore: avoid_print
-    print("morning: $_morning, afternoon: $_afternoon, evening: $_evening");
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               SizedBox(
@@ -107,11 +130,17 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                         }
                       },
                       child: Card(
-                        color: i == _weekday ? Colors.amber : Colors.white,
+                        color: i == _weekday
+                            ? const Color(0xFF3A86FF)
+                            : Colors.white,
                         child: SizedBox(
                           width: size.width / 5,
                           child: Center(
-                            child: Text(week[i]),
+                            child: Text(
+                              week[i],
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ),
@@ -128,66 +157,49 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
               const SizedBox(
                 height: 20,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                ),
+              Expanded(
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color(0xFFC4FAFF),
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 5,
                     vertical: 10,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SliderWithLabel(
-                        label: "Morning",
-                        onChanged: (value) {
-                          setState(() {
-                            _morning = value;
-                            _changed = true;
-                          });
-                        },
-                        value: _morning,
-                        timeText: _morning == 0 ? "Unavailable" : "07:00 - ${_toTime(7, _morning)}",
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SliderWithLabel(
-                        label: "Afternoon",
-                        onChanged: (value) {
-                          setState(() {
-                            _afternoon = value;
-                            _changed = true;
-                          });
-                        },
-                        value: _afternoon,
-                        timeText: _afternoon == 0 ? "Unavailable" : "13:00 - ${_toTime(13, _afternoon)}",
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SliderWithLabel(
-                        label: "Evening",
-                        onChanged: (value) {
-                          setState(() {
-                            _evening = value;
-                            _changed = true;
-                          });
-                        },
-                        value: _evening,
-                        timeText: _evening == 0 ? "Unavailable" : "18:00 - ${_toTime(18, _evening)}",
-                      ),
-                    ],
-                  ),
+                  child: ListView.builder(
+                      itemCount: time.length,
+                      itemBuilder: (ctx, index) {
+                        bool checked = checkedTime.contains(time[index]);
+                        return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: checked
+                                    ? Colors.red
+                                    : const Color(0xFF3A86FF)),
+                            onPressed: () {
+                              if (!checked) {
+                                setState(() {
+                                  checkedTime.add(time[index]);
+                                });
+                              } else {
+                                setState(() {
+                                  checkedTime.remove(time[index]);
+                                });
+                              }
+                            },
+                            child: Text(
+                              '${time[index]}',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ));
+                      }),
                 ),
               ),
-              const Spacer(),
+
+              //button appear only for changing
+              const SizedBox(
+                height: 16,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -196,7 +208,11 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                       onPressed: _discard,
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 5),
-                        child: Text("Undo"),
+                        child: Text(
+                          "Undo",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
                       ),
                     ),
                   ),
@@ -208,7 +224,11 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                       onPressed: _save,
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 5),
-                        child: Text("Save"),
+                        child: Text(
+                          "Save",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
                       ),
                     ),
                   ),
@@ -220,14 +240,15 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                       onPressed: _saveToAll,
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 5),
-                        child: Text("Apply to all"),
+                        child: Text(
+                          "Apply to all",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
                       ),
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(
-                height: 10,
               ),
             ],
           ),

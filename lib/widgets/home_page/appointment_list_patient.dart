@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:health_care/models/patient_model.dart';
-import 'package:health_care/widgets/infomation_page/doctor_infor_page.dart';
+import 'package:health_care/screens/Doctor/doctor_infor_page.dart';
 
 class AppointmentListPatient extends StatelessWidget {
   AppointmentListPatient();
@@ -48,7 +48,7 @@ class AppointmentListPatient extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    DoctorInforPage(doctorList[index].id)))
+                                    DoctorInforPage(doctorList[index].id, false)))
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(16),

@@ -16,9 +16,11 @@ class AppointmentModel {
   String patientPhone;
   String specialization;
   DateTime dateTime;
-  bool status;
+  double meetingTime;
+  int status;
 
-  static final CollectionReference _ref = FirebaseFirestore.instance.collection("appointment");
+  static final CollectionReference _ref =
+      FirebaseFirestore.instance.collection("appointment");
 
   AppointmentModel(
     this.id,
@@ -32,6 +34,7 @@ class AppointmentModel {
     this.patientImage,
     this.specialization,
     this.dateTime,
+    this.meetingTime,
     this.status,
   );
 
@@ -46,9 +49,10 @@ class AppointmentModel {
     this.patientImage,
     this.specialization,
     this.dateTime,
+    this.meetingTime,
     this.status,
   );
-
+  //status = 0: chua duyet, status = 1: da duyet, status = 2: da xong,
   Future<void> save() async {
     try {
       if (id == null) {
@@ -62,6 +66,7 @@ class AppointmentModel {
           "patient_image": patientImage,
           "patient_phone": patientPhone,
           "specialization": specialization,
+          "meeting_time": meetingTime,
           "datetime": Timestamp.fromDate(dateTime),
           "status": status,
         });
@@ -77,6 +82,7 @@ class AppointmentModel {
           "patient_phone": patientPhone,
           "patient_image": patientImage,
           "specialization": specialization,
+          "meeting_time": meetingTime,
           "datetime": Timestamp.fromDate(dateTime),
           "status": status,
         });
@@ -89,12 +95,14 @@ class AppointmentModel {
   Future<bool> makeCall() async {
     try {
       if (id != null) {
-        final res = await http.post(Uri.parse("https://health-care-admin-production.up.railway.app/makecall/$id"));
+        final res = await http.post(Uri.parse(
+            "https://health-care-admin-production.up.railway.app/makecall/$id"));
         final json = jsonDecode(res.body);
         if (json["status"] != "successful!") {
           return false;
         }
         return true;
+        //navigate to call screen
       }
       return false;
     } catch (e) {
@@ -102,7 +110,8 @@ class AppointmentModel {
     }
   }
 
-  static Future<List<AppointmentModel>> getAppointment({String? doctorId, String? patientId}) async {
+  static Future<List<AppointmentModel>> getAppointment(
+      {String? doctorId, String? patientId}) async {
     if (doctorId != null) {
       final snapshot = await _ref.where("doctor_id", isEqualTo: doctorId).get();
       final res = snapshot.docs
@@ -119,6 +128,7 @@ class AppointmentModel {
               e.get("patient_image"),
               e.get("specialization"),
               (e.get("datetime") as Timestamp).toDate(),
+              e.get("meeting_time"),
               e.get("status"),
             ),
           )
@@ -140,6 +150,7 @@ class AppointmentModel {
             e.get("patient_image"),
             e.get("specialization"),
             (e.get("datetime") as Timestamp).toDate(),
+            e.get("meeting_time"),
             e.get("status"),
           ),
         )

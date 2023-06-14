@@ -49,9 +49,6 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
   DateTime _enteredBirthday = DateTime.now();
   final now = DateTime.now();
 
-  Map<String, dynamic> available_time =[] as Map<String, dynamic>;
-
-
   void _submit() async {
     try {
       final isValid = widget.formkey.currentState!.validate();
@@ -97,8 +94,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
           _enteredSpecialization,
           _enteredIdentityId,
           _enteredLicenseId,
-          url,
-          available_time);
+          url);
 
       await user
           .save()
@@ -458,7 +454,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                     fontWeight: FontWeight.w700,
                   )),
                 ),
-                onPressed: () {},
+                onPressed: _submit,
                 child: const Text("Sign up"),
               ),
               const SizedBox(height: 10),

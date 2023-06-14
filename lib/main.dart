@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:health_care/screens/doctor_schedule_screen.dart';
+import 'package:health_care/screens/Patient/mainPage.dart';
+// import 'package:health_care/screens/doctor_schedule_screen.dart';
 import 'package:health_care/services/notification_service.dart';
 
 import 'firebase_options.dart';
@@ -62,13 +63,15 @@ class MyWidget extends StatelessWidget {
           builder: (BuildContext ctx, AsyncSnapshot<User?> auth) {
             if (auth.hasData) {
               return FutureBuilder(
-                future: FirebaseFirestore.instance.collection("doc").doc(auth.data!.uid).get(),
+                future: FirebaseFirestore.instance.collection("doctor").doc(auth.data!.uid).get(),
                 builder: (ctx2, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const LoadingScreen("Loading...");
                   }
                    // if snapshot.hasData == true, then this is doctor vice versa 
-                  return const PageNotFoundScreen("/undefined");
+                  // return const PageNotFoundScreen("/undefined");
+                  if(snapshot.data!.exists) return _render('doctor', auth.data!.uid, true);
+                  return _render('patient', auth.data!.uid, false);
                 },
               );
             }
