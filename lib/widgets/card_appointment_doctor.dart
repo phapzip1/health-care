@@ -41,9 +41,9 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
         .makeCall()
         .then((value) => NavigationService.navKey.currentState?.pushNamed('/call', arguments: {
               'token': value,
-              'channelId': widget.schedule.id,
-              'remotename': widget.schedule.patientName,
-              'remotecover': widget.schedule.patientName,
+              'channel_id': widget.schedule.id,
+              'remote_name': widget.schedule.patientName,
+              'remote_cover': widget.schedule.patientName,
               'caller': true,
             }))
         .catchError((error, stackTrace) {
