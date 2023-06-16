@@ -16,6 +16,7 @@ class NavigationService {
   static const String schedule = "/schedule";
   static const String payment = "/payment";
   static const String wallets = "/wallets";
+  static const String call = "/call";
 
   static final GlobalKey<NavigatorState> _navState =
       GlobalKey<NavigatorState>();
@@ -29,7 +30,7 @@ class NavigationService {
         return MaterialPageRoute(builder: homepageBuilder);
       case chat:
         return MaterialPageRoute(builder: (_) => CommunityQA());
-      case "/call":
+      case call:
         {
           final data = settings.arguments as Map<String, dynamic>;
           return MaterialPageRoute(

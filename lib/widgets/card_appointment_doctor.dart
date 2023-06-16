@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/services/navigation_service.dart';
@@ -6,9 +7,7 @@ import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class CardAppointmentDoctor extends StatefulWidget {
-  CardAppointmentDoctor(this.changedPage, this.mediaQuery, this.schedule,
-      this.time, this.updateStatus,
-      {super.key});
+  CardAppointmentDoctor(this.changedPage, this.mediaQuery, this.schedule, this.time, this.updateStatus, {super.key});
 
   bool changedPage;
   Size mediaQuery;
@@ -38,14 +37,25 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
   }
 
   void _makeCall() async {
-    // await widget.schedule.makeCall().whenComplete(() => NavigationService.navKey.currentState
-    //                           ?.pushNamed('/call', arguments: {
-    //                         'token': ,
-    //           'channelId': ,
-    //           'remotename': ,
-    //           'remotecover': ,
-    //           'caller': ,
-    //                       }));
+    await widget.schedule
+        .makeCall()
+        .then((value) => NavigationService.navKey.currentState?.pushNamed('/call', arguments: {
+              'token': value,
+              'channelId': widget.schedule.id,
+              'remotename': widget.schedule.patientName,
+              'remotecover': widget.schedule.patientName,
+              'caller': true,
+            }))
+        .catchError((error, stackTrace) {
+      Fluttertoast.showToast(
+        msg: "An error occurred",
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    });
   }
 
   @override
@@ -85,8 +95,7 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                       ),
                       Text(
                         "Issues: ${widget.schedule.specialization}",
-                        style: const TextStyle(
-                            fontSize: 16, color: Color(0xFF828282)),
+                        style: const TextStyle(fontSize: 16, color: Color(0xFF828282)),
                       ),
                       const SizedBox(
                         height: 6,
@@ -148,17 +157,13 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                         children: [
                           CircleAvatar(
                             radius: 4,
-                            backgroundColor: widget.schedule.status == 0
-                                ? const Color(0xFFE2B93B)
-                                : const Color(0xFFEB5757),
+                            backgroundColor: widget.schedule.status == 0 ? const Color(0xFFE2B93B) : const Color(0xFFEB5757),
                           ),
                           const SizedBox(
                             width: 4,
                           ),
                           Text(
-                            widget.schedule.status == 0
-                                ? "Waiting"
-                                : "Rejected",
+                            widget.schedule.status == 0 ? "Waiting" : "Rejected",
                             style: const TextStyle(fontSize: 16),
                           ),
                         ],
@@ -190,35 +195,19 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                               children: [
                                 ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xFFFFBE0B),
-                                        elevation: 0,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal:
-                                                widget.mediaQuery.width * 0.1, vertical: 12)),
+                                        backgroundColor: const Color(0xFFFFBE0B), elevation: 0, padding: EdgeInsets.symmetric(horizontal: widget.mediaQuery.width * 0.1, vertical: 12)),
                                     onPressed: () {},
                                     child: const Text(
                                       'Postpone',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                          fontSize: 16),
+                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16),
                                     )),
                                 ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xFF2F80ED),
-                                        elevation: 0,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal:
-                                                widget.mediaQuery.width * 0.1, vertical: 12)),
+                                        backgroundColor: const Color(0xFF2F80ED), elevation: 0, padding: EdgeInsets.symmetric(horizontal: widget.mediaQuery.width * 0.1, vertical: 12)),
                                     onPressed: _makeCall,
                                     child: const Text(
                                       'Make a call',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: 16),
+                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),
                                     )),
                               ],
                             )
@@ -226,35 +215,19 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFFE0E0E0),
-                                      elevation: 0,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              widget.mediaQuery.width * 0.1)),
+                                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE0E0E0), elevation: 0, padding: EdgeInsets.symmetric(horizontal: widget.mediaQuery.width * 0.1)),
                                   onPressed: () => _updateState(2),
                                   child: const Text(
                                     'Reject',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                        fontSize: 16),
+                                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16),
                                   ),
                                 ),
                                 ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF3A86FF),
-                                      elevation: 0,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              widget.mediaQuery.width * 0.1)),
+                                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF3A86FF), elevation: 0, padding: EdgeInsets.symmetric(horizontal: widget.mediaQuery.width * 0.1)),
                                   onPressed: () => _updateState(1),
                                   child: const Text(
                                     'Confirm',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        fontSize: 16),
+                                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),
                                   ),
                                 )
                               ],

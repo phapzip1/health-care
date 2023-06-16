@@ -95,6 +95,14 @@ class AppointmentModel {
   Future<String> makeCall() async {
     try {
       if (id != null) {
+        // final date = DateTime(dateTime.year, dateTime.month, dateTime.day, (meetingTime / 10).floor(), (meetingTime % 10) * 10, 0);
+        // if (DateTime.now().isAfter(date)) {
+        //   return "";
+        // }
+
+        // if (DateTime.now().isAfter(date.add(const Duration(minutes: 30)))) {
+        //   return "";
+        // }
         final res = await http.post(Uri.parse(
             "https://health-care-admin-production.up.railway.app/makecall/$id"));
         final json = jsonDecode(res.body);
