@@ -92,21 +92,21 @@ class AppointmentModel {
     }
   }
 
-  Future<bool> makeCall() async {
+  Future<String> makeCall() async {
     try {
       if (id != null) {
         final res = await http.post(Uri.parse(
             "https://health-care-admin-production.up.railway.app/makecall/$id"));
         final json = jsonDecode(res.body);
         if (json["status"] != "successful!") {
-          return false;
+          return json["token"];
         }
-        return true;
+        return "";
         //navigate to call screen
       }
-      return false;
+      return "";
     } catch (e) {
-      return false;
+      return "";
     }
   }
 
