@@ -137,9 +137,7 @@ class _CallScreenState extends State<CallScreen> {
             ? CallPicking(
                 cover: widget.remotecover,
                 name: widget.remotename,
-                answerFn: () {
-                  NavigationService.navKey.currentState!.pop();
-                },
+                answerFn: _join,
               )
             : Stack(
                 children: <Widget>[
