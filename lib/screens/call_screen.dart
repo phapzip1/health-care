@@ -58,7 +58,9 @@ class _CallScreenState extends State<CallScreen> {
     await _engine.switchCamera();
   }
 
-  Future<void> _endCall() async {}
+  Future<void> _endCall() async {
+    _leave();
+  }
 
   Future<void> _setupVideoCall() async {
     await [Permission.microphone, Permission.camera].request();
@@ -110,7 +112,7 @@ class _CallScreenState extends State<CallScreen> {
     );
   }
 
-  void leave() async {
+  void _leave() async {
     await _engine.stopPreview();
     await _engine.leaveChannel();
   }

@@ -43,7 +43,7 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
               'token': value,
               'channel_id': widget.schedule.id,
               'remote_name': widget.schedule.patientName,
-              'remote_cover': widget.schedule.patientName,
+              'remote_cover': widget.schedule.patientImage,
               'caller': true,
             }))
         .catchError((error, stackTrace) {
