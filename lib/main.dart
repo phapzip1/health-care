@@ -36,16 +36,12 @@ class MyWidget extends StatelessWidget {
 
   Widget _render(String collection, String uid, bool isDoctor) {
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection(collection)
-            .doc(uid)
-            .snapshots(),
+        stream: FirebaseFirestore.instance.collection(collection).doc(uid).snapshots(),
         builder: (ctx, snapShot) {
           if (snapShot.hasData) {
             return MainPage(isDoctor);
           }
-          return const Scaffold(
-              body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
         });
   }
 
@@ -55,8 +51,7 @@ class MyWidget extends StatelessWidget {
       theme: getDefaultTheme(),
       navigatorKey: NavigationService.navKey,
       initialRoute: "/",
-      onGenerateRoute: (RouteSettings settings) =>
-          NavigationService.generateRoute(
+      onGenerateRoute: (RouteSettings settings) => NavigationService.generateRoute(
         settings,
         (_) => StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
@@ -68,9 +63,17 @@ class MyWidget extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const LoadingScreen("Loading...");
                   }
-                   // if snapshot.hasData == true, then this is doctor vice versa 
+                  // if snapshot.hasData == true, then this is doctor vice versa
                   // return const PageNotFoundScreen("/undefined");
-                  if(snapshot.data!.exists) return _render('doctor', auth.data!.uid, true);
+                  if (snapshot.data!.exists) {
+                    NotificationService.getFirebaseMessagingToken().then((value) => FirebaseFirestore.instance.collection("doctor").doc(auth.data!.uid).update({
+                          "device": value,
+                        }));
+                    return _render('doctor', auth.data!.uid, true);
+                  }
+                  NotificationService.getFirebaseMessagingToken().then((value) => FirebaseFirestore.instance.collection("patient").doc(auth.data!.uid).update({
+                        "device": value,
+                      }));
                   return _render('patient', auth.data!.uid, false);
                 },
               );
