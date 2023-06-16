@@ -2,6 +2,7 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:health_care/models/patient_model.dart";
 import "package:health_care/services/navigation_service.dart";
+import "package:intl/intl.dart";
 
 class PaymentScreen extends StatelessWidget {
   final String doctorId;
@@ -11,7 +12,7 @@ class PaymentScreen extends StatelessWidget {
   final String doctorImage;
   final String doctorSpecialization;
   final DateTime date;
-  final double hour;
+  final int hour;
   const PaymentScreen(
       this.doctorId,
       this.doctorName,
@@ -26,6 +27,9 @@ class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const double listtileVerticalPadding = 4.5;
+
+    String time = hour % 10 == 3 ? '${hour ~/ 10}:30' : '${hour ~/ 10}:00';
+
     return Scaffold(
       body: FutureBuilder(
           future: PatientModel.getById(FirebaseAuth.instance.currentUser!.uid),
@@ -228,7 +232,7 @@ class PaymentScreen extends StatelessWidget {
                                       color: Colors.grey),
                                 ),
                                 subtitle: Text(
-                                  "$date $hour",
+                                  "${DateFormat('dd-MM-y').format(date)}    $time",
                                   style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,

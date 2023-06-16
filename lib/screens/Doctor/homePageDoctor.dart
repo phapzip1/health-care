@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:health_care/models/doctor_model.dart';
 import 'package:health_care/widgets/function_category.dart';
 import 'package:health_care/widgets/header_section.dart';
+import 'package:health_care/widgets/home_page/appointment_list_doctor.dart';
 import 'package:intl/intl.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePageDoctor extends StatefulWidget {
@@ -14,8 +15,6 @@ class HomePageDoctor extends StatefulWidget {
 }
 
 class _HomePageDoctor extends State<HomePageDoctor> {
-  final TextEditingController _searchController = TextEditingController();
-
   final String formattedTime = DateFormat.jm().format(DateTime.now());
   final String formattedDate = DateFormat.yMd().format(DateTime.now());
 
@@ -29,7 +28,7 @@ class _HomePageDoctor extends State<HomePageDoctor> {
         padding: const EdgeInsets.only(top: 24),
         child: SingleChildScrollView(
           child: FutureBuilder(
-              future: Future.value(user!.uid),
+              future: DoctorModel.getById(user!.uid),
               builder: (ctx, futureSnapshot) {
                 if (futureSnapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
@@ -37,48 +36,35 @@ class _HomePageDoctor extends State<HomePageDoctor> {
                   );
                 }
 
-                return StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('doctor')
-                        .doc(user.uid)
-                        .snapshots(),
-                    builder: (ctx, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
+                final userDocs = futureSnapshot.data!;
 
-                      if (!snapshot.hasData) return Container();
-
-                      final userDocs = snapshot.data!;
-
-                      return Column(
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                HeaderSection(
-                                    url: userDocs['image'],
-                                    userName: userDocs['name']),
-                                FunctionCategory(userDocs.id, true),
+                          HeaderSection(
+                              url: userDocs.image,
+                              userName: userDocs.name),
+                          FunctionCategory(userDocs.id!, true),
 
-                                // Appointment list
-                                const Text(
-                                  'My Appointment',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      height: 1.1),
-                                ),
-                              ],
-                            ),
+                          // Appointment list
+                          const Text(
+                            'My Appointment',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                height: 1.1),
                           ),
-                          // AppointmentListDoctor(),
                         ],
-                      );
-                    });
+                      ),
+                    ),
+                    AppointmentListDoctor(userDocs.id!),
+                  ],
+                );
               }),
         ),
       ),

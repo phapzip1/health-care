@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import './patient_model.dart' show Gender;
@@ -28,7 +33,8 @@ class DoctorModel {
   String workplace;
   String specialization;
 
-  static final CollectionReference _ref = FirebaseFirestore.instance.collection("doctor");
+  static final CollectionReference _ref =
+      FirebaseFirestore.instance.collection("doctor");
 
   DoctorModel(
     this.id,
@@ -70,7 +76,7 @@ class DoctorModel {
 
   Future<bool> checkTime() async {
     final snapshot = await _ref.doc(id).get();
-    return (snapshot.get('available_time') as Map).isEmpty ;
+    return (snapshot.get('available_time') as Map).isEmpty;
   }
 
   static Gender toGenderEnum(String val) {
@@ -111,13 +117,13 @@ class DoctorModel {
     return val;
   }
 
-  Future<void> applySchedule(int weekday, List<double> data) async {
+  Future<void> applySchedule(int weekday, List<int> data) async {
     await _ref.doc(id).update({
       "available_time.${_map[weekday]}": data,
     });
   }
 
-  Future<void> applyToAllSchedule(List<double> data) async {
+  Future<void> applyToAllSchedule(List<int> data) async {
     await _ref.doc(id).update({
       "available_time.mon": data,
     });
@@ -139,5 +145,23 @@ class DoctorModel {
     await _ref.doc(id).update({
       "available_time.sun": data,
     });
+  }
+
+  Future<List> getAvailableTime(int day, int month, int year) async {
+    try {
+      if (id != null) {
+        final res = await http.get(
+          Uri.parse(
+              "https://health-care-admin-production.up.railway.app/availabletime/$id/$day/$month/$year"),
+        );
+        final json = jsonDecode(res.body);
+        if (json["status"] == 'Successful!') {
+          return json["data"];
+        }
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
   }
 }

@@ -19,7 +19,9 @@ class _PatientSectionState extends State<PatientSection> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: AppointmentModel.getAppointment(patientId: user!.uid),
+        future: !widget.changedPage
+            ? AppointmentModel.getAppointmentHistory(patientId: user!.uid)
+            : AppointmentModel.getAppointment(patientId: user!.uid),
         builder: (ctx, futureSnapshot) {
           if (futureSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -36,7 +38,7 @@ class _PatientSectionState extends State<PatientSection> {
           final scheduleDocs = futureSnapshot.data!;
 
           return ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: scheduleDocs.length,
               itemBuilder: (ctx, index) => Container(
                     margin: const EdgeInsets.only(bottom: 8.0, top: 8.0),
@@ -51,162 +53,157 @@ class _PatientSectionState extends State<PatientSection> {
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                    child: InkWell(
-                      // onTap: () => {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => ChatScreen(
-                      //               scheduleDocs[index]['chatId'],
-                      //               scheduleDocs[index]['name'],
-                      //               scheduleDocs[index]['image_url'])))
-                      // },
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        scheduleDocs[index].doctorName,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      scheduleDocs[index].doctorName,
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                      const SizedBox(
-                                        height: 6,
-                                      ),
-                                      Text(
-                                        scheduleDocs[index].specialization,
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            color: Color(0xFF828282)),
-                                      ),
-                                      const SizedBox(
-                                        height: 6,
-                                      ),
-                                    ],
+                                    ),
+                                    const SizedBox(
+                                      height: 6,
+                                    ),
+                                    Text(
+                                      scheduleDocs[index].specialization,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Color(0xFF828282)),
+                                    ),
+                                    const SizedBox(
+                                      height: 6,
+                                    ),
+                                    Text(
+                                    scheduleDocs[index].doctorPhone,
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                ),
-                                CircleAvatar(
-                                  radius: 26.0,
-                                  backgroundImage: NetworkImage(
-                                      scheduleDocs[index].doctorImage),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      FontAwesomeIcons.calendar,
-                                      size: 20,
-                                    ),
-                                    const SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      scheduleDocs[index]
-                                          .dateTime
-                                          .toString()
-                                          .substring(0, 10),
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
                                   ],
                                 ),
-                                Row(
+                              ),
+                              CircleAvatar(
+                                radius: 26.0,
+                                backgroundImage: NetworkImage(
+                                    scheduleDocs[index].doctorImage),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(
+                                    FontAwesomeIcons.calendar,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    scheduleDocs[index]
+                                        .dateTime
+                                        .toString()
+                                        .substring(0, 10),
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    FontAwesomeIcons.clock,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    scheduleDocs[index]
+                                        .dateTime
+                                        .toString()
+                                        .substring(10, 16),
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 4,
+                                    backgroundColor:
+                                        scheduleDocs[index].status == 0
+                                            ? const Color(0xFFE2B93B)
+                                            : const Color(0xFF27AE60),
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    scheduleDocs[index].status == 0 ? "Waiting" : scheduleDocs[index].status == 1 ? "Confirmed" : "Rejected",
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          widget.changedPage
+                              ? Column(
                                   children: [
-                                    const Icon(
-                                      FontAwesomeIcons.clock,
-                                      size: 20,
-                                    ),
                                     const SizedBox(
-                                      width: 4,
+                                      height: 8,
                                     ),
-                                    Text(
-                                      scheduleDocs[index]
-                                          .dateTime
-                                          .toString()
-                                          .substring(10, 16),
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 4,
-                                      backgroundColor:
-                                          scheduleDocs[index].status == 0
-                                              ? const Color(0xFFE2B93B)
-                                              : const Color(0xFF27AE60),
-                                    ),
-                                    const SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      scheduleDocs[index].status == 1
-                                          ? "Confirmed"
-                                          : 'Waiting',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            widget.changedPage
-                                ? Column(
-                                    children: [
-                                      const SizedBox(
-                                        height: 8,
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xFFE0E0E0),
+                                        elevation: 0,
                                       ),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              const Color(0xFFE0E0E0),
-                                          elevation: 0,
-                                        ),
-                                        onPressed: () {
-                                          FirebaseFirestore.instance
-                                              .collection('patient')
-                                              .doc(user!.uid)
-                                              .collection('schedule')
-                                              .doc(scheduleDocs[index].id)
-                                              .delete();
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          child: const Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                'Cancel',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                ),
+                                      onPressed: () {
+                                        FirebaseFirestore.instance
+                                            .collection('patient')
+                                            .doc(user!.uid)
+                                            .collection('schedule')
+                                            .doc(scheduleDocs[index].id)
+                                            .delete();
+                                      },
+                                      child: Container(
+                                        width: double.infinity,
+                                        child: const Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Cancel',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                      )
-                                    ],
-                                  )
-                                : Container(),
-                          ],
-                        ),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : Container(),
+                        ],
                       ),
                     ),
                   ));

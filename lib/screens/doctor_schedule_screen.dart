@@ -21,7 +21,7 @@ class DoctorScheduleScreen extends StatefulWidget {
 }
 
 class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
-  List<double> def = [0, 0, 0];
+  List<int> def = [0, 0, 0];
 
   int _weekday = 0;
 
@@ -33,7 +33,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
     final data =
         await (await DoctorModel.getById(widget.doctorId)).getSchedule(weekday);
     setState(() {
-      checkedTime = def = data as List<double>;
+      checkedTime = def = data as List<int>;
     });
   }
 
@@ -69,42 +69,42 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
     });
   }
 
-  List<double> time = [
-    7,
-    7.30,
+  List<int> time = [
+    70,
+    73,
     8,
-    8.30,
-    9,
-    9.30,
-    10,
-    10.30,
-    11,
-    11.30,
-    12,
-    12.30,
-    13,
-    13.30,
-    14,
-    14.30,
-    15,
-    15.30,
-    16,
-    16.30,
-    17,
-    17.30,
-    18,
-    18.30,
-    19,
-    19.30,
-    20,
-    20.30,
-    21,
-    21.30,
-    22,
-    22.30
+    83,
+    90,
+    93,
+    100,
+    103,
+    110,
+    113,
+    120,
+    123,
+    130,
+    133,
+    140,
+    143,
+    150,
+    153,
+    160,
+    163,
+    170,
+    173,
+    180,
+    183,
+    190,
+    193,
+    200,
+    203,
+    210,
+    213,
+    220,
+    223
   ];
 
-  List<double> checkedTime = [];
+  List<int> checkedTime = [];
 
   @override
   Widget build(BuildContext context) {

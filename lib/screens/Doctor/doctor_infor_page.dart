@@ -2,13 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/models/doctor_model.dart';
-// import 'package:health_care/screens/doctor_schedule_screen.dart';
-// import 'package:health_care/models/patient_model.dart';
-// import 'package:health_care/screens/payment_screen.dart';
 import 'package:health_care/services/navigation_service.dart';
-// import 'package:health_care/widgets/comment_card.dart';
+import 'package:health_care/widgets/infomation_page/time_choosing.dart';
 import 'package:intl/intl.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class DoctorInforPage extends StatefulWidget {
   const DoctorInforPage(this.doctorId, this.isDoctor, {super.key});
@@ -192,8 +189,15 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
     }
   }
 
+  int _choosingTime = -1;
+
+  void _onChange(index) {
+    _choosingTime = index;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -208,9 +212,7 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: const BackButton(
-          color: Colors.black,
-        ),
+       automaticallyImplyLeading: false,
       ),
       body: SafeArea(
           child: FutureBuilder(
@@ -227,7 +229,6 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                 }
 
                 final userDocs = futureSnapShot.data!;
-
                 // final doctor = DoctorModel(
                 //     userDocs.id,
                 //     userDocs.name,
@@ -388,11 +389,34 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                           ),
                                         );
                                       }
-                                      // return ListView.builder(
-                                      //   itemCount: ,
-                                      //   itemBuilder:
-                                      // );
-                                      return Container();
+
+                                      return FutureBuilder(
+                                          future: userDocs.getAvailableTime(
+                                            _selectedDate.day,
+                                            _selectedDate.month,
+                                            _selectedDate.year,
+                                          ),
+                                          builder: (ctx, future) {
+                                            if (future.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              );
+                                            }
+                                            final time = future.data!;
+                                            return time.isEmpty
+                                                ? const Text(
+                                                    'There is no time frame available')
+                                                : TimeChoosing(
+                                                    time,
+                                                    mediaQuery,
+                                                    _selectedDate.day,
+                                                    _selectedDate.month,
+                                                    _selectedDate.year,
+                                                    _onChange,
+                                                    widget.isDoctor);
+                                          });
                                     }),
                                 const SizedBox(
                                   height: 16,
@@ -405,18 +429,34 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                         ),
                                         onPressed: () {
                                           //payment screen
-                                          NavigationService.navKey.currentState
-                                              ?.pushNamed('/payment',
-                                                  arguments: {
-                                                'doctorId': userDocs.id,
-                                                'doctorName': userDocs.name,
-                                                'price': userDocs.price,
-                                                'doctorPhone': userDocs.phoneNumber,
-                                                'doctorImage': userDocs.image,
-                                                'doctorSpecialization': userDocs.specialization,
-                                                'date': _selectedDate,
-                                                'hour': 8
-                                              });
+                                          _choosingTime == -1
+                                              ? Fluttertoast.showToast(
+                                                  msg: "You must choose time",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor: Colors.red,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0,
+                                                )
+                                              : NavigationService
+                                                  .navKey.currentState
+                                                  ?.pushNamed('/payment',
+                                                      arguments: {
+                                                      'doctorId': userDocs.id,
+                                                      'doctorName':
+                                                          userDocs.name,
+                                                      'price': userDocs.price,
+                                                      'doctorPhone':
+                                                          userDocs.phoneNumber,
+                                                      'doctorImage':
+                                                          userDocs.image,
+                                                      'doctorSpecialization':
+                                                          userDocs
+                                                              .specialization,
+                                                      'date': _selectedDate,
+                                                      'hour': _choosingTime
+                                                    });
                                         },
                                         child: const Text(
                                           'Make appointment',

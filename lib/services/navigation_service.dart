@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:health_care/models/doctor_model.dart';
 import 'package:health_care/screens/cards_and_wallets_screen.dart';
 import 'package:health_care/screens/doctor_schedule_screen.dart';
 import 'package:health_care/screens/payment_screen.dart';

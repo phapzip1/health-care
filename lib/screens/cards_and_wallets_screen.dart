@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:health_care/models/appointment_model.dart";
 import "package:health_care/models/patient_model.dart";
 import 'package:fluttertoast/fluttertoast.dart';
-import "package:health_care/screens/Patient/homePage.dart";
+import "package:health_care/services/navigation_service.dart";
 
 class CardsAndWalletsScreen extends StatelessWidget {
   final String doctorId;
@@ -12,7 +12,7 @@ class CardsAndWalletsScreen extends StatelessWidget {
   final String doctorImage;
   final String doctorSpecialization;
   final DateTime date;
-  final double hour;
+  final int hour;
   final PatientModel patient;
 
   const CardsAndWalletsScreen(
@@ -28,7 +28,6 @@ class CardsAndWalletsScreen extends StatelessWidget {
       {super.key});
 
   void _makeAppointment(context) async {
-    //thay so 8
     final currentAppointment = AppointmentModel.create(
         doctorId,
         doctorName,
@@ -52,8 +51,7 @@ class CardsAndWalletsScreen extends StatelessWidget {
         textColor: Colors.black,
       );
 
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+      NavigationService.navKey.currentState?.pushNamed('/');
     }).catchError((error) {
       Fluttertoast.showToast(
         msg: "Failed to make appointment",
@@ -68,6 +66,7 @@ class CardsAndWalletsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: SafeArea(
         child: Padding(

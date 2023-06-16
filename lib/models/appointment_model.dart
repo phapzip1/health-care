@@ -16,9 +16,9 @@ class AppointmentModel {
   String patientPhone;
   String specialization;
   DateTime dateTime;
-  double meetingTime;
+  int meetingTime;
   int status;
-
+  // status: 0 -> waiting, status: 1 -> comfirmed, status: 2 -> rejected
   static final CollectionReference _ref =
       FirebaseFirestore.instance.collection("appointment");
 
@@ -136,6 +136,60 @@ class AppointmentModel {
       return res;
     }
     final snapshot = await _ref.where("patient_id", isEqualTo: patientId).get();
+    final res = snapshot.docs
+        .map(
+          (e) => AppointmentModel(
+            e.id,
+            e.get("doctor_id"),
+            e.get("doctor_name"),
+            e.get("doctor_phone"),
+            e.get("doctor_image"),
+            e.get("patient_id"),
+            e.get("patient_name"),
+            e.get("patient_phone"),
+            e.get("patient_image"),
+            e.get("specialization"),
+            (e.get("datetime") as Timestamp).toDate(),
+            e.get("meeting_time"),
+            e.get("status"),
+          ),
+        )
+        .toList();
+    return res;
+  }
+
+  static Future<List<AppointmentModel>> getAppointmentHistory(
+      {String? doctorId, String? patientId}) async {
+    if (doctorId != null) {
+      final snapshot = await _ref
+          .where("doctor_id", isEqualTo: doctorId)
+          .where("status", isNotEqualTo: 0)
+          .get();
+      final res = snapshot.docs
+          .map(
+            (e) => AppointmentModel(
+              e.id,
+              e.get("doctor_id"),
+              e.get("doctor_name"),
+              e.get("doctor_phone"),
+              e.get("doctor_image"),
+              e.get("patient_id"),
+              e.get("patient_name"),
+              e.get("patient_phone"),
+              e.get("patient_image"),
+              e.get("specialization"),
+              (e.get("datetime") as Timestamp).toDate(),
+              e.get("meeting_time"),
+              e.get("status"),
+            ),
+          )
+          .toList();
+      return res;
+    }
+    final snapshot = await _ref
+        .where("patient_id", isEqualTo: patientId)
+        .where("status", isNotEqualTo: 0)
+        .get();
     final res = snapshot.docs
         .map(
           (e) => AppointmentModel(
