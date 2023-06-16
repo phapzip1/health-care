@@ -94,6 +94,10 @@ class _CallScreenState extends State<CallScreen> {
         }
       },
     ));
+
+    if (widget.caller) {
+      _join();
+    }
   }
 
   Future<void> _join() async {
