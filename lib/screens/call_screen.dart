@@ -112,7 +112,7 @@ class _CallScreenState extends State<CallScreen> {
       token: widget.token,
       channelId: widget.channelId,
       options: options,
-      uid: 0,
+      uid: widget.caller ? 0 : 1,
     );
   }
 
