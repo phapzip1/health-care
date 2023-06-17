@@ -36,6 +36,16 @@ class NotificationService {
           defaultColor: Colors.blueAccent,
           ledColor: Colors.blueAccent,
         ),
+        NotificationChannel(
+          channelKey: "missed",
+          channelName: "Missed",
+          channelDescription: 'Notification tests as alerts',
+          playSound: true,
+          importance: NotificationImportance.High,
+          defaultPrivacy: NotificationPrivacy.Private,
+          defaultColor: Colors.red,
+          ledColor: Colors.redAccent,
+        ),
       ],
       debug: debug,
     );
@@ -62,13 +72,15 @@ class NotificationService {
   static Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
     debugPrint("BACKGROUND");
     final payload = receivedAction.payload!;
-    NavigationService.navKey.currentState?.pushNamedAndRemoveUntil('/call', (route) => (route.settings.name != '/call') || route.isFirst, arguments: {
-      "token": payload["token"],
-      "channel_id": payload["channel_id"],
-      "remote_name": payload["name"],
-      "remote_cover": payload["cover"],
-      "caller": false,
-    });
+    if (payload["action"] == "call") {
+      NavigationService.navKey.currentState?.pushNamedAndRemoveUntil('/call', (route) => (route.settings.name != '/call') || route.isFirst, arguments: {
+        "token": payload["token"],
+        "channel_id": payload["channel_id"],
+        "remote_name": payload["name"],
+        "remote_cover": payload["cover"],
+        "caller": false,
+      });
+    }
   }
 
   @pragma("vm:entry-point")
@@ -83,6 +95,17 @@ class NotificationService {
         room: data["room"]!,
         token: data["token"]!,
       );
+    } else if (data["action"] == "decline1") {
+      AwesomeNotifications().cancel(_call_id);
+      NavigationService.navKey.currentState!.popUntil(ModalRoute.withName("/"));
+      sendMissedCallNotification(doctorName: data["doctor"]!);
+    } else if (data["action"] == "decline2") {
+      NavigationService.navKey.currentState!.popUntil(ModalRoute.withName("/"));
+    } else if (data["action"] == "timeout") {
+      if (!NavigationService.isCalling) {
+        AwesomeNotifications().cancel(_call_id);
+        NavigationService.navKey.currentState!.popUntil(ModalRoute.withName("/"));
+      }
     }
   }
 
@@ -128,6 +151,19 @@ class NotificationService {
         "channel_id": room,
         "token": token,
       }),
+    );
+  }
+
+  static Future<void> sendMissedCallNotification({
+    required String doctorName,
+  }) async {
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: _call_id,
+        channelKey: "missed",
+        body: "You have missed call with $doctorName",
+        category: NotificationCategory.MissedCall,
+      ),
     );
   }
 }
