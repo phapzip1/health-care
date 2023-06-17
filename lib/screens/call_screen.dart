@@ -31,6 +31,7 @@ class CallScreen extends StatefulWidget {
 class _CallScreenState extends State<CallScreen> {
   final RtcEngine _engine = createAgoraRtcEngine();
   int _remoteUid = -1;
+  int _localUid = 0;
 
   // local
   bool _micMute = false;
@@ -95,7 +96,7 @@ class _CallScreenState extends State<CallScreen> {
       },
       onJoinChannelSuccess: (connection, elapsed) {
         setState(() {
-          _remoteUid = widget.caller ? 2 : 1;
+          _localUid = connection.localUid!;
         });
       },
     ));
@@ -160,6 +161,7 @@ class _CallScreenState extends State<CallScreen> {
                     child: VideoCallView(
                       engine: _engine,
                       remoteUid: _remoteUid,
+                      localUid: _localUid,
                       channelId: widget.channelId,
                       remoteName: widget.remotename,
                       remoteCover: widget.remotecover,

@@ -10,6 +10,7 @@ class VideoCallView extends StatelessWidget {
     required this.remoteName,
     required this.remoteCover,
     required this.remoteUid,
+    required this.localUid,
     required this.remoteMute,
     required this.remoteCamoff,
     required this.localCamoff,
@@ -18,6 +19,7 @@ class VideoCallView extends StatelessWidget {
   final RtcEngine engine;
   final String channelId;
   final int remoteUid;
+  final int localUid;
   final String remoteName;
   final String remoteCover;
   final bool remoteMute;
@@ -65,7 +67,7 @@ class VideoCallView extends StatelessWidget {
               child: AgoraVideoView(
                 controller: VideoViewController(
                   rtcEngine: engine,
-                  canvas: const VideoCanvas(uid: 0),
+                  canvas: VideoCanvas(uid: localUid),
                 ),
               ),
             ),
