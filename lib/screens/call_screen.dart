@@ -93,6 +93,11 @@ class _CallScreenState extends State<CallScreen> {
           NavigationService.navKey.currentState!.pop();
         }
       },
+      onJoinChannelSuccess: (connection, elapsed) {
+        setState(() {
+          _remoteUid = 1;
+        });
+      },
     ));
 
     if (widget.caller) {
@@ -101,7 +106,8 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   Future<void> _join() async {
-    await _engine.startPreview();
+    try {
+      await _engine.startPreview();
 
     ChannelMediaOptions options = const ChannelMediaOptions(
       clientRoleType: ClientRoleType.clientRoleBroadcaster,
@@ -112,8 +118,11 @@ class _CallScreenState extends State<CallScreen> {
       token: widget.token,
       channelId: widget.channelId,
       options: options,
-      uid: widget.caller ? 0 : 1,
+      uid: widget.caller ? 1 : 2,
     );
+    } catch (e) {
+      return;
+    }
   }
 
   void _leave() async {
