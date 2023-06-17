@@ -1,5 +1,6 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:health_care/services/navigation_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -62,6 +63,13 @@ class _CallScreenState extends State<CallScreen> {
     _leave();
   }
 
+  void _timeoutTask() {
+    if (_remoteUid == -1 && mounted) {
+      Fluttertoast.showToast(msg: "Did not answer!");
+      _leave();
+    }
+  }
+
   Future<void> _setupVideoCall() async {
     await [Permission.microphone, Permission.camera].request();
 
@@ -89,14 +97,19 @@ class _CallScreenState extends State<CallScreen> {
         });
       },
       onLeaveChannel: (connection, stats) {
+        NavigationService.isCalling = false;
         if (mounted) {
           NavigationService.navKey.currentState!.pop();
         }
+      },
+      onJoinChannelSuccess: (connection, elapsed) {
+        NavigationService.isCalling = true;
       },
     ));
 
     if (widget.caller) {
       _join();
+      Future.delayed(Duration(seconds: 29), _timeoutTask);
     }
   }
 
@@ -138,6 +151,7 @@ class _CallScreenState extends State<CallScreen> {
     await _engine.leaveChannel();
     await _engine.release();
   }
+
 
   @override
   Widget build(BuildContext context) {

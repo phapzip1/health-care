@@ -10,7 +10,8 @@ import '../screens/call_screen.dart';
 import '../screens/communityQA.dart';
 
 class NavigationService {
-  static bool isDoctor = false;
+  static bool isCalling = false;
+  
   static const String home = "/";
   static const String chat = "/chat";
   static const String schedule = "/schedule";
