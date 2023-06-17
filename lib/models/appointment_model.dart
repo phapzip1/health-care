@@ -106,7 +106,7 @@ class AppointmentModel {
         final res = await http.post(Uri.parse(
             "https://health-care-admin-production.up.railway.app/makecall/$id"));
         final json = jsonDecode(res.body);
-        if (json["status"] != "successful!") {
+        if (json["status"] == "successful!") {
           return json["token"];
         }
         return "";

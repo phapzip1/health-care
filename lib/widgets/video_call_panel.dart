@@ -22,7 +22,8 @@ class VideoCallPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: Colors.black12),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50), color: Colors.black12),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
         child: SizedBox(
@@ -57,13 +58,16 @@ class VideoCallPanel extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              IconButton(
-                color: Colors.red,
-                padding: const EdgeInsets.all(12),
-                onPressed: endCallFn,
-                icon: const Icon(
-                  Icons.call_end,
-                  color: Colors.white,
+              CircleAvatar(
+                radius: 25,
+                backgroundColor: Colors.red, 
+                child: IconButton(
+                  padding: const EdgeInsets.all(12),
+                  onPressed: endCallFn,
+                  icon: const Icon(
+                    Icons.call_end,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],
