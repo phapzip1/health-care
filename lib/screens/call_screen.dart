@@ -95,7 +95,7 @@ class _CallScreenState extends State<CallScreen> {
       },
       onJoinChannelSuccess: (connection, elapsed) {
         setState(() {
-          _remoteUid = 1;
+          _remoteUid = widget.caller ? 2 : 1;
         });
       },
     ));
