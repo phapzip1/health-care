@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/screens/cards_and_wallets_screen.dart';
+import 'package:health_care/screens/chat.dart';
 import 'package:health_care/screens/doctor_schedule_screen.dart';
 import 'package:health_care/screens/payment_screen.dart';
 
@@ -13,6 +15,7 @@ class NavigationService {
   static bool isCalling = false;
   
   static const String home = "/";
+  static const String community = "/community";
   static const String chat = "/chat";
   static const String schedule = "/schedule";
   static const String payment = "/payment";
@@ -29,8 +32,17 @@ class NavigationService {
     switch (settings.name) {
       case home:
         return MaterialPageRoute(builder: homepageBuilder);
-      case chat:
+      case community:
         return MaterialPageRoute(builder: (_) => CommunityQA());
+      case chat:
+        {
+          final data = settings.arguments as AppointmentModel;
+          return MaterialPageRoute(
+            builder: (_) => ChatScreen(
+              data,
+            ),
+          );
+        }
       case call:
         {
           final data = settings.arguments as Map<String, dynamic>;
