@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_care/models/appointment_model.dart';
+import 'package:health_care/services/navigation_service.dart';
 
 import '../widgets/chat/messages.dart';
 import '../widgets/chat/new_message.dart';
@@ -18,7 +19,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDoctor =  user == widget.appointment.doctorId;
+    final isDoctor = user == widget.appointment.doctorId;
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -49,7 +50,15 @@ class _ChatScreenState extends State<ChatScreen> {
             color: Colors.black,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              widget.appointment.makeCall().then((value) => NavigationService.navKey.currentState!.pushNamed("/call", arguments: {
+                    'token': value,
+                    'channel_id': widget.appointment.id,
+                    'remote_name': widget.appointment.patientName,
+                    'remote_cover': widget.appointment.patientImage,
+                    'caller': true,
+                  }));
+            },
             icon: const Icon(Icons.camera),
             color: Colors.black,
           ),
@@ -63,7 +72,9 @@ class _ChatScreenState extends State<ChatScreen> {
           Expanded(
             child: Messages(appointmentModel: widget.appointment),
           ),
-          NewMessage(appointmentModel: widget.appointment,),
+          NewMessage(
+            appointmentModel: widget.appointment,
+          ),
         ]),
       ),
     );

@@ -230,7 +230,7 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                                     onPressed: () {
                                       NavigationService.navKey.currentState
                                           ?.pushNamed('/chat',
-                                              arguments: {widget.schedule});
+                                              arguments: widget.schedule);
                                     },
                                     child: const Text(
                                       'Send message',

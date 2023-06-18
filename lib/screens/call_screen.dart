@@ -106,6 +106,12 @@ class _CallScreenState extends State<CallScreen> {
           NavigationService.navKey.currentState!.pop();
         }
       },
+      onUserOffline: (connection, remoteUid, reason) {
+        NavigationService.isCalling = false;
+        if (mounted) {
+          NavigationService.navKey.currentState!.pop();
+        }
+      },
       onJoinChannelSuccess: (connection, elapsed) {
         NavigationService.isCalling = true;
       },
@@ -173,7 +179,9 @@ class _CallScreenState extends State<CallScreen> {
   Future<void> dispose() async {
     super.dispose();
     _unbindIsolate();
-    timer.cancel();
+    if (widget.caller) {
+      timer.cancel();
+    }
     await _engine.stopPreview();
     await _engine.leaveChannel();
     await _engine.release();
