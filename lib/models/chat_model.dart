@@ -1,14 +1,11 @@
 class ChatModel {
-  String postId;
+  String appointmentId;
   String senderId;
-  String gender;
-  int age;
+  String receiverName;
   String? text;
   String? image;
-  bool imageReadable;
   DateTime time;
 
-  ChatModel(this.postId, this.senderId, this.gender, this.age, this.time,
-      this.imageReadable,
-      {this.text, this.image});
+  ChatModel(this.appointmentId, this.senderId, this.receiverName, this.text,
+      this.time, this.image);
 }

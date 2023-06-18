@@ -204,9 +204,9 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                                 ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color(0xFF2F80ED), elevation: 0, padding: EdgeInsets.symmetric(horizontal: widget.mediaQuery.width * 0.1, vertical: 12)),
-                                    onPressed: _makeCall,
+                                    onPressed: () {},
                                     child: const Text(
-                                      'Make a call',
+                                      'Send message',
                                       style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),
                                     )),
                               ],

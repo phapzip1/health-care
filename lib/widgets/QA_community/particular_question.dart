@@ -144,10 +144,10 @@ class ParticularQuestion extends StatelessWidget {
                   child: Column(
                     children: [
                       Expanded(
-                        child: Messages(question),
+                        child: Messages(post: question,),
                       ),
                       question.patientId == userId
-                          ? NewMessage(question)
+                          ? NewMessage(post: question)
                           : Container(),
                     ],
                   ),

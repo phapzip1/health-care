@@ -91,6 +91,19 @@ class AppointmentModel {
     }
   }
 
+    Future<void> reply(String message, bool isDoctor) async {
+    if (id != null) {
+      _ref.doc(id).collection("chat").add({
+        "message": message,
+        "is_doctor": isDoctor,
+      });
+    }
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getStreamChat() {
+    return _ref.doc(id).collection("chat").snapshots();
+  }
+
   Future<String> makeCall() async {
     try {
       if (id != null) {
