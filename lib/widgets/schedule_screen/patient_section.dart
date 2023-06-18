@@ -169,7 +169,7 @@ class _PatientSectionState extends State<PatientSection> {
                                     const SizedBox(
                                       height: 8,
                                     ),
-                                    ElevatedButton(
+                                    scheduleDocs[index].status == 0 ? ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
                                             const Color(0xFFE0E0E0),
@@ -183,23 +183,36 @@ class _PatientSectionState extends State<PatientSection> {
                                             .doc(scheduleDocs[index].id)
                                             .delete();
                                       },
-                                      child: Container(
-                                        width: double.infinity,
-                                        child: const Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              'Cancel',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          ],
+                                      child: const Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          'Cancel',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
                                         ),
                                       ),
-                                    )
+                                    ) : ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xFF2F80ED),
+                                        elevation: 0,
+                                      ),
+                                      onPressed: () {
+                                        
+                                      },
+                                      child: const Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          'Send message',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 )
                               : Container(),

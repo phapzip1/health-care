@@ -1,11 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/models/post_model.dart';
 
 class NewMessage extends StatefulWidget {
-  NewMessage(this.post, {super.key});
-  final PostModel post;
+  NewMessage({this.post, this.appointmentModel, super.key});
+  final PostModel? post;
+  final AppointmentModel? appointmentModel;
 
   @override
   State<NewMessage> createState() => _NewMessageState();
@@ -16,19 +17,22 @@ class _NewMessageState extends State<NewMessage> {
 
   final _controller = TextEditingController();
 
+  var object;
+
   void _sendMessage() async {
     FocusScope.of(context).unfocus();
     final user = FirebaseAuth.instance.currentUser;
 
-    final isDoctor = widget.post.id == user!.uid ? false : true;
+    final isDoctor = widget.post!.id == user!.uid ? false : true;
 
-    await widget.post.reply(_enterMessage, isDoctor);
+    await object.reply(_enterMessage, isDoctor);
 
     _controller.clear();
   }
 
   @override
   Widget build(BuildContext context) {
+    object = widget.post ?? widget.appointmentModel;
     return Container(
       margin: const EdgeInsets.only(top: 8),
       padding: const EdgeInsets.all(8),
@@ -48,7 +52,7 @@ class _NewMessageState extends State<NewMessage> {
             child: TextField(
               decoration: const InputDecoration(
                 border: InputBorder.none,
-                hintText: 'Text your comment',
+                hintText: '...',
               ),
               controller: _controller,
               onChanged: (value) {
