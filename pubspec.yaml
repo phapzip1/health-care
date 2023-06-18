@@ -45,8 +45,8 @@ dependencies:
   firebase_storage: ^11.1.1
   agora_rtc_engine: ^6.1.1+1
   permission_handler: ^10.2.0
-  awesome_notifications: ^0.7.5-dev.2+1
-  awesome_notifications_fcm: ^0.7.5-dev.2+1
+  awesome_notifications: ^0.7.5-dev.3
+  awesome_notifications_fcm: ^0.7.5-dev.3
   fluttertoast: ^8.2.2
   http: ^0.13.6
 

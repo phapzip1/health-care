@@ -1,31 +1,27 @@
+import 'dart:isolate';
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:awesome_notifications_fcm/awesome_notifications_fcm.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:awesome_notifications/android_foreground_service.dart';
 import 'package:flutter/material.dart';
+import 'package:health_care/models/appointment_model.dart';
 
 import '../firebase_options.dart';
 
 import './navigation_service.dart';
 
 class NotificationService {
-  static const int _call_id = -1;
+  static const int _call_id = 1;
+  static const int _missed_call_id = 2;
 
   static Future<void> initialize({required bool debug}) async {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
     await AwesomeNotifications().initialize(
       null, //'resource://drawable/res_app_icon',//
       [
-        NotificationChannel(
-          channelKey: 'alerts',
-          channelName: 'Alerts',
-          channelDescription: 'Notification tests as alerts',
-          playSound: true,
-          importance: NotificationImportance.High,
-          defaultPrivacy: NotificationPrivacy.Private,
-          defaultColor: Colors.red,
-          ledColor: Colors.red,
-        ),
         NotificationChannel(
           channelKey: "call",
           channelName: "Call",
@@ -36,19 +32,11 @@ class NotificationService {
           defaultColor: Colors.blueAccent,
           ledColor: Colors.blueAccent,
         ),
-        NotificationChannel(
-          channelKey: "missed",
-          channelName: "Missed",
-          channelDescription: 'Notification tests as alerts',
-          playSound: true,
-          importance: NotificationImportance.High,
-          defaultPrivacy: NotificationPrivacy.Private,
-          defaultColor: Colors.red,
-          ledColor: Colors.redAccent,
-        ),
       ],
+
       debug: debug,
     );
+
     await AwesomeNotificationsFcm().initialize(
       onFcmSilentDataHandle: mySilentDataHandle,
       onFcmTokenHandle: myFcmTokenHandle,
@@ -56,6 +44,7 @@ class NotificationService {
       licenseKeys: null,
       debug: debug,
     );
+
     debugPrint("Token ${await getFirebaseMessagingToken()}");
   }
 
@@ -70,22 +59,49 @@ class NotificationService {
 
   @pragma('vm:entry-point')
   static Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
-    debugPrint("BACKGROUND");
     final payload = receivedAction.payload!;
     if (payload["action"] == "call") {
-      NavigationService.navKey.currentState?.pushNamedAndRemoveUntil('/call', (route) => (route.settings.name != '/call') || route.isFirst, arguments: {
-        "token": payload["token"],
-        "channel_id": payload["channel_id"],
-        "remote_name": payload["name"],
-        "remote_cover": payload["cover"],
-        "caller": false,
-      });
+      if (receivedAction.actionType == ActionType.Default) {
+        NavigationService.navKey.currentState?.pushNamedAndRemoveUntil('/call', (route) => (route.settings.name != '/call') || route.isFirst, arguments: {
+          "token": payload["token"],
+          "channel_id": payload["channel_id"],
+          "remote_name": payload["name"],
+          "remote_cover": payload["cover"],
+          "caller": false,
+        });
+      } else if (receivedAction.actionType == ActionType.SilentAction) {
+        AppointmentModel.getById(payload["channel_id"]!).then((value) => value.declineCall());
+      }
     }
   }
 
+  // static Future<void> executeLongTaskInBackground() async {
+  //   print("starting long task");
+  //   await Future.delayed(const Duration(seconds: 4));
+  //   final url = Uri.parse("http://google.com");
+  //   print("long task done");
+  // }
+
+  // static Future<void> onSilentActionHandle(ReceivedAction received) async {
+  //   print('On new background action received: ${received.toMap()}');
+
+  //   SendPort? uiSendPort = IsolateNameServer.lookupPortByName('background_notification_action');
+  //   if (uiSendPort != null) {
+  //     print('Background action running on parallel isolate without valid context. Redirecting execution');
+  //     uiSendPort.send(received);
+  //     return;
+  //   }
+
+  //   print('Background action running on main isolate');
+  //   await _handleBackgroundAction(received);
+  // }
+
+  // static Future<void> _handleBackgroundAction(ReceivedAction received) async {
+  //   // Your background action handle
+  // }
+
   @pragma("vm:entry-point")
   static Future<void> mySilentDataHandle(FcmSilentData silentData) async {
-    debugPrint('"SilentData": ${silentData.toString()}');
     final data = silentData.data!;
     if (data["action"] == "call") {
       sendCallNotification(
@@ -95,17 +111,14 @@ class NotificationService {
         room: data["room"]!,
         token: data["token"]!,
       );
-    } else if (data["action"] == "decline1") {
-      AwesomeNotifications().cancel(_call_id);
-      NavigationService.navKey.currentState!.popUntil(ModalRoute.withName("/"));
-      sendMissedCallNotification(doctorName: data["doctor"]!);
-    } else if (data["action"] == "decline2") {
-      NavigationService.navKey.currentState!.popUntil(ModalRoute.withName("/"));
-    } else if (data["action"] == "timeout") {
-      if (!NavigationService.isCalling) {
-        AwesomeNotifications().cancel(_call_id);
-        NavigationService.navKey.currentState!.popUntil(ModalRoute.withName("/"));
-      }
+    } else if (data["action"] == "cancel") {
+      AwesomeNotifications().dismiss(_call_id);
+      sendMissedCallNotification(
+        doctorName: data["doctor"]!,
+      );
+    } else if (data["action"] == "decline") {
+      final sendPort = IsolateNameServer.lookupPortByName("background_notification_action");
+      sendPort?.send(null);
     }
   }
 
@@ -143,27 +156,45 @@ class NotificationService {
     required String room,
     required String token,
   }) async {
-    AwesomeNotifications().createNotification(
-      content: NotificationContent(id: _call_id, channelKey: "call", body: "Incoming Call", category: NotificationCategory.Call, payload: {
+    final notificationContent = NotificationContent(
+      id: _call_id,
+      channelKey: "call",
+      body: "Incoming Call",
+      category: NotificationCategory.Call,
+      actionType: ActionType.Default,
+      payload: {
+        "action": "call",
         "id": id,
         "name": name,
         "cover": ava,
         "channel_id": room,
         "token": token,
-      }),
+      },
+      autoDismissible: true,
     );
+    AwesomeNotifications().createNotification(content: notificationContent, actionButtons: [
+      NotificationActionButton(key: "answer", label: "Answer", color: Colors.green, actionType: ActionType.Default),
+      NotificationActionButton(
+        key: "decline",
+        label: "Decline",
+        color: Colors.red,
+        actionType: ActionType.SilentAction,
+      ),
+    ]);
   }
 
-  static Future<void> sendMissedCallNotification({
+  static Future<bool> sendMissedCallNotification({
     required String doctorName,
   }) async {
-    AwesomeNotifications().createNotification(
+    final res = await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: _call_id,
-        channelKey: "missed",
+        id: _missed_call_id,
+        channelKey: "call",
+        title: "Missed call",
         body: "You have missed call with $doctorName",
         category: NotificationCategory.MissedCall,
       ),
     );
+    return res;
   }
 }

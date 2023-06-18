@@ -1,6 +1,12 @@
+import 'dart:async';
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/services/navigation_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -31,6 +37,8 @@ class CallScreen extends StatefulWidget {
 
 class _CallScreenState extends State<CallScreen> {
   final RtcEngine _engine = createAgoraRtcEngine();
+  final ReceivePort _port = ReceivePort();
+  late Timer timer;
   int _remoteUid = -1;
 
   // local
@@ -60,14 +68,10 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   Future<void> _endCall() async {
-    _leave();
-  }
-
-  void _timeoutTask() {
-    if (_remoteUid == -1 && mounted) {
-      Fluttertoast.showToast(msg: "Did not answer!");
-      _leave();
+    if (_remoteUid == -1) {
+      AppointmentModel.getById(widget.channelId).then((value) => value.cancelCall());
     }
+    _leave();
   }
 
   Future<void> _setupVideoCall() async {
@@ -108,26 +112,46 @@ class _CallScreenState extends State<CallScreen> {
     ));
 
     if (widget.caller) {
-      _join();
-      Future.delayed(Duration(seconds: 29), _timeoutTask);
+      timer = Timer(
+        const Duration(seconds: 29),
+        () {
+          if (_remoteUid == -1) {
+            AppointmentModel.getById(widget.channelId).then((value) => value.cancelCall());
+            _leave();
+          }
+        },
+      );
     }
+
+    _join();
+  }
+
+  void _bindIsolate() {
+    IsolateNameServer.registerPortWithName(_port.sendPort, "background_notification_action");
+    _port.listen((message) {
+      NavigationService.navKey.currentState!.pop();
+    });
+  }
+
+  void _unbindIsolate() {
+    IsolateNameServer.removePortNameMapping("background_notification_action");
   }
 
   Future<void> _join() async {
     try {
       await _engine.startPreview();
 
-    ChannelMediaOptions options = const ChannelMediaOptions(
-      clientRoleType: ClientRoleType.clientRoleBroadcaster,
-      channelProfile: ChannelProfileType.channelProfileCommunication,
-    );
+      ChannelMediaOptions options = const ChannelMediaOptions(
+        clientRoleType: ClientRoleType.clientRoleBroadcaster,
+        channelProfile: ChannelProfileType.channelProfileCommunication,
+      );
 
-    await _engine.joinChannel(
-      token: widget.token,
-      channelId: widget.channelId,
-      options: options,
-      uid: 0,
-    );
+      await _engine.joinChannel(
+        token: widget.token,
+        channelId: widget.channelId,
+        options: options,
+        uid: 0,
+      );
     } catch (e) {
       return;
     }
@@ -141,27 +165,32 @@ class _CallScreenState extends State<CallScreen> {
   @override
   void initState() {
     super.initState();
+    _bindIsolate();
     _setupVideoCall();
   }
 
   @override
   Future<void> dispose() async {
     super.dispose();
+    _unbindIsolate();
+    timer.cancel();
     await _engine.stopPreview();
     await _engine.leaveChannel();
     await _engine.release();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: _remoteUid == -1 && !widget.caller
-            ? CallPicking(
-                cover: widget.remotecover,
-                name: widget.remotename,
-                answerFn: _join,
+            ? Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: const Center(
+                  child: Text("Joining..."),
+                ),
               )
             : Stack(
                 children: <Widget>[
