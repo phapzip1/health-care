@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/services/navigation_service.dart';
 
-import '../widgets/chat/messages.dart';
-import '../widgets/chat/new_message.dart';
+import '../../widgets/chat/messages.dart';
+import '../../widgets/chat/new_message.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
