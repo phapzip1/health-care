@@ -82,6 +82,7 @@ class HomePage extends StatelessWidget {
                         ],
                       ),
                     ),
+                    //list symptoms
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       margin: const EdgeInsets.only(bottom: 4),

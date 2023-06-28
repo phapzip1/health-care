@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ReviewModal extends StatelessWidget {
   const ReviewModal({super.key});
@@ -8,7 +9,7 @@ class ReviewModal extends StatelessWidget {
       context: context,
       barrierDismissible: false,
       barrierLabel: "Modal",
-      transitionDuration: const Duration(milliseconds: 100),
+      transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (_, __, ___) {
         return Scaffold(
           body: SafeArea(
@@ -53,7 +54,23 @@ class ReviewModal extends StatelessWidget {
                                 height: 16,
                               ),
 
-                              /// khung rating
+                              /// rating section here
+                              RatingBar.builder(
+                                initialRating: 0,
+                                minRating: 1,
+                                direction: Axis.horizontal,
+                                allowHalfRating: false,
+                                itemCount: 5,
+                                itemSize: 40,
+                                itemBuilder: (context, _) => const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                onRatingUpdate: (rating) {
+                                  print(rating);
+                                },
+                              ),
+
                               const SizedBox(
                                 height: 40,
                               ),
@@ -105,6 +122,22 @@ class ReviewModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF2F80ED),
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(vertical: 8)),
+          onPressed: () => _showFullModal(context),
+          child: const Text(
+            'Rating',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          )),
+    );
   }
 }
