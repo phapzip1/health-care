@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/services/navigation_service.dart';
@@ -35,29 +34,6 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
 
     setState(() {
       isConfirm = status == 1;
-    });
-  }
-
-  void _makeCall() async {
-    await widget.schedule
-        .makeCall()
-        .then((value) => NavigationService.navKey.currentState
-                ?.pushNamed('/call', arguments: {
-              'token': value,
-              'channel_id': widget.schedule.id,
-              'remote_name': widget.schedule.patientName,
-              'remote_cover': widget.schedule.patientImage,
-              'caller': true,
-            }))
-        .catchError((error, stackTrace) {
-      Fluttertoast.showToast(
-        msg: "An error occurred",
-        toastLength: Toast.LENGTH_SHORT,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
     });
   }
 

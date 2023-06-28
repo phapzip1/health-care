@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_care/screens/general/review_modal.dart';
+import 'package:health_care/services/navigation_service.dart';
 
 class PatientSection extends StatefulWidget {
   const PatientSection(this.changedPage, {super.key});
@@ -83,14 +85,14 @@ class _PatientSectionState extends State<PatientSection> {
                                       height: 6,
                                     ),
                                     Text(
-                                    scheduleDocs[index].doctorPhone,
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(
-                                    height: 6,
-                                  ),
+                                      scheduleDocs[index].doctorPhone,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      height: 6,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -156,66 +158,79 @@ class _PatientSectionState extends State<PatientSection> {
                                     width: 4,
                                   ),
                                   Text(
-                                    scheduleDocs[index].status == 0 ? "Waiting" : scheduleDocs[index].status == 1 ? "Confirmed" : "Rejected",
+                                    scheduleDocs[index].status == 0
+                                        ? "Waiting"
+                                        : scheduleDocs[index].status == 1
+                                            ? "Confirmed"
+                                            : "Rejected",
                                     style: const TextStyle(fontSize: 16),
                                   ),
                                 ],
                               ),
                             ],
                           ),
+                          const SizedBox(
+                            height: 8,
+                          ),
                           widget.changedPage
                               ? Column(
                                   children: [
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    scheduleDocs[index].status == 0 ? ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xFFE0E0E0),
-                                        elevation: 0,
-                                      ),
-                                      onPressed: () {
-                                        FirebaseFirestore.instance
-                                            .collection('patient')
-                                            .doc(user!.uid)
-                                            .collection('schedule')
-                                            .doc(scheduleDocs[index].id)
-                                            .delete();
-                                      },
-                                      child: const Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          'Cancel',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
+                                    scheduleDocs[index].status == 0
+                                        ? ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  const Color(0xFFE0E0E0),
+                                              elevation: 0,
+                                            ),
+                                            onPressed: () {
+                                              FirebaseFirestore.instance
+                                                  .collection('patient')
+                                                  .doc(user!.uid)
+                                                  .collection('schedule')
+                                                  .doc(scheduleDocs[index].id)
+                                                  .delete();
+                                            },
+                                            child: const Align(
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                'Cancel',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    const Color(0xFF2F80ED),
+                                                elevation: 0,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 8)),
+                                            onPressed: () {
+                                              NavigationService
+                                                  .navKey.currentState
+                                                  ?.pushNamed('/chat',
+                                                      arguments:
+                                                          scheduleDocs[index]);
+                                            },
+                                            child: const Align(
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                'Send message',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ) : ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xFF2F80ED),
-                                        elevation: 0,
-                                      ),
-                                      onPressed: () {
-                                        
-                                      },
-                                      child: const Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          'Send message',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
                                   ],
                                 )
-                              : Container(),
+                              : ReviewModal(),
                         ],
                       ),
                     ),

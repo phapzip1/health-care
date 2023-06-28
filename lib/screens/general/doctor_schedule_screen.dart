@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // model
-import '../models/doctor_model.dart';
+import '../../models/doctor_model.dart';
 
 const week = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 const map = {

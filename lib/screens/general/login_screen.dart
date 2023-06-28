@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/widgets/auth/change_password_form.dart';
-import '../widgets/auth/otp_form.dart';
+import '../../widgets/auth/otp_form.dart';
 
 // forms
-import '../widgets/auth/doctor_register_form.dart';
-import '../widgets/auth/register_form.dart';
-import '../widgets/auth/login_form.dart';
+import '../../widgets/auth/doctor_register_form.dart';
+import '../../widgets/auth/register_form.dart';
+import '../../widgets/auth/login_form.dart';
 
 // utils
-import '../utils/formstage.dart';
+import '../../utils/formstage.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -62,53 +62,57 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Expanded(
                         child: Center(
-                          child: Container(
-                            width: 258,
-                            height: dwidth/3.5,
-                            decoration: const BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color(0xFFBDBDBD),
-                                  blurRadius: 10.0,
+                          child: IntrinsicHeight(
+                            child: IntrinsicWidth(
+                              child: Container(
+                                // width: 258,
+                                // height: dwidth/3.5,
+                                decoration: const BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color(0xFFBDBDBD),
+                                      blurRadius: 10.0,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Column(children: [
-                                  Row(
-                                    children: [
-                                      Image.asset(
-                                        "assets/images/logo_app.png",
-                                        width: 32,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(children: [
+                                      Row(
+                                        children: [
+                                          Image.asset(
+                                            "assets/images/logo_app.png",
+                                            width: 32,
+                                          ),
+                                          const SizedBox(
+                                            width: 8,
+                                          ),
+                                          const Text(
+                                            'Health meeting',
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        ],
                                       ),
                                       const SizedBox(
-                                        width: 8,
+                                        height: 8,
                                       ),
                                       const Text(
-                                        'Health meeting',
+                                        'Your health is our care',
                                         style: TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
                                         ),
-                                      )
-                                    ],
+                                      ),
+                                    ]),
                                   ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  const Text(
-                                    'Your health is our care',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ]),
+                                ),
                               ),
                             ),
                           ),

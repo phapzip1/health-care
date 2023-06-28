@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/services/navigation_service.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../widgets/chat/messages.dart';
-import '../widgets/chat/new_message.dart';
+import '../../widgets/chat/messages.dart';
+import '../../widgets/chat/new_message.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -27,7 +28,9 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Row(
           children: [
             CircleAvatar(
-              backgroundImage: NetworkImage(isDoctor ? widget.appointment.doctorImage : widget.appointment.patientImage),
+              backgroundImage: NetworkImage(!isDoctor
+                  ? widget.appointment.doctorImage
+                  : widget.appointment.patientImage),
             ),
             const SizedBox(
               width: 4,
@@ -36,7 +39,9 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Container(
                 padding: const EdgeInsets.only(left: 4),
                 child: Text(
-                  isDoctor ? widget.appointment.doctorName : widget.appointment.patientName,
+                  !isDoctor
+                      ? widget.appointment.doctorName
+                      : widget.appointment.patientName,
                   style: const TextStyle(color: Colors.black, fontSize: 16),
                 ),
               ),
@@ -45,13 +50,10 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.phone),
-            color: Colors.black,
-          ),
-          IconButton(
             onPressed: () {
-              widget.appointment.makeCall().then((value) => NavigationService.navKey.currentState!.pushNamed("/call", arguments: {
+              widget.appointment.makeCall().then((value) => NavigationService
+                      .navKey.currentState!
+                      .pushNamed("/call", arguments: {
                     'token': value,
                     'channel_id': widget.appointment.id,
                     'remote_name': widget.appointment.patientName,
@@ -59,7 +61,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     'caller': true,
                   }));
             },
-            icon: const Icon(Icons.camera),
+            icon: const Icon(FontAwesomeIcons.camera),
             color: Colors.black,
           ),
         ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/screens/Patient/new_appointment.dart';
 import 'package:health_care/screens/Patient/patientRecord.dart';
-import 'package:health_care/screens/communityQA.dart';
+import 'package:health_care/screens/general/communityQA.dart';
 
 class FunctionCategory extends StatelessWidget {
   final String id;

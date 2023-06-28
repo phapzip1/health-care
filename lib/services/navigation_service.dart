@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/models/appointment_model.dart';
-import 'package:health_care/screens/cards_and_wallets_screen.dart';
-import 'package:health_care/screens/chat.dart';
-import 'package:health_care/screens/doctor_schedule_screen.dart';
-import 'package:health_care/screens/payment_screen.dart';
+import 'package:health_care/screens/Patient/cards_and_wallets_screen.dart';
+import 'package:health_care/screens/general/chat.dart';
+import 'package:health_care/screens/general/doctor_schedule_screen.dart';
+import 'package:health_care/screens/Patient/payment_screen.dart';
+import 'package:health_care/screens/general/login_screen.dart';
+import 'package:health_care/screens/general/splash.dart';
 
 // screens
 // import '../screens/page_not_found_screen.dart';
-import '../screens/call_screen.dart';
+import '../screens/general/call_screen.dart';
 // import '../screens/Doctor/homePageDoctor.dart';
-import '../screens/communityQA.dart';
+import '../screens/general/communityQA.dart';
 
 class NavigationService {
   static bool isCalling = false;
-  
+
   static const String home = "/";
   static const String community = "/community";
   static const String chat = "/chat";
@@ -21,6 +23,8 @@ class NavigationService {
   static const String payment = "/payment";
   static const String wallets = "/wallets";
   static const String call = "/call";
+  static const String login = "/login";
+  static const String splash = "/splash";
 
   static final GlobalKey<NavigatorState> _navState =
       GlobalKey<NavigatorState>();
@@ -34,6 +38,10 @@ class NavigationService {
         return MaterialPageRoute(builder: homepageBuilder);
       case community:
         return MaterialPageRoute(builder: (_) => CommunityQA());
+      case login:
+        return MaterialPageRoute(builder: (_) => LoginScreen());
+      case splash:
+        return MaterialPageRoute(builder: (_) => SplashScreen());
       case chat:
         {
           final data = settings.arguments as AppointmentModel;
@@ -101,6 +109,7 @@ class NavigationService {
       default:
         // return MaterialPageRoute(builder: (_) => PageNotFoundScreen(settings.name!));
         return MaterialPageRoute(builder: (_) => Container());
+        
     }
   }
 }
