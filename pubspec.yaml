@@ -108,6 +108,7 @@ flutter:
     - assets/images/chat.png
     - assets/images/question.png
     - assets/images/insurance.png
+    - assets/images/fallback.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
