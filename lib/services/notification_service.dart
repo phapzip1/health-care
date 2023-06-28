@@ -16,6 +16,7 @@ import './navigation_service.dart';
 class NotificationService {
   static const int _call_id = 1;
   static const int _missed_call_id = 2;
+  static const String _scheduleGroupkey = "ricon";
 
   static Future<void> initialize({required bool debug}) async {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -74,31 +75,6 @@ class NotificationService {
       }
     }
   }
-
-  // static Future<void> executeLongTaskInBackground() async {
-  //   print("starting long task");
-  //   await Future.delayed(const Duration(seconds: 4));
-  //   final url = Uri.parse("http://google.com");
-  //   print("long task done");
-  // }
-
-  // static Future<void> onSilentActionHandle(ReceivedAction received) async {
-  //   print('On new background action received: ${received.toMap()}');
-
-  //   SendPort? uiSendPort = IsolateNameServer.lookupPortByName('background_notification_action');
-  //   if (uiSendPort != null) {
-  //     print('Background action running on parallel isolate without valid context. Redirecting execution');
-  //     uiSendPort.send(received);
-  //     return;
-  //   }
-
-  //   print('Background action running on main isolate');
-  //   await _handleBackgroundAction(received);
-  // }
-
-  // static Future<void> _handleBackgroundAction(ReceivedAction received) async {
-  //   // Your background action handle
-  // }
 
   @pragma("vm:entry-point")
   static Future<void> mySilentDataHandle(FcmSilentData silentData) async {
@@ -196,5 +172,63 @@ class NotificationService {
       ),
     );
     return res;
+  }
+
+  static Future<bool> scheduleAppointmentNoti(String doctorid) async {
+    final appointments = await AppointmentModel.getConfirmedAppointment(doctorid);
+
+    try {
+      int i = 1;
+
+      appointments.forEach((element) async {
+        final date = DateTime(element.dateTime.year, element.dateTime.month, element.dateTime.day, (element.meetingTime / 10).floor(), (element.meetingTime % 10) * 10, 0);
+
+        await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: i++,
+            channelKey: "schedule",
+            groupKey: _scheduleGroupkey,
+            title: "Reminder",
+            body: "You have an appointment with ${element.doctorName}",
+            notificationLayout: NotificationLayout.Default,
+          ),
+          schedule: NotificationCalendar.fromDate(
+            date: date.subtract(
+              const Duration(minutes: 5),
+            ),
+          ),
+        );
+
+        await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: i++,
+            channelKey: "schedule",
+            groupKey: _scheduleGroupkey,
+            title: "Reminder",
+            body: "You have an appointment with ${element.doctorName}",
+            notificationLayout: NotificationLayout.Default,
+          ),
+          schedule: NotificationCalendar.fromDate(
+            date: date.subtract(
+              const Duration(minutes: 30),
+            ),
+          ),
+        );
+      });
+      debugPrint("Create schedules successfully!");
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<bool> cancelSchedule() async {
+    try {
+      await AwesomeNotifications().cancelSchedulesByGroupKey(_scheduleGroupkey);
+      debugPrint("Cancel schedules successfully!");
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

@@ -91,7 +91,7 @@ class AppointmentModel {
     }
   }
 
-    Future<void> reply(String message, bool isDoctor) async {
+  Future<void> reply(String message, bool isDoctor) async {
     if (id != null) {
       _ref.doc(id).collection("chat").add({
         "message": message,
@@ -161,6 +161,32 @@ class AppointmentModel {
       );
     }
     throw Exception();
+  }
+
+  static Future<List<AppointmentModel>> getConfirmedAppointment(String doctorId) async {
+    final snapshot = await _ref.where("doctor_id", isEqualTo: doctorId).where("status", isEqualTo: 1).get();
+    if (snapshot.size > 0) {
+      return snapshot.docs
+          .map(
+            (e) => AppointmentModel(
+              e.id,
+              e.get("doctor_id"),
+              e.get("doctor_name"),
+              e.get("doctor_phone"),
+              e.get("doctor_image"),
+              e.get("patient_id"),
+              e.get("patient_name"),
+              e.get("patient_phone"),
+              e.get("patient_image"),
+              e.get("specialization"),
+              (e.get("datetime") as Timestamp).toDate(),
+              e.get("meeting_time"),
+              e.get("status"),
+            ),
+          )
+          .toList();
+    }
+    return [];
   }
 
   static Future<List<AppointmentModel>> getAppointment({String? doctorId, String? patientId}) async {

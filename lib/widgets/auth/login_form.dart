@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_care/services/notification_service.dart';
 import '../../utils/formstage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -35,17 +36,16 @@ class _LoginFormState extends State<LoginForm> {
         });
         UserCredential authResult;
 
-        authResult = await _auth
-            .signInWithEmailAndPassword(
-                email: formData['Email'], password: formData['Password'])
-            .whenComplete(() => Fluttertoast.showToast(
-                  msg: "Login successfully!",
-                  toastLength: Toast.LENGTH_SHORT,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.greenAccent,
-                  textColor: Colors.black,
-                  fontSize: 16.0,
-                ));
+        authResult = await _auth.signInWithEmailAndPassword(email: formData['Email'], password: formData['Password']);
+        Fluttertoast.showToast(
+          msg: "Login successfully!",
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.greenAccent,
+          textColor: Colors.black,
+          fontSize: 16.0,
+        );
+        NotificationService.scheduleAppointmentNoti(authResult.user!.uid);
       } on PlatformException catch (err) {
         var message = 'An error occured, please check your credential';
 
@@ -111,8 +111,7 @@ class _LoginFormState extends State<LoginForm> {
               TextFormField(
                 decoration: const InputDecoration(hintText: "abc@gmail.com"),
                 validator: (value) {
-                  final pattern = RegExp(
-                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+                  final pattern = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
                   if (value == null || value.isEmpty) {
                     return "Email field is required!";
                   }
@@ -172,8 +171,7 @@ class _LoginFormState extends State<LoginForm> {
                       forgot = true;
                       bool isValid = widget.formKey.currentState!.validate();
                       if (isValid) {
-                        widget.setFormStage(FormStage.OTP,
-                            email: formData["Email"]);
+                        widget.setFormStage(FormStage.OTP, email: formData["Email"]);
                       }
                     },
                     child: const Text(
@@ -201,8 +199,7 @@ class _LoginFormState extends State<LoginForm> {
                     style: TextStyle(),
                   ),
                   TextButton(
-                    onPressed: () =>
-                        widget.setFormStage(FormStage.PatientRegister),
+                    onPressed: () => widget.setFormStage(FormStage.PatientRegister),
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all<EdgeInsets>(
                         const EdgeInsets.all(0),
