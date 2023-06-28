@@ -113,13 +113,6 @@ class HomePage extends StatelessWidget {
                                                     const SizedBox(
                                                       width: 4,
                                                     ),
-                                                    // FutureBuilder(
-                                                    //   builder: (ctx3, image) {
-                                                    //   if (image.connectionState != ConnectionState.done) {
-                                                    //     Image.asset("assets/images/fallback.jpg");
-                                                    //   }
-                                                    //   return  Image.network(image.data!)
-                                                    // }),
                                                     Image.network(
                                                       snapshot.data![index].icon,
                                                       frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {

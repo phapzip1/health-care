@@ -1,0 +1,70 @@
+[
+    {
+        "name": "Respiratory",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2Frespiratory.png?alt=media&token=32c774c6-aa5d-49d8-a564-9d9c7a925c7b"
+    },
+    {
+        "name": "Internal medicine",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2Finternal.png?alt=media&token=b6d53201-01a2-476c-a42e-e92ff188dbe2"
+    },
+    {
+        "name": "Obstetrics and gynaecology",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FObstetrics_and_gynaecology.png?alt=media&token=c216cdc8-639d-4d77-af5b-1ac89098f76c"
+    },
+    {
+        "name": "Endocrinology",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FEndocrinology.png?alt=media&token=4f92a4cb-0535-47a6-8f0b-2a824e807194"
+    },
+    {
+        "name": "Psychology",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FPsychology.png?alt=media&token=2a723112-57d1-4131-8dce-e77838dbde7b"
+    },
+    {
+        "name": "Optometry",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FOptometry.png?alt=media&token=603fccfa-d4cb-4a1d-aa62-a3f6706adc90"
+    },
+    {
+        "name": "Dentomaxillofacial",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FDentomaxillofacial.png?alt=media&token=c028cdb1-60ff-4d60-a684-54ec088cb34a"
+    },
+    {
+        "name": "Dermatology",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FDermatology.png?alt=media&token=25937ad2-c448-4491-92e7-a9969ce17f0d"
+    },
+    {
+        "name": "Musculoskeletal",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FMusculoskeletal.png?alt=media&token=b9c72a9f-0360-4a93-b969-805ba74c4f97"
+    },
+    {
+        "name": "Hematology",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FHematology.png?alt=media&token=6fa4f4d3-216a-4a24-81c2-6e0a030c6fed"
+    },
+    {
+        "name": "Cardiology",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FCardiology.png?alt=media&token=656e953a-3e5e-49b7-b63c-e86513072c9a"
+    },
+    {
+        "name": "Surgery",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FSurgery.jpg?alt=media&token=ca9ac98c-c4b6-4947-b4f9-cd9e69a546fd"
+    },
+    {
+        "name": "Otorhinolaryngology",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FOtorhinolaryngology.png?alt=media&token=4a8b60d9-5a89-423b-8752-e5d37e8877a2"
+    },
+    {
+        "name": "Pediatrics",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FPediatrics.png?alt=media&token=a89969ce-1bfc-4883-a999-80667b80bcd8"
+    },
+    {
+        "name": "Neurology",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FNeurology.png?alt=media&token=acbf84a7-c46e-4e68-9326-7a91704ddb50"
+    },
+    {
+        "name": "Traditional medicine",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FTraditional%20medicine.png?alt=media&token=43043d2d-981a-4c78-b626-093b26d6918a"
+    },
+    {
+        "name": "Infectious diseases",
+        "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2FInfectious%20diseases.png?alt=media&token=3795d6e6-503a-4aa1-943f-1cec6d43fd7e"
+    }
+]
