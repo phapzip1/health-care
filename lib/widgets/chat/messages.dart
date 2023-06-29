@@ -29,14 +29,14 @@ class Messages extends StatelessWidget {
             }
 
             final chatDocs = chatSnapShot.data!.docs;
-            final id = post != null ? post!.id : appointmentModel!.id;
+
 
             return ListView.builder(
               reverse: true,
               itemCount: chatDocs.length,
               itemBuilder: (ctx, index) => MessageBubble(
                   chatDocs[index]['message'],
-                  id == userId ? false : true,
+                  chatDocs[index]['sender_id'] == userId,
                   ValueKey(chatDocs[index].id)),
             );
           },

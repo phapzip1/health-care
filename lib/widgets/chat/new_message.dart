@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_care/models/appointment_model.dart';
@@ -23,9 +25,7 @@ class _NewMessageState extends State<NewMessage> {
     FocusScope.of(context).unfocus();
     final user = FirebaseAuth.instance.currentUser;
 
-    final isDoctor = widget.post!.id == user!.uid ? false : true;
-
-    await object.reply(_enterMessage, isDoctor);
+    await object.reply(_enterMessage, user!.uid);
 
     _controller.clear();
   }

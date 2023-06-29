@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _navigateHome() async {
     await Future.delayed(const Duration(milliseconds: 3000), () {
-      NavigationService.navKey.currentState?.pushNamed('/');
+      NavigationService.navKey.currentState?.pushReplacementNamed('/');
     });
   }
 

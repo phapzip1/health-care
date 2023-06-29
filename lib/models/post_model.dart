@@ -64,11 +64,12 @@ class PostModel {
     }
   }
 
-  Future<void> reply(String message, bool isDoctor) async {
+  Future<void> reply(String message, String senderId) async {
     if (id != null) {
       _ref.doc(id).collection("chat").add({
         "message": message,
-        "is_doctor": isDoctor,
+        "sender_id": senderId,
+        "at": Timestamp.now(),
       });
     }
   }

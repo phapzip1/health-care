@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/services/navigation_service.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../widgets/chat/messages.dart';
 import '../../widgets/chat/new_message.dart';
@@ -49,7 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
         actions: [
-          IconButton(
+          isDoctor ? IconButton(
             onPressed: () {
               widget.appointment.makeCall().then((value) => NavigationService
                       .navKey.currentState!
@@ -61,9 +60,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     'caller': true,
                   }));
             },
-            icon: const Icon(FontAwesomeIcons.camera),
+            icon: const Icon(Icons.videocam),
             color: Colors.black,
-          ),
+          ): Container()
         ],
         leading: const BackButton(
           color: Colors.black,

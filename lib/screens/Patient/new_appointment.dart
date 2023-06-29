@@ -18,20 +18,6 @@ class _NewAppointmentState extends State<NewAppointment> {
   var _selectedValue;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    _selectedValue = symptoms[0].name;
-    super.initState();
-  }
-
-  final List<Symptom> symptoms = [
-    Symptom('Bone', 'assets/images/bone.png'),
-    Symptom('Joint', 'assets/images/joint.png'),
-    Symptom('Digest', 'assets/images/stomachache.png'),
-    Symptom('Nerve', 'assets/images/brain.png'),
-  ];
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -55,27 +41,36 @@ class _NewAppointmentState extends State<NewAppointment> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Search(_searchController),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            width: double.infinity,
-            child: DropDownTextField(
-              initialValue: _selectedValue,
-              clearOption: false,
-              dropDownItemCount: symptoms.length,
-              dropDownList: symptoms
-                  .map(
-                    (e) => DropDownValueModel(name: e.name, value: e.name),
-                  )
-                  .toList(),
-              textFieldDecoration: const InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              ),
-              onChanged: (value) {
-                _selectedValue = value.name.toString();
-              },
-            ),
-          ),
+          FutureBuilder(
+              future: SymptomsProvider.getSymtoms(),
+              builder: (ctx, future) {
+                if (future.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  width: double.infinity,
+                  child: DropDownTextField(
+                    initialValue: future.data![0].name,
+                    clearOption: false,
+                    dropDownItemCount: 6,
+                    dropDownList: future.data!
+                        .map(
+                          (e) =>
+                              DropDownValueModel(name: e.name, value: e.name),
+                        )
+                        .toList(),
+                    textFieldDecoration: const InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    ),
+                    onChanged: (value) {
+                      _selectedValue = value.name.toString();
+                    },
+                  ),
+                );
+              }),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             margin: const EdgeInsets.only(bottom: 4),

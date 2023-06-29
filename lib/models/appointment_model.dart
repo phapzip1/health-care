@@ -19,7 +19,8 @@ class AppointmentModel {
   int meetingTime;
   int status;
   // status: 0 -> waiting, status: 1 -> comfirmed, status: 2 -> rejected
-  static final CollectionReference _ref = FirebaseFirestore.instance.collection("appointment");
+  static final CollectionReference _ref =
+      FirebaseFirestore.instance.collection("appointment");
 
   AppointmentModel(
     this.id,
@@ -91,11 +92,12 @@ class AppointmentModel {
     }
   }
 
-  Future<void> reply(String message, bool isDoctor) async {
+  Future<void> reply(String message, String senderId) async {
     if (id != null) {
       _ref.doc(id).collection("chat").add({
         "message": message,
-        "is_doctor": isDoctor,
+        "sender_id": senderId,
+        "at": Timestamp.now(),
       });
     }
   }
@@ -115,7 +117,8 @@ class AppointmentModel {
         // if (DateTime.now().isAfter(date.add(const Duration(minutes: 30)))) {
         //   return "";
         // }
-        final res = await http.post(Uri.parse("https://health-care-admin-production.up.railway.app/makecall/$id"));
+        final res = await http.post(Uri.parse(
+            "https://health-care-admin-production.up.railway.app/makecall/$id"));
         final json = jsonDecode(res.body);
         if (json["status"] == "successful!") {
           return json["token"];
@@ -130,13 +133,15 @@ class AppointmentModel {
   }
 
   Future<bool> cancelCall() async {
-    final res = await http.post(Uri.parse("https://health-care-admin-production.up.railway.app/cancel/$id"));
+    final res = await http.post(Uri.parse(
+        "https://health-care-admin-production.up.railway.app/cancel/$id"));
     final json = jsonDecode(res.body);
     return json["status"] != "successful!";
   }
 
   Future<bool> declineCall() async {
-    final res = await http.post(Uri.parse("https://health-care-admin-production.up.railway.app/decline/$id"));
+    final res = await http.post(Uri.parse(
+        "https://health-care-admin-production.up.railway.app/decline/$id"));
     final json = jsonDecode(res.body);
     return json["status"] != "successful!";
   }
@@ -163,8 +168,12 @@ class AppointmentModel {
     throw Exception();
   }
 
-  static Future<List<AppointmentModel>> getConfirmedAppointment(String doctorId) async {
-    final snapshot = await _ref.where("doctor_id", isEqualTo: doctorId).where("status", isEqualTo: 1).get();
+  static Future<List<AppointmentModel>> getConfirmedAppointment(
+      String doctorId) async {
+    final snapshot = await _ref
+        .where("doctor_id", isEqualTo: doctorId)
+        .where("status", isEqualTo: 1)
+        .get();
     if (snapshot.size > 0) {
       return snapshot.docs
           .map(
@@ -189,7 +198,8 @@ class AppointmentModel {
     return [];
   }
 
-  static Future<List<AppointmentModel>> getAppointment({String? doctorId, String? patientId}) async {
+  static Future<List<AppointmentModel>> getAppointment(
+      {String? doctorId, String? patientId}) async {
     if (doctorId != null) {
       final snapshot = await _ref.where("doctor_id", isEqualTo: doctorId).get();
       final res = snapshot.docs
@@ -236,9 +246,13 @@ class AppointmentModel {
     return res;
   }
 
-  static Future<List<AppointmentModel>> getAppointmentHistory({String? doctorId, String? patientId}) async {
+  static Future<List<AppointmentModel>> getAppointmentHistory(
+      {String? doctorId, String? patientId}) async {
     if (doctorId != null) {
-      final snapshot = await _ref.where("doctor_id", isEqualTo: doctorId).where("status", isNotEqualTo: 0).get();
+      final snapshot = await _ref
+          .where("doctor_id", isEqualTo: doctorId)
+          .where("status", isNotEqualTo: 0)
+          .get();
       final res = snapshot.docs
           .map(
             (e) => AppointmentModel(
@@ -260,7 +274,10 @@ class AppointmentModel {
           .toList();
       return res;
     }
-    final snapshot = await _ref.where("patient_id", isEqualTo: patientId).where("status", isNotEqualTo: 0).get();
+    final snapshot = await _ref
+        .where("patient_id", isEqualTo: patientId)
+        .where("status", isNotEqualTo: 0)
+        .get();
     final res = snapshot.docs
         .map(
           (e) => AppointmentModel(
