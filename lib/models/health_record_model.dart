@@ -10,7 +10,6 @@ class HealthRecordModel {
   String patientName;
   String patientImage;
   DateTime time;
-  String issues;
   String diagnostic;
   String prescription;
   String note;
@@ -26,7 +25,6 @@ class HealthRecordModel {
     this.patientName,
     this.patientImage,
     this.time,
-    this.issues,
     this.diagnostic,
     this.prescription,
     this.note,
@@ -39,7 +37,6 @@ class HealthRecordModel {
     this.patientName,
     this.patientImage,
     this.time,
-    this.issues,
     this.diagnostic,
     this.prescription,
     this.note,
@@ -56,7 +53,6 @@ class HealthRecordModel {
           "patient_name": patientName,
           "patient_image": patientImage,
           "time": Timestamp.fromDate(time),
-          "issues": issues,
           "diagnostic": diagnostic,
           "prescription": prescription,
           "note": note,
@@ -71,7 +67,6 @@ class HealthRecordModel {
           "patient_name": patientName,
           "patient_image": patientImage,
           "time": Timestamp.fromDate(time),
-          "issues": issues,
           "diagnostic": diagnostic,
           "prescription": prescription,
           "note": note,
@@ -109,7 +104,6 @@ class HealthRecordModel {
               e.get("patient_name"),
               e.get("patient_image"),
               (e.get("time") as Timestamp).toDate(),
-              e.get("issues"),
               e.get("diagnostic"),
               e.get("prescription"),
               e.get("note"),
@@ -129,7 +123,6 @@ class HealthRecordModel {
               e.get("patient_name"),
               e.get("patient_image"),
               (e.get("time") as Timestamp).toDate(),
-              e.get("issues"),
               e.get("diagnostic"),
               e.get("prescription"),
               e.get("note"),

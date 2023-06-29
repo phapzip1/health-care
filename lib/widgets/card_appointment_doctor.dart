@@ -256,11 +256,29 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                             ),
                     ],
                   )
-                : Container(),
+                : SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF2F80ED),
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(vertical: 8)),
+                        onPressed: () {
+                          NavigationService.navKey.currentState
+                              ?.pushNamed('/writerecord', arguments: widget.schedule);
+                        },
+                        child: const Text(
+                          'Write record',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        )),
+                  ),
           ],
         ),
       ),
     );
-    ;
   }
 }

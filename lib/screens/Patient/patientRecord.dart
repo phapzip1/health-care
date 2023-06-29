@@ -4,8 +4,8 @@ import 'package:health_care/models/health_record_model.dart';
 import 'package:health_care/widgets/record_screen/record_tag.dart';
 
 class PatientRecords extends StatefulWidget {
-  final String id;
-  const PatientRecords(this.id, {super.key});
+  final bool isDoctor;
+  const PatientRecords(this.isDoctor, {super.key});
 
   @override
   State<PatientRecords> createState() => _PatientRecordsState();
@@ -35,7 +35,9 @@ class _PatientRecordsState extends State<PatientRecords> {
         body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: FutureBuilder(
-            future: HealthRecordModel.get(patientId: user!.uid),
+            future: widget.isDoctor
+                ? HealthRecordModel.get(doctorId: user!.uid)
+                : HealthRecordModel.get(patientId: user!.uid),
             builder: (ctx, futureSnapshot) {
               if (futureSnapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -47,7 +49,7 @@ class _PatientRecordsState extends State<PatientRecords> {
 
               return ListView.builder(
                   itemCount: healthRecord.length,
-                  itemBuilder: (ctx, index) => RecordTag(healthRecord[index]));
+                  itemBuilder: (ctx, index) => RecordTag(healthRecord[index], widget.isDoctor));
             },
           ),
         ));

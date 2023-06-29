@@ -14,7 +14,8 @@ class FunctionCategory extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 24),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: isDoctor ? MainAxisAlignment.spaceBetween: MainAxisAlignment.start,
+        mainAxisAlignment:
+            isDoctor ? MainAxisAlignment.spaceBetween : MainAxisAlignment.start,
         children: [
           isDoctor
               ? Container()
@@ -102,12 +103,13 @@ class FunctionCategory extends StatelessWidget {
           ),
           Expanded(
             child: Align(
-              alignment: isDoctor ?Alignment.center : Alignment.centerRight,
+              alignment: isDoctor ? Alignment.center : Alignment.centerRight,
               child: InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => PatientRecords(id)),
+                    MaterialPageRoute(
+                        builder: (context) => PatientRecords(isDoctor)),
                   );
                 },
                 child: Column(

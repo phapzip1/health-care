@@ -1,24 +1,64 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/models/health_record_model.dart';
 import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class RecordDetail extends StatefulWidget {
-  final HealthRecordModel record;
-  final bool isDoctor;
-  const RecordDetail(this.record, this.isDoctor, {super.key});
+class WriteRecord extends StatefulWidget {
+  final AppointmentModel record;
+  const WriteRecord(this.record, {super.key});
 
   @override
-  State<RecordDetail> createState() => _RecordDetailState();
+  State<WriteRecord> createState() => _RecordDetailState();
 }
 
-class _RecordDetailState extends State<RecordDetail> {
+class _RecordDetailState extends State<WriteRecord> {
   final userID = FirebaseAuth.instance.currentUser!.uid;
+  final TextEditingController diagnosticController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
+  final TextEditingController prescriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    diagnosticController.dispose();
+    noteController.dispose();
+    prescriptionController.dispose();
+    super.dispose();
+  }
+
+  void _writeRecord() async {
+    if (diagnosticController.text != "") {
+      await HealthRecordModel.create(
+              widget.record.doctorId,
+              widget.record.doctorName,
+              widget.record.doctorImage,
+              widget.record.patientId,
+              widget.record.patientName,
+              widget.record.patientImage,
+              widget.record.dateTime,
+              diagnosticController.text,
+              prescriptionController.text,
+              noteController.text)
+          .save();
+    } else {
+      Fluttertoast.showToast(
+        msg: "You must fill diagnostic for patient",
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final _time = DateFormat('dd-MM-y').format(widget.record.time);
-    final _hour = DateFormat.Hm().format(widget.record.time);
+    String _hour = widget.record.meetingTime % 10 == 3
+        ? '${widget.record.meetingTime ~/ 10}:30'
+        : '${widget.record.meetingTime ~/ 10}:00';
+    final _time = DateFormat('dd-MM-y').format(widget.record.dateTime);
 
     return Scaffold(
       appBar: AppBar(
@@ -46,17 +86,13 @@ class _RecordDetailState extends State<RecordDetail> {
               children: [
                 CircleAvatar(
                   radius: 26.0,
-                  backgroundImage: NetworkImage(widget.isDoctor
-                      ? widget.record.patientImage
-                      : widget.record.doctorImage),
+                  backgroundImage: NetworkImage(widget.record.patientImage),
                 ),
                 const SizedBox(
                   width: 8,
                 ),
                 Text(
-                  widget.isDoctor
-                      ? widget.record.patientName
-                      : widget.record.doctorName,
+                  widget.record.patientName,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],
@@ -116,8 +152,7 @@ class _RecordDetailState extends State<RecordDetail> {
               height: 8,
             ),
             TextFormField(
-              readOnly: widget.isDoctor ? false : true,
-              initialValue: widget.record.diagnostic,
+              controller: diagnosticController,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderSide:
@@ -142,9 +177,7 @@ class _RecordDetailState extends State<RecordDetail> {
               height: 8,
             ),
             TextField(
-              readOnly: widget.isDoctor ? false : true,
-              controller:
-                  TextEditingController(text: widget.record.prescription),
+              controller: prescriptionController,
               keyboardType: TextInputType.multiline,
               maxLines: 7,
               decoration: InputDecoration(
@@ -171,8 +204,7 @@ class _RecordDetailState extends State<RecordDetail> {
               height: 8,
             ),
             TextField(
-              readOnly: widget.isDoctor ? false : true,
-              controller: TextEditingController(text: widget.record.note),
+              controller: noteController,
               keyboardType: TextInputType.multiline,
               maxLines: 6,
               decoration: InputDecoration(
@@ -188,33 +220,26 @@ class _RecordDetailState extends State<RecordDetail> {
                 ),
               ),
             ),
-            widget.isDoctor
-                ? Column(
-                    children: [
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF2F80ED),
-                                elevation: 0,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12)),
-                            onPressed: () {},
-                            child: const Text(
-                              'Save',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            )),
-                      ),
-                    ],
-                  )
-                : Container(),
+            const SizedBox(
+              height: 16,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2F80ED),
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(vertical: 12)),
+                  onPressed: _writeRecord,
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  )),
+            ),
           ],
         ),
       ),
