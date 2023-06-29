@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/models/appointment_model.dart';
+import 'package:health_care/models/health_record_model.dart';
 import 'package:health_care/screens/Patient/cards_and_wallets_screen.dart';
 import 'package:health_care/screens/general/chat.dart';
 import 'package:health_care/screens/general/doctor_schedule_screen.dart';
 import 'package:health_care/screens/Patient/payment_screen.dart';
 import 'package:health_care/screens/general/login_screen.dart';
 import 'package:health_care/screens/general/splash.dart';
+import 'package:health_care/widgets/record_screen/record_detail.dart';
 
 // screens
 // import '../screens/page_not_found_screen.dart';
@@ -25,6 +27,7 @@ class NavigationService {
   static const String call = "/call";
   static const String login = "/login";
   static const String splash = "/splash";
+  static const String record = "/record";
 
   static final GlobalKey<NavigatorState> _navState =
       GlobalKey<NavigatorState>();
@@ -42,6 +45,15 @@ class NavigationService {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case splash:
         return MaterialPageRoute(builder: (_) => SplashScreen());
+      case record:
+        {
+          final data = settings.arguments as HealthRecordModel;
+          return MaterialPageRoute(
+            builder: (_) => RecordDetail(
+              data
+            ),
+          );
+        }
       case chat:
         {
           final data = settings.arguments as AppointmentModel;
@@ -109,7 +121,6 @@ class NavigationService {
       default:
         // return MaterialPageRoute(builder: (_) => PageNotFoundScreen(settings.name!));
         return MaterialPageRoute(builder: (_) => Container());
-        
     }
   }
 }

@@ -44,15 +44,10 @@ class _PatientRecordsState extends State<PatientRecords> {
               }
 
               final healthRecord = futureSnapshot.data!;
-              
+
               return ListView.builder(
-                itemCount: healthRecord.length,
-                itemBuilder: (ctx, index) => RecordTag(
-                  'abxc',
-                  healthRecord[index].doctorName,
-                  healthRecord[index].time,
-                  'W.')
-              );
+                  itemCount: healthRecord.length,
+                  itemBuilder: (ctx, index) => RecordTag(healthRecord[index]));
             },
           ),
         ));

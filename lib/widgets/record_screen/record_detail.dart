@@ -1,16 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:health_care/models/health_record_model.dart';
+import 'package:intl/intl.dart';
 
 class RecordDetail extends StatefulWidget {
-  final String url;
-  const RecordDetail(this.url, {super.key});
+  final HealthRecordModel record;
+  const RecordDetail(this.record, {super.key});
 
   @override
   State<RecordDetail> createState() => _RecordDetailState();
 }
 
 class _RecordDetailState extends State<RecordDetail> {
+  final userID = FirebaseAuth.instance.currentUser!.uid;
+
   @override
   Widget build(BuildContext context) {
+    final _time = DateFormat('dd-MM-y').format(widget.record.time);
+    final _hour = DateFormat.Hm().format(widget.record.time);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -37,14 +45,14 @@ class _RecordDetailState extends State<RecordDetail> {
               children: [
                 CircleAvatar(
                   radius: 26.0,
-                  backgroundImage: NetworkImage(widget.url),
+                  backgroundImage: NetworkImage(widget.record.patientImage),
                 ),
                 const SizedBox(
                   width: 8,
                 ),
-                const Text(
-                  'Do Pham Huy Khanh',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Text(
+                  widget.record.patientName,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],
             ),
@@ -66,8 +74,8 @@ class _RecordDetailState extends State<RecordDetail> {
                     const Text('Doctor: '),
                   ],
                 ),
-                const Text('Nguyen Huynh Tuan Khang',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(widget.record.doctorName,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(
@@ -88,8 +96,8 @@ class _RecordDetailState extends State<RecordDetail> {
                     const Text('Time: '),
                   ],
                 ),
-                const Text('2023-04-19 08:00AM',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('${_time} ${_hour}',
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(
@@ -104,7 +112,7 @@ class _RecordDetailState extends State<RecordDetail> {
             ),
             TextFormField(
               readOnly: true,
-              initialValue: 'Fat',
+              initialValue: widget.record.diagnostic,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderSide:
@@ -130,7 +138,7 @@ class _RecordDetailState extends State<RecordDetail> {
             ),
             TextField(
               readOnly: true,
-              controller: TextEditingController(text: '...'),
+              controller: TextEditingController(text: widget.record.prescription),
               keyboardType: TextInputType.multiline,
               maxLines: 7,
               decoration: InputDecoration(
@@ -158,7 +166,7 @@ class _RecordDetailState extends State<RecordDetail> {
             ),
             TextField(
               readOnly: true,
-              controller: TextEditingController(text: '...'),
+              controller: TextEditingController(text: widget.record.note),
               keyboardType: TextInputType.multiline,
               maxLines: 6,
               decoration: InputDecoration(

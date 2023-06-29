@@ -5,6 +5,7 @@ class HealthRecordModel {
   String? id;
   String doctorId;
   String doctorName;
+  String doctorImage;
   String patientId;
   String patientName;
   String patientImage;
@@ -20,6 +21,7 @@ class HealthRecordModel {
     this.id,
     this.doctorId,
     this.doctorName,
+    this.doctorImage,
     this.patientId,
     this.patientName,
     this.patientImage,
@@ -32,6 +34,7 @@ class HealthRecordModel {
   HealthRecordModel.create(
     this.doctorId,
     this.doctorName,
+    this.doctorImage,
     this.patientId,
     this.patientName,
     this.patientImage,
@@ -48,6 +51,7 @@ class HealthRecordModel {
         final docRef = await _ref.add({
           "doctor_id": doctorId,
           "doctor_name": doctorName,
+          "doctor_image": doctorImage,
           "patient_id": patientId,
           "patient_name": patientName,
           "patient_image": patientImage,
@@ -62,6 +66,7 @@ class HealthRecordModel {
         await _ref.doc(id).set({
           "doctor_id": doctorId,
           "doctor_name": doctorName,
+          "doctor_image": doctorImage,
           "patient_id": patientId,
           "patient_name": patientName,
           "patient_image": patientImage,
@@ -99,6 +104,7 @@ class HealthRecordModel {
               e.id,
               e.get("doctor_id"),
               e.get("doctor_name"),
+              e.get("doctor_image"),
               e.get("patient_id"),
               e.get("patient_name"),
               e.get("patient_image"),
@@ -118,6 +124,7 @@ class HealthRecordModel {
               e.id,
               e.get("doctor_id"),
               e.get("doctor_name"),
+              e.get("doctor_image"),
               e.get("patient_id"),
               e.get("patient_name"),
               e.get("patient_image"),
