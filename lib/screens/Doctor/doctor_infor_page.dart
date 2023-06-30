@@ -212,7 +212,9 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
-       automaticallyImplyLeading: false,
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
       ),
       body: SafeArea(
           child: FutureBuilder(

@@ -201,32 +201,66 @@ class _PatientSectionState extends State<PatientSection> {
                                               ),
                                             ),
                                           )
-                                        : ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    const Color(0xFF2F80ED),
-                                                elevation: 0,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 8)),
-                                            onPressed: () {
-                                              NavigationService
-                                                  .navKey.currentState
-                                                  ?.pushNamed('/chat',
-                                                      arguments:
-                                                          scheduleDocs[index]);
-                                            },
-                                            child: const Align(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                'Send message',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
+                                        : Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              ///Button Postpone
+                                              ElevatedButton(
+                                                  style: ElevatedButton.styleFrom(
+                                                      backgroundColor:
+                                                          const Color(
+                                                              0xFFFFBE0B),
+                                                      elevation: 0,
+                                                      padding: EdgeInsets.symmetric(
+                                                          horizontal:
+                                                              MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.05,
+                                                          vertical: 12)),
+                                                  onPressed: () {},
+                                                  child: const Text(
+                                                    'Postpone',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black,
+                                                        fontSize: 16),
+                                                  )),
+                                              ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        const Color(0xFF2F80ED),
+                                                    elevation: 0,
+                                                    padding: EdgeInsets.symmetric(
+                                                        horizontal:
+                                                            MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.05,
+                                                        vertical: 12)),
+                                                onPressed: () {
+                                                  NavigationService
+                                                      .navKey.currentState
+                                                      ?.pushNamed('/chat',
+                                                          arguments:
+                                                              scheduleDocs[
+                                                                  index]);
+                                                },
+                                                child: const Text(
+                                                  'Send message',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
+                                            ],
                                           ),
                                   ],
                                 )

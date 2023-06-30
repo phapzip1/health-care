@@ -15,33 +15,32 @@ class Messages extends StatelessWidget {
     final userId = FirebaseAuth.instance.currentUser!.uid;
 
     return StreamBuilder(
-          stream: post != null ? post!.getStreamChat() : appointmentModel!.getStreamChat(),
-          builder: (ctx, chatSnapShot) {
-            if (chatSnapShot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
+      stream: post != null
+          ? post!.getStreamChat()
+          : appointmentModel!.getStreamChat(),
+      builder: (ctx, chatSnapShot) {
+        if (chatSnapShot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-            ///here
-            if (!chatSnapShot.hasData ||
-                chatSnapShot.data == null ||
-                chatSnapShot.data!.docs.isEmpty) {
-              return Container();
-            }
+        ///here
+        if (!chatSnapShot.hasData ||
+            chatSnapShot.data == null ||
+            chatSnapShot.data!.docs.isEmpty) {
+          return Container();
+        }
 
-            final chatDocs = chatSnapShot.data!.docs;
+        final chatDocs = chatSnapShot.data!.docs;
 
-
-            return ListView.builder(
-              reverse: true,
-              itemCount: chatDocs.length,
-              itemBuilder: (ctx, index) => MessageBubble(
-                  chatDocs[index]['message'],
-                  chatDocs[index]['sender_id'] == userId,
-                  ValueKey(chatDocs[index].id)),
-            );
-          },
+        return ListView.builder(
+          reverse: true,
+          itemCount: chatDocs.length,
+          itemBuilder: (ctx, index) => MessageBubble(
+              chatDocs[index]['message'],
+              chatDocs[index]['sender_id'] == userId,
+              ValueKey(chatDocs[index].id)),
         );
-      
-    
+      },
+    );
   }
 }
