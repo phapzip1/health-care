@@ -5,14 +5,18 @@ class ReviewModel {
   String? id;
   String doctorId;
   String patientId;
-  double rating;
+  String patientName;
+  int rating;
   String feedback;
 
-  static final CollectionReference _ref = FirebaseFirestore.instance.collection("review");
+  static final CollectionReference _ref =
+      FirebaseFirestore.instance.collection("review");
 
-  ReviewModel(this.id, this.doctorId, this.patientId, this.rating, this.feedback);
+  ReviewModel(this.id, this.doctorId, this.patientId, this.patientName,
+      this.rating, this.feedback);
 
-  ReviewModel.create(this.doctorId, this.patientId, this.rating, this.feedback);
+  ReviewModel.create(this.doctorId, this.patientId, this.patientName,
+      this.rating, this.feedback);
 
   Future<void> save() async {
     try {
@@ -20,6 +24,7 @@ class ReviewModel {
         final docRef = await _ref.add({
           "doctor_id": doctorId,
           "patient_id": patientId,
+          "patient_name": patientName,
           "rating": rating,
           "feedback": feedback,
         });
@@ -28,6 +33,7 @@ class ReviewModel {
         await _ref.doc(id).set({
           "doctor_id": doctorId,
           "patient_id": patientId,
+          "patient_name": patientName,
           "rating": rating,
           "feedback": feedback,
         });
