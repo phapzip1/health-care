@@ -59,8 +59,7 @@ Widget upperPart(doctor) => Card(
                     // ignore: prefer_const_constructors
                     Text(
                       '4.5',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                     ),
                   ],
                 ),
@@ -79,8 +78,7 @@ Widget upperPart(doctor) => Card(
                     ),
                     Text(
                       '4',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                     ),
                   ],
                 ),
@@ -91,23 +89,20 @@ Widget upperPart(doctor) => Card(
             ),
             Text(
               doctor.workplace,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: Color(0xFF828282)),
+              style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF828282)),
             ),
             const SizedBox(
               height: 8,
             ),
             Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(60),
                 color: const Color(0xFFAEE6FF).withOpacity(0.5),
               ),
               child: Text(
                 doctor.specialization,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600, color: Color(0xFF3A86FF)),
+                style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF3A86FF)),
               ),
             ),
             const SizedBox(
@@ -124,8 +119,7 @@ Widget upperPart(doctor) => Card(
                 ),
                 Text(
                   doctor.price.toString(),
-                  style: const TextStyle(
-                      color: Color(0xFF3A86FF), fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: Color(0xFF3A86FF), fontWeight: FontWeight.bold),
                 )
               ],
             ),
@@ -140,9 +134,7 @@ Widget upperPart(doctor) => Card(
                   children: [
                     Text(
                       'Appointments',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF828282)),
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF828282)),
                     ),
                     Text(
                       '22',
@@ -154,14 +146,11 @@ Widget upperPart(doctor) => Card(
                   children: [
                     Text(
                       'Consultations',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF828282)),
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF828282)),
                     ),
                     Text(
                       '1',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600, color: Colors.red),
+                      style: TextStyle(fontWeight: FontWeight.w600, color: Colors.red),
                     )
                   ],
                 ),
@@ -176,11 +165,14 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
   DateTime _selectedDate = DateTime.now();
 
   _selectDate(BuildContext context) async {
+    final now = DateTime.now();
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(3000),
+      firstDate: now,
+      lastDate: now.add(
+        const Duration(days: 7),
+      ),
     );
     if (picked != null && picked != _selectedDate) {
       setState(() {
@@ -262,8 +254,7 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                   width: double.infinity,
                                   padding: const EdgeInsets.all(16),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         'About doctor',
@@ -276,8 +267,7 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                         height: 16,
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           const Text(
                                             'Year of experience',
@@ -285,8 +275,7 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                           ),
                                           Text(
                                             '${userDocs.experience} years',
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                            style: const TextStyle(fontWeight: FontWeight.bold),
                                           )
                                         ],
                                       ),
@@ -295,8 +284,7 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                       ),
                                       // ignore: prefer_const_constructors
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: const [
                                           Text(
                                             'Patients checked',
@@ -304,8 +292,7 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                           ),
                                           Text(
                                             '2',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                            style: TextStyle(fontWeight: FontWeight.bold),
                                           )
                                         ],
                                       ),
@@ -328,26 +315,19 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                         },
                                         style: OutlinedButton.styleFrom(
                                           primary: Colors.black,
-                                          textStyle:
-                                              const TextStyle(fontSize: 16),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 16, vertical: 8),
+                                          textStyle: const TextStyle(fontSize: 16),
+                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                           shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(50)),
+                                            borderRadius: BorderRadius.all(Radius.circular(50)),
                                           ),
                                         ),
-                                        child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(DateFormat('dd/MM/y')
-                                                  .format(_selectedDate)),
-                                              const Icon(
-                                                FontAwesomeIcons.calendar,
-                                                color: Colors.black,
-                                              ),
-                                            ]),
+                                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                          Text(DateFormat('dd/MM/y').format(_selectedDate)),
+                                          const Icon(
+                                            FontAwesomeIcons.calendar,
+                                            color: Colors.black,
+                                          ),
+                                        ]),
                                       ),
                                       const SizedBox(
                                         height: 16,
@@ -365,8 +345,7 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                 FutureBuilder(
                                     future: userDocs.checkTime(),
                                     builder: (ctx, futureCheck) {
-                                      if (futureCheck.connectionState ==
-                                          ConnectionState.waiting) {
+                                      if (futureCheck.connectionState == ConnectionState.waiting) {
                                         return const Center(
                                           child: CircularProgressIndicator(),
                                         );
@@ -374,20 +353,14 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                       if (futureCheck.data!) {
                                         return ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 16, vertical: 12),
+                                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                           ),
                                           onPressed: () {
-                                            NavigationService
-                                                .navKey.currentState
-                                                ?.pushNamed('/schedule',
-                                                    arguments: userDocs.id);
+                                            NavigationService.navKey.currentState?.pushNamed('/schedule', arguments: userDocs.id);
                                           },
                                           child: const Text(
                                             'Choose your time for consultant',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16),
+                                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                                           ),
                                         );
                                       }
@@ -399,25 +372,15 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                             _selectedDate.year,
                                           ),
                                           builder: (ctx, future) {
-                                            if (future.connectionState ==
-                                                ConnectionState.waiting) {
+                                            if (future.connectionState == ConnectionState.waiting) {
                                               return const Center(
-                                                child:
-                                                    CircularProgressIndicator(),
+                                                child: CircularProgressIndicator(),
                                               );
                                             }
                                             final time = future.data!;
                                             return time.isEmpty
-                                                ? const Text(
-                                                    'There is no time frame available')
-                                                : TimeChoosing(
-                                                    time,
-                                                    mediaQuery,
-                                                    _selectedDate.day,
-                                                    _selectedDate.month,
-                                                    _selectedDate.year,
-                                                    _onChange,
-                                                    widget.isDoctor);
+                                                ? const Text('There is no time frame available')
+                                                : TimeChoosing(time, mediaQuery, _selectedDate.day, _selectedDate.month, _selectedDate.year, _onChange, widget.isDoctor);
                                           });
                                     }),
                                 const SizedBox(
@@ -426,53 +389,40 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                 !widget.isDoctor
                                     ? ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 16, vertical: 12),
+                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                         ),
                                         onPressed: () {
                                           //payment screen
                                           _choosingTime == -1
                                               ? Fluttertoast.showToast(
                                                   msg: "You must choose time",
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
+                                                  toastLength: Toast.LENGTH_SHORT,
                                                   timeInSecForIosWeb: 1,
                                                   backgroundColor: Colors.red,
                                                   textColor: Colors.white,
                                                   fontSize: 16.0,
                                                 )
-                                              : NavigationService
-                                                  .navKey.currentState
-                                                  ?.pushNamed('/payment',
-                                                      arguments: {
-                                                      'doctorId': userDocs.id,
-                                                      'doctorName':
-                                                          userDocs.name,
-                                                      'price': userDocs.price,
-                                                      'doctorPhone':
-                                                          userDocs.phoneNumber,
-                                                      'doctorImage':
-                                                          userDocs.image,
-                                                      'doctorSpecialization':
-                                                          userDocs
-                                                              .specialization,
-                                                      'date': _selectedDate,
-                                                      'hour': _choosingTime
-                                                    });
+                                              : NavigationService.navKey.currentState?.pushNamed('/payment', arguments: {
+                                                  'doctorId': userDocs.id,
+                                                  'doctorName': userDocs.name,
+                                                  'price': userDocs.price,
+                                                  'doctorPhone': userDocs.phoneNumber,
+                                                  'doctorImage': userDocs.image,
+                                                  'doctorSpecialization': userDocs.specialization,
+                                                  'date': _selectedDate,
+                                                  'hour': _choosingTime
+                                                });
                                         },
                                         child: const Text(
                                           'Make appointment',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16),
+                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                                         ))
                                     : Container(),
                                 const SizedBox(
                                   height: 16,
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(horizontal: 16),
                                   // ignore: prefer_const_constructors
                                   child: const Column(children: [
                                     Align(
