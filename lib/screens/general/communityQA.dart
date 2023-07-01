@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/models/post_model.dart';
+import 'package:health_care/screens/general/filiter_symptom.dart';
 import 'package:health_care/widgets/QA_community/input_question_modal.dart';
 import 'package:health_care/widgets/button_section.dart';
 import 'package:health_care/widgets/QA_community/particular_question.dart';
@@ -16,7 +17,20 @@ class CommunityQA extends StatefulWidget {
 
 final TextEditingController _searchController = TextEditingController();
 
-Widget headerNavigateSection(click, changedPage, mediaQuery) => Padding(
+void _openFilterSymptom(BuildContext ctx) {
+    showModalBottomSheet(
+      context: ctx,
+      builder: (_) {
+        return GestureDetector(
+          onTap: () {},
+          child: FilterSymptom(),
+          behavior: HitTestBehavior.opaque,
+        );
+      },
+    );
+  }
+
+Widget headerNavigateSection(click, changedPage, mediaQuery, context) => Padding(
       padding: const EdgeInsets.only(top: 24, right: 16, left: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,8 +53,8 @@ Widget headerNavigateSection(click, changedPage, mediaQuery) => Padding(
               decoration: InputDecoration(
                 hintText: 'Search...',
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () => _searchController.clear(),
+                  icon: const Icon(Icons.menu),
+                  onPressed: () => _openFilterSymptom(context),
                 ),
                 prefixIcon: IconButton(
                   icon: const Icon(Icons.search),
@@ -261,7 +275,7 @@ class _CommunityQAState extends State<CommunityQA> {
       ),
       body: Column(
         children: [
-          headerNavigateSection(_click, _changedPage, mediaQuery),
+          headerNavigateSection(_click, _changedPage, mediaQuery, context),
           _buildListAll(posts),
         ],
       ),

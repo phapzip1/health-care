@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:health_care/models/doctor_model.dart';
 import 'package:health_care/models/patient_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:health_care/widgets/user_image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../utils/formstage.dart';
@@ -152,7 +153,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.6,
+      height: MediaQuery.of(context).size.height * 0.56,
       child: Form(
         key: widget.formkey,
         child: SingleChildScrollView(
@@ -164,7 +165,11 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                 style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(height: 20),
-
+              UserImagePicker(
+                onPickImage: (pickedImage) {
+                  _selectedImage = pickedImage;
+                },
+              ),
               TextFormField(
                 key: const ValueKey('identity'),
                 decoration: InputDecoration(
