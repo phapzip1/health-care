@@ -6,14 +6,18 @@ import 'package:health_care/models/review_model.dart';
 import 'package:health_care/screens/Doctor/doctor_infor_page.dart';
 
 class AppointmentListPatient extends StatelessWidget {
-  AppointmentListPatient();
+  AppointmentListPatient({
+    required this.spec
+  });
+
+  final String spec;
 
   final user = FirebaseAuth.instance.currentUser;
-
+  final _ref = FirebaseFirestore.instance.collection('doctor');
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: FirebaseFirestore.instance.collection('doctor').get(),
+        future: spec != "All" ? _ref.where("specialization", isEqualTo: spec).get() : _ref.get(),
         builder: (ctx, futureSnapShot) {
           if (futureSnapShot.connectionState == ConnectionState.waiting) {
             return const Center(

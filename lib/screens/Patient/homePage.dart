@@ -10,10 +10,32 @@ import 'package:health_care/widgets/header_section.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser;
+
+  late List<Symptom> symptoms;
+  int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    symptoms = [];
+    loadSymtoms();
+  }
+
+  void loadSymtoms() async {
+    final list = await SymptomsProvider.getSymtoms();
+    setState(() {
+      symptoms.addAll(list);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,77 +89,76 @@ class HomePage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    FutureBuilder(
-                        future: SymptomsProvider.getSymtoms(),
-                        builder: (ctx, snapshot) {
-                          if (snapshot.connectionState != ConnectionState.done) {
-                            return Container();
-                          }
-                          return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            margin: const EdgeInsets.only(bottom: 4),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 48,
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: snapshot.data!.length,
-                                    itemBuilder: (ctx2, index) {
-                                      return InkWell(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(2.0),
-                                          child: IntrinsicHeight(
-                                            child: Container(
-                                              margin: const EdgeInsets.only(right: 8),
-                                              decoration: const BoxDecoration(
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Color(0xFFC9C9C9),
-                                                    blurRadius: 1,
-                                                    spreadRadius: 1,
-                                                  ),
-                                                ],
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.all(Radius.circular(8)),
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      snapshot.data![index].name,
-                                                      style: const TextStyle(fontWeight: FontWeight.bold),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 4,
-                                                    ),
-                                                    Image.network(
-                                                      snapshot.data![index].icon,
-                                                      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                                                        if (wasSynchronouslyLoaded) {
-                                                          return child;
-                                                        }
-                                                        return Image.asset("assets/images/fallback.jpg");
-                                                      },
-                                                      width: 24,
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      margin: const EdgeInsets.only(bottom: 4),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: symptoms.length,
+                              itemBuilder: (ctx2, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedIndex = index;
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: IntrinsicHeight(
+                                      child: Container(
+                                        margin: const EdgeInsets.only(right: 8),
+                                        decoration: const BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Color(0xFFC9C9C9),
+                                              blurRadius: 1,
+                                              spreadRadius: 1,
                                             ),
+                                          ],
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                symptoms[index].name,
+                                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                              ),
+                                              const SizedBox(
+                                                width: 4,
+                                              ),
+                                              Image.network(
+                                                symptoms[index].icon,
+                                                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                                                  if (wasSynchronouslyLoaded) {
+                                                    return child;
+                                                  }
+                                                  return Image.asset("assets/images/fallback.jpg");
+                                                },
+                                                width: 24,
+                                              )
+                                            ],
                                           ),
                                         ),
-                                      );
-                                    },
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                AppointmentListPatient(),
-                              ],
+                                );
+                              },
                             ),
-                          );
-                        }),
+                          ),
+                          if (symptoms.isNotEmpty)
+                            AppointmentListPatient(spec: symptoms[_selectedIndex].name),
+                        ],
+                      ),
+                    ),
                   ],
                 );
               },

@@ -1,5 +1,9 @@
 [
     {
+        "name": "All",
+        "icon": "https://e7.pngegg.com/pngimages/618/567/png-clipart-red-cross-illustration-hospital-plus-and-minus-signs-symbol-american-red-cross-red-cross-miscellaneous-angle.png"
+    },
+    {
         "name": "Respiratory",
         "icon": "https://firebasestorage.googleapis.com/v0/b/health-meeting.appspot.com/o/icons%2Frespiratory.png?alt=media&token=32c774c6-aa5d-49d8-a564-9d9c7a925c7b"
     },
