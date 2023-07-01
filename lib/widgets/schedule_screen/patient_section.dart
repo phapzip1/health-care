@@ -21,7 +21,9 @@ class _PatientSectionState extends State<PatientSection> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: !widget.changedPage ? AppointmentModel.getAppointmentHistory(patientId: user!.uid) : AppointmentModel.getAppointment(patientId: user!.uid),
+        future: !widget.changedPage
+            ? AppointmentModel.getAppointmentHistory(patientId: user!.uid)
+            : AppointmentModel.getAppointment(patientId: user!.uid),
         builder: (ctx, futureSnapshot) {
           if (futureSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -29,7 +31,9 @@ class _PatientSectionState extends State<PatientSection> {
             );
           }
 
-          if (!futureSnapshot.hasData || futureSnapshot.data == null || futureSnapshot.data!.isEmpty) {
+          if (!futureSnapshot.hasData ||
+              futureSnapshot.data == null ||
+              futureSnapshot.data!.isEmpty) {
             return Container();
           }
 
@@ -82,14 +86,17 @@ class _PatientSectionState extends State<PatientSection> {
                                   ),
                                   Text(
                                     scheduleDocs[index].specialization,
-                                    style: const TextStyle(fontSize: 16, color: Color(0xFF828282)),
+                                    style: const TextStyle(
+                                        fontSize: 16, color: Color(0xFF828282)),
                                   ),
                                   const SizedBox(
                                     height: 6,
                                   ),
                                   Text(
                                     scheduleDocs[index].doctorPhone,
-                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(
                                     height: 6,
@@ -99,7 +106,8 @@ class _PatientSectionState extends State<PatientSection> {
                             ),
                             CircleAvatar(
                               radius: 26.0,
-                              backgroundImage: NetworkImage(scheduleDocs[index].doctorImage),
+                              backgroundImage:
+                                  NetworkImage(scheduleDocs[index].doctorImage),
                             ),
                           ],
                         ),
@@ -119,7 +127,10 @@ class _PatientSectionState extends State<PatientSection> {
                                   width: 4,
                                 ),
                                 Text(
-                                  scheduleDocs[index].dateTime.toString().substring(0, 10),
+                                  scheduleDocs[index]
+                                      .dateTime
+                                      .toString()
+                                      .substring(0, 10),
                                   style: const TextStyle(fontSize: 16),
                                 ),
                               ],
@@ -134,7 +145,10 @@ class _PatientSectionState extends State<PatientSection> {
                                   width: 4,
                                 ),
                                 Text(
-                                  scheduleDocs[index].dateTime.toString().substring(10, 16),
+                                  scheduleDocs[index]
+                                      .dateTime
+                                      .toString()
+                                      .substring(10, 16),
                                   style: const TextStyle(fontSize: 16),
                                 ),
                               ],
@@ -143,7 +157,10 @@ class _PatientSectionState extends State<PatientSection> {
                               children: [
                                 CircleAvatar(
                                   radius: 4,
-                                  backgroundColor: scheduleDocs[index].status == 0 ? const Color(0xFFE2B93B) : const Color(0xFF27AE60),
+                                  backgroundColor:
+                                      scheduleDocs[index].status == 0
+                                          ? const Color(0xFFE2B93B)
+                                          : const Color(0xFF27AE60),
                                 ),
                                 const SizedBox(
                                   width: 4,
@@ -169,11 +186,17 @@ class _PatientSectionState extends State<PatientSection> {
                                   scheduleDocs[index].status == 0
                                       ? ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: const Color(0xFFE0E0E0),
+                                            backgroundColor:
+                                                const Color(0xFFE0E0E0),
                                             elevation: 0,
                                           ),
                                           onPressed: () {
-                                            FirebaseFirestore.instance.collection('patient').doc(user!.uid).collection('schedule').doc(scheduleDocs[index].id).delete();
+                                            FirebaseFirestore.instance
+                                                .collection('patient')
+                                                .doc(user!.uid)
+                                                .collection('schedule')
+                                                .doc(scheduleDocs[index].id)
+                                                .delete();
                                           },
                                           child: const Align(
                                             alignment: Alignment.center,
@@ -187,28 +210,57 @@ class _PatientSectionState extends State<PatientSection> {
                                           ),
                                         )
                                       : Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
                                           children: [
                                             ///Button Cancel
-                                            if (now.isBefore(meeting.subtract(const Duration(minutes: 30))))
+                                            if (now.isBefore(meeting.subtract(
+                                                const Duration(minutes: 30))))
                                               ElevatedButton(
                                                   style: ElevatedButton.styleFrom(
-                                                      backgroundColor: const Color(0xFFFFBE0B),
+                                                      backgroundColor:
+                                                          const Color(
+                                                              0xFFFFBE0B),
                                                       elevation: 0,
-                                                      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.05, vertical: 12)),
+                                                      padding: EdgeInsets.symmetric(
+                                                          horizontal:
+                                                              MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.05,
+                                                          vertical: 12)),
                                                   onPressed: () {},
                                                   child: const Text(
                                                     'Cancel',
-                                                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16),
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black,
+                                                        fontSize: 16),
                                                   )),
-                                            if (now.isBefore(meeting.subtract(const Duration(minutes: 5))))
+                                            if (now.isBefore(meeting.subtract(
+                                                const Duration(minutes: 5))))
                                               ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                    backgroundColor: const Color(0xFF2F80ED),
+                                                    backgroundColor:
+                                                        const Color(0xFF2F80ED),
                                                     elevation: 0,
-                                                    padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.05, vertical: 12)),
+                                                    padding: EdgeInsets.symmetric(
+                                                        horizontal:
+                                                            MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.05,
+                                                        vertical: 12)),
                                                 onPressed: () {
-                                                  NavigationService.navKey.currentState?.pushNamed('/chat', arguments: scheduleDocs[index]);
+                                                  NavigationService
+                                                      .navKey.currentState
+                                                      ?.pushNamed('/chat',
+                                                          arguments:
+                                                              scheduleDocs[
+                                                                  index]);
                                                 },
                                                 child: const Text(
                                                   'Send message',
@@ -219,17 +271,16 @@ class _PatientSectionState extends State<PatientSection> {
                                                   ),
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                  ],
-                                )
-                              : ReviewModal(
-                                  scheduleDocs[index].doctorId,
-                                  scheduleDocs[index].patientId,
-                                  scheduleDocs[index].patientName,
-                                  scheduleDocs[index].patientImage),
-                        ],
-                      ),
+                                          ],
+                                        ),
+                                ],
+                              )
+                            : ReviewModal(
+                                scheduleDocs[index].doctorId,
+                                scheduleDocs[index].patientId,
+                                scheduleDocs[index].patientName,
+                                scheduleDocs[index].patientImage),
+                      ],
                     ),
                   ),
                 );

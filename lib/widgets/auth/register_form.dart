@@ -134,7 +134,7 @@ class _RegisterFormState extends State<RegisterForm> {
   Widget build(BuildContext context) {
     final now = DateTime.now();
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.6,
+      height: MediaQuery.of(context).size.height * 0.56,
       child: Form(
         key: widget.formkey,
         child: SingleChildScrollView(
