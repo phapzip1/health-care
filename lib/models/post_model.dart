@@ -78,6 +78,11 @@ class PostModel {
     return _ref.doc(id).collection("chat").snapshots();
   }
 
+  static Future<int> getTotalChat(String id) async {
+    final snapshot = await _ref.doc(id).collection("chat").get();
+    return snapshot.size;
+  }
+
   static Future<List<PostModel>> getPublic(String lastId) async {
     if (lastId != "") {
       final doc = await _ref.doc(lastId).get();

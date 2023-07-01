@@ -39,8 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final dwidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
           width: double.infinity,
@@ -65,8 +65,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: IntrinsicHeight(
                             child: IntrinsicWidth(
                               child: Container(
-                                // width: 258,
-                                // height: dwidth/3.5,
                                 decoration: const BoxDecoration(
                                   boxShadow: [
                                     BoxShadow(
@@ -120,43 +118,40 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(20),
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(20),
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                            ),
+                            color: Colors.white,
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(color: Colors.black, blurRadius: 4.0),
+                            ],
                           ),
-                          color: Colors.white,
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(color: Colors.black, blurRadius: 4.0),
-                          ],
-                        ),
-                        child: AnimatedSize(
-                            curve: Curves.easeIn,
-                            duration: const Duration(milliseconds: 200),
-                            child: stage == FormStage.Login
-                                ? LoginForm(
-                                    formKey: _loginFormKey,
-                                    setFormStage: updateFormStage)
-                                : stage == FormStage.PatientRegister
-                                    ? RegisterForm(
-                                        formkey: _registerFormKey,
-                                        setFormStage: updateFormStage)
-                                    : stage == FormStage.DoctorRegister
-                                        ? DoctorRegisterForm(
-                                            formkey: _doctorRegisterFormKey,
-                                            setFormStage: updateFormStage,
-                                          )
-                                        : stage == FormStage.ChangePassword
-                                            ? ChangePasswordForm(
-                                                formKey: _changePasswordFormKey,
-                                                setFormStage: updateFormStage,
-                                                email: _email)
-                                            : OTPForm(
-                                                email: _email,
-                                                setFormStage: updateFormStage)),
-                      ),
+                          child: stage == FormStage.Login
+                              ? LoginForm(
+                                  formKey: _loginFormKey,
+                                  setFormStage: updateFormStage)
+                              : stage == FormStage.PatientRegister
+                                  ? RegisterForm(
+                                      formkey: _registerFormKey,
+                                      setFormStage: updateFormStage)
+                                  : stage == FormStage.DoctorRegister
+                                      ? DoctorRegisterForm(
+                                          formkey: _doctorRegisterFormKey,
+                                          setFormStage: updateFormStage,
+                                        )
+                                      : stage == FormStage.ChangePassword
+                                          ? ChangePasswordForm(
+                                              formKey: _changePasswordFormKey,
+                                              setFormStage: updateFormStage,
+                                              email: _email)
+                                          : OTPForm(
+                                              email: _email,
+                                              setFormStage: updateFormStage)),
+
                     ],
                   ),
                 ),

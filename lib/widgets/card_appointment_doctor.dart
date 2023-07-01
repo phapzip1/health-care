@@ -167,12 +167,12 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                       ]),
               ],
             ),
+            const SizedBox(
+              height: 8,
+            ),
             widget.changedPage
                 ? Column(
                     children: [
-                      const SizedBox(
-                        height: 8,
-                      ),
                       isConfirm
                           ? Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -264,8 +264,9 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                             elevation: 0,
                             padding: const EdgeInsets.symmetric(vertical: 8)),
                         onPressed: () {
-                          NavigationService.navKey.currentState
-                              ?.pushNamed('/writerecord', arguments: widget.schedule);
+                          NavigationService.navKey.currentState?.pushNamed(
+                              '/writerecord',
+                              arguments: widget.schedule);
                         },
                         child: const Text(
                           'Write record',

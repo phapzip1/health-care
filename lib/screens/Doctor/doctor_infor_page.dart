@@ -1,7 +1,12 @@
+// ignore_for_file: avoid_print
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/models/doctor_model.dart';
+import 'package:health_care/models/review_model.dart';
+import 'package:health_care/screens/general/review_section.dart';
 import 'package:health_care/services/navigation_service.dart';
 import 'package:health_care/widgets/infomation_page/time_choosing.dart';
 import 'package:intl/intl.dart';
@@ -45,42 +50,53 @@ Widget upperPart(doctor) => Card(
             // ignore: prefer_const_constructors
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       FontAwesomeIcons.solidStar,
                       color: Color(0xFF3A86FF),
                       size: 20,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
                     // ignore: prefer_const_constructors
-                    Text(
-                      '4.5',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
-                    ),
+                    FutureBuilder(
+                        future: ReviewModel.getAverageRating(doctor.id),
+                        builder: (ctx, rating) {
+                          if (rating.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+                          return Text(
+                            rating.data.toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 15),
+                          );
+                        }),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 24,
                 ),
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       FontAwesomeIcons.solidMessage,
                       color: Color(0xFF3A86FF),
                       size: 20,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
-                    Text(
-                      '4',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                    FutureBuilder(
+                      future: ReviewModel.getTotalReview(doctor.id),
+                      builder: (ctx, review) => Text(
+                        review.data.toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 15),
+                      ),
                     ),
                   ],
                 ),
@@ -123,7 +139,7 @@ Widget upperPart(doctor) => Card(
                   ),
                 ),
                 Text(
-                  doctor.price.toString(),
+                  "${doctor.price} vnd",
                   style: const TextStyle(
                       color: Color(0xFF3A86FF), fontWeight: FontWeight.bold),
                 )
@@ -132,41 +148,41 @@ Widget upperPart(doctor) => Card(
             const SizedBox(
               height: 16,
             ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Appointments',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF828282)),
-                    ),
-                    Text(
-                      '22',
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text(
-                      'Consultations',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF828282)),
-                    ),
-                    Text(
-                      '1',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600, color: Colors.red),
-                    )
-                  ],
-                ),
-              ],
-            ),
+            // const Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //   children: [
+            //     Column(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         Text(
+            //           'Appointments',
+            //           style: TextStyle(
+            //               fontWeight: FontWeight.bold,
+            //               color: Color(0xFF828282)),
+            //         ),
+            //         Text(
+            //           '22',
+            //           style: TextStyle(fontWeight: FontWeight.w600),
+            //         )
+            //       ],
+            //     ),
+            //     Column(
+            //       children: [
+            //         Text(
+            //           'Consultations',
+            //           style: TextStyle(
+            //               fontWeight: FontWeight.bold,
+            //               color: Color(0xFF828282)),
+            //         ),
+            //         Text(
+            //           '1',
+            //           style: TextStyle(
+            //               fontWeight: FontWeight.w600, color: Colors.red),
+            //         )
+            //       ],
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),
@@ -174,6 +190,7 @@ Widget upperPart(doctor) => Card(
 
 class _DoctorInforPageState extends State<DoctorInforPage> {
   DateTime _selectedDate = DateTime.now();
+  final userId = FirebaseAuth.instance.currentUser!.uid;
 
   _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -231,20 +248,6 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                 }
 
                 final userDocs = futureSnapShot.data!;
-                // final doctor = DoctorModel(
-                //     userDocs.id,
-                //     userDocs.name,
-                //     userDocs.phoneNumber,
-                //     userDocs.gender,
-                //     userDocs.birthdate,
-                //     userDocs.email,
-                //     userDocs.experience,
-                //     userDocs.price,
-                //     userDocs.workplace,
-                //     userDocs.specialization,
-                //     userDocs.identityId,
-                //     userDocs.licenseId,
-                //     userDocs.image);
 
                 return Column(
                   children: [
@@ -297,15 +300,20 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                        children: const [
-                                          Text(
+                                        children: [
+                                          const Text(
                                             'Patients checked',
                                             style: TextStyle(),
                                           ),
-                                          Text(
-                                            '2',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                          FutureBuilder(
+                                            future: AppointmentModel
+                                                .countTotalAppointmentHistory(
+                                                    doctorId: userDocs.id),
+                                            builder: (ctx, total) => Text(
+                                              total.data.toString(),
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           )
                                         ],
                                       ),
@@ -474,8 +482,8 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16),
                                   // ignore: prefer_const_constructors
-                                  child: const Column(children: [
-                                    Align(
+                                  child: Column(children: [
+                                    const Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         'Reviews',
@@ -485,7 +493,11 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    ReviewSection(userDocs),
+                                    const SizedBox(
                                       height: 16,
                                     ),
                                   ]),

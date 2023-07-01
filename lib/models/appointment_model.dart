@@ -299,4 +299,24 @@ class AppointmentModel {
         .toList();
     return res;
   }
+
+  static Future<int> countTotalAppointmentHistory(
+      {String? doctorId, String? patientId}) async {
+    final snapshot;
+
+    if (doctorId != null) {
+      snapshot = await _ref
+          .where("doctor_id", isEqualTo: doctorId)
+          .where("status", isEqualTo: 1)
+          .get();
+      return snapshot.size;
+
+    }
+    snapshot = await _ref
+        .where("patient_id", isEqualTo: patientId)
+        .where("status", isNotEqualTo: 0)
+        .get();
+    
+    return snapshot.size;
+  }
 }

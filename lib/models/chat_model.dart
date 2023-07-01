@@ -8,4 +8,6 @@ class ChatModel {
 
   ChatModel(this.appointmentId, this.senderId, this.receiverName, this.text,
       this.time, this.image);
+
+  
 }

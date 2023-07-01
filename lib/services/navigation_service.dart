@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:health_care/models/appointment_model.dart';
 // import 'package:health_care/models/health_record_model.dart';
 import 'package:health_care/screens/Patient/cards_and_wallets_screen.dart';
+import 'package:health_care/screens/Patient/patientRecord.dart';
 import 'package:health_care/screens/general/chat.dart';
 import 'package:health_care/screens/general/doctor_schedule_screen.dart';
 import 'package:health_care/screens/Patient/payment_screen.dart';
@@ -9,6 +10,7 @@ import 'package:health_care/screens/general/login_screen.dart';
 import 'package:health_care/screens/general/splash.dart';
 import 'package:health_care/widgets/record_screen/record_detail.dart';
 import 'package:health_care/widgets/record_screen/write_record.dart';
+import 'package:health_care/widgets/schedule_screen/patient_section.dart';
 
 // screens
 // import '../screens/page_not_found_screen.dart';
@@ -30,6 +32,8 @@ class NavigationService {
   static const String splash = "/splash";
   static const String record = "/record";
   static const String writeRecord = "/writerecord";
+  static const String recordPage = "/recordpage";
+  static const String patientSchedule = "/patientschedule";
 
   static final GlobalKey<NavigatorState> _navState =
       GlobalKey<NavigatorState>();
@@ -47,6 +51,20 @@ class NavigationService {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case splash:
         return MaterialPageRoute(builder: (_) => SplashScreen());
+      case patientSchedule:
+        {
+          final data = settings.arguments as bool;
+          return MaterialPageRoute(
+            builder: (_) => PatientSection(data),
+          );
+        }
+      case recordPage:
+        {
+          final data = settings.arguments as bool;
+          return MaterialPageRoute(
+            builder: (_) => PatientRecords(data),
+          );
+        }
       case writeRecord:
         {
           final data = settings.arguments as AppointmentModel;

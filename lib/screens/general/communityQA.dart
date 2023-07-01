@@ -171,13 +171,21 @@ Widget questionCard(PostModel question, context) {
                     color: Color(0xFFFFBE0B), fontWeight: FontWeight.w600),
               ),
             ),
-            const Row(
+            Row(
               children: [
-                Icon(FontAwesomeIcons.comment),
-                SizedBox(
+                const Icon(FontAwesomeIcons.comment),
+                const SizedBox(
                   width: 4,
                 ),
-                Text('4')
+                FutureBuilder(
+                  future: PostModel.getTotalChat(question.id!),
+                  builder: (ctx, comment) {
+                    if (comment.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+                    return Text(comment.data.toString());
+                  },
+                )
               ],
             ),
           ],
@@ -224,7 +232,9 @@ class _CommunityQAState extends State<CommunityQA> {
       isLoading = true;
     });
 
-    final newPost =  _changedPage ? await PostModel.getPublic(id) : await PostModel.getAsPatient(id, userId);
+    final newPost = _changedPage
+        ? await PostModel.getPublic(id)
+        : await PostModel.getAsPatient(id, userId);
 
     setState(() {
       isLoading = false;
@@ -252,7 +262,7 @@ class _CommunityQAState extends State<CommunityQA> {
       body: Column(
         children: [
           headerNavigateSection(_click, _changedPage, mediaQuery),
-           _buildListAll(posts),
+          _buildListAll(posts),
         ],
       ),
       floatingActionButton: FloatingActionButton(

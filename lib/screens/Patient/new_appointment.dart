@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:health_care/models/symptom.dart';
 import 'package:health_care/widgets/home_page/appointment_list_patient.dart';

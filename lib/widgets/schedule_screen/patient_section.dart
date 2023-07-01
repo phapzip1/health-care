@@ -254,8 +254,7 @@ class _PatientSectionState extends State<PatientSection> {
                                                   'Send message',
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                     fontSize: 16,
                                                   ),
                                                 ),
@@ -264,7 +263,11 @@ class _PatientSectionState extends State<PatientSection> {
                                           ),
                                   ],
                                 )
-                              : ReviewModal(),
+                              : ReviewModal(
+                                  scheduleDocs[index].doctorId,
+                                  scheduleDocs[index].patientId,
+                                  scheduleDocs[index].patientName,
+                                  scheduleDocs[index].patientImage),
                         ],
                       ),
                     ),
