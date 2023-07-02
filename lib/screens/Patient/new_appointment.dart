@@ -16,8 +16,22 @@ class NewAppointment extends StatefulWidget {
 
 class _NewAppointmentState extends State<NewAppointment> {
   final TextEditingController _searchController = TextEditingController();
+  late List<Symptom> symptoms;
+  String _selectedValue = "All";
 
-  var _selectedValue;
+  @override
+  void initState() {
+    super.initState();
+    symptoms = [];
+    loadDropdown();
+  }
+
+  void loadDropdown() async {
+    final list = await SymptomsProvider.getSymtoms();
+    setState(() {
+      symptoms.addAll(list);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,40 +57,32 @@ class _NewAppointmentState extends State<NewAppointment> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Search(_searchController),
           ),
-          FutureBuilder(
-              future: SymptomsProvider.getSymtoms(),
-              builder: (ctx, future) {
-                if (future.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                }
-
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  width: double.infinity,
-                  child: DropDownTextField(
-                    initialValue: future.data![0].name,
-                    clearOption: false,
-                    dropDownItemCount: 6,
-                    dropDownList: future.data!
-                        .map(
-                          (e) =>
-                              DropDownValueModel(name: e.name, value: e.name),
-                        )
-                        .toList(),
-                    textFieldDecoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    ),
-                    onChanged: (value) {
-                      _selectedValue = value.name.toString();
-                    },
-                  ),
-                );
-              }),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            width: double.infinity,
+            child: DropDownTextField(
+              initialValue: "All",
+              clearOption: false,
+              dropDownItemCount: 6,
+              dropDownList: symptoms
+                  .map(
+                    (e) => DropDownValueModel(name: e.name, value: e.name),
+                  )
+                  .toList(),
+              textFieldDecoration: const InputDecoration(
+                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              ),
+              onChanged: (value) {
+                _selectedValue = value.name.toString();
+              },
+            ),
+          ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             margin: const EdgeInsets.only(bottom: 4),
-            child: AppointmentListPatient(),
+            child: AppointmentListPatient(
+              spec: _selectedValue,
+            ),
           ),
         ],
       ),
