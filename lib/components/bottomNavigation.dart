@@ -21,7 +21,6 @@ class _MyWidgetState extends State<BottomNavBar> {
           icon: Icon(Icons.home),
           label: 'Home',
         ),
-
         BottomNavigationBarItem(
           icon: ImageIcon(
             AssetImage("assets/images/calendar.png")),
@@ -32,7 +31,13 @@ class _MyWidgetState extends State<BottomNavBar> {
             AssetImage("assets/images/user.png")),
           label: 'Info',
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.notifications),
+          label: 'Noti',
+        ),
       ],
+      showUnselectedLabels: false,
+      elevation: 0,
       currentIndex: widget.selectedIndex,
       selectedItemColor: const Color(0xFF3A86FF),
       unselectedItemColor: const Color(0xFF828282),

@@ -111,13 +111,19 @@ class ParticularQuestion extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,
-        leading: const BackButton(
-          color: Colors.black,
-        ),
         title: const Text(
           'Question',
           style: TextStyle(
               fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.black,
         ),
       ),
       body: SafeArea(

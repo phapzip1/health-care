@@ -28,8 +28,14 @@ class _PatientRecordsState extends State<PatientRecords> {
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
-          leading: const BackButton(
-            color: Colors.black,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_ios),
+          ),
+          iconTheme: const IconThemeData(
+            color: Colors.black, //change your color here
           ),
         ),
         body: Container(
@@ -49,7 +55,8 @@ class _PatientRecordsState extends State<PatientRecords> {
 
               return ListView.builder(
                   itemCount: healthRecord.length,
-                  itemBuilder: (ctx, index) => RecordTag(healthRecord[index], widget.isDoctor));
+                  itemBuilder: (ctx, index) =>
+                      RecordTag(healthRecord[index], widget.isDoctor));
             },
           ),
         ));

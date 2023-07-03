@@ -24,7 +24,6 @@ class DoctorModel {
   Gender gender;
   DateTime birthdate;
   String email;
-  String identityId;
   String licenseId;
   int experience;
   int price;
@@ -45,7 +44,6 @@ class DoctorModel {
     this.price,
     this.workplace,
     this.specialization,
-    this.identityId,
     this.licenseId,
     this.image,
   );
@@ -59,7 +57,6 @@ class DoctorModel {
         "birthdate": Timestamp.fromDate(birthdate),
         "email": email,
         "experience": experience,
-        "identityId": identityId,
         "licenseId": licenseId,
         "price": price,
         "workplace": workplace,
@@ -102,7 +99,6 @@ class DoctorModel {
       snapshot.get("price"),
       snapshot.get("workplace"),
       snapshot.get("specialization"),
-      snapshot.get("identityId"),
       snapshot.get("licenseId"),
       snapshot.get("image"),
     );

@@ -5,6 +5,7 @@ import 'package:health_care/models/post_model.dart';
 import 'message_bubble.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class Messages extends StatelessWidget {
   Messages({this.post, this.appointmentModel, super.key});
   PostModel? post;
