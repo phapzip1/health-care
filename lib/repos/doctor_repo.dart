@@ -38,6 +38,5 @@ abstract class DoctorRepo {
     required double rating,
     required String message,
   });
-  Future<void> editFeedback(FeedbackModel feedback);
   Future<void> removeFeedback(String feedbackId);
 }

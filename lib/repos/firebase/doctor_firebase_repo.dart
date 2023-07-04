@@ -46,23 +46,6 @@ class DoctorFirebaseRepo extends DoctorRepo {
   }
 
   @override
-  Future<void> editFeedback(FeedbackModel feedback) async {
-    try {
-      await _ref.doc(feedback.id).update({
-        "doctor_id": feedback.doctorId,
-        "patient_id": feedback.patientId,
-        "patient_name": feedback.patientName,
-        "patient_image": feedback.patientImage,
-        "create_at": Timestamp.fromDate(feedback.createAt),
-        "rating": feedback.rating,
-        "message": feedback.message,
-      });
-    } catch (e) {
-      throw GenericDBException();
-    }
-  }
-
-  @override
   Future<void> giveFeedback({
     required String doctorId,
     required String patientId,
@@ -73,9 +56,8 @@ class DoctorFirebaseRepo extends DoctorRepo {
     required String message,
   }) async {
     try {
-      await _ref.add({
+      await _ref.doc(patientId).set({
         "doctor_id": doctorId,
-        "patient_id": patientId,
         "patient_name": patientName,
         "patient_image": patientImage,
         "create_at": Timestamp.fromDate(createAt),
