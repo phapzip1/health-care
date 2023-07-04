@@ -1,11 +1,11 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:health_care/models/symptom.dart';
+import 'package:health_care/models/symptom_model.dart';
 import 'package:health_care/widgets/home_page/appointment_list_patient.dart';
 
 class TypicalDoctor extends StatefulWidget {
-  List<Symptom> symptoms;
+  List<SymptomModel> symptoms;
   TypicalDoctor(this.symptoms, {super.key});
 
   @override

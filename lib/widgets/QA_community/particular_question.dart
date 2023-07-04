@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/models/post_model.dart';
-import 'package:health_care/widgets/chat/messages.dart';
-import 'package:health_care/widgets/chat/new_message.dart';
 import 'package:intl/intl.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class ParticularQuestion extends StatelessWidget {
   const ParticularQuestion(this.question, {super.key});
@@ -49,7 +46,7 @@ class ParticularQuestion extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
-        Text(question.descriptions),
+        Text(question.description),
         const SizedBox(
           height: 16,
         ),
@@ -77,7 +74,7 @@ class ParticularQuestion extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 24.0,
-                          backgroundImage: NetworkImage(question.doctorImage),
+                          backgroundImage: NetworkImage(question.doctorImage!),
                         ),
                         const SizedBox(
                           width: 8,
@@ -87,7 +84,7 @@ class ParticularQuestion extends StatelessWidget {
                           children: [
                             const Text('Answered by'),
                             Text(
-                              question.doctorName,
+                              question.doctorName!,
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
@@ -105,7 +102,6 @@ class ParticularQuestion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userId = FirebaseAuth.instance.currentUser!.uid;
 
     return Scaffold(
       appBar: AppBar(
@@ -127,41 +123,7 @@ class ParticularQuestion extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            questionSection(question),
-            const Divider(
-              color: Colors.black,
-              thickness: 0.3,
-            ),
-            Expanded(
-              child: Column(children: [
-                Text(
-                  DateFormat('hh:mm dd/MM/y').format(DateTime.now()),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF828282),
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Messages(post: question,),
-                      ),
-                      question.patientId == userId
-                          ? NewMessage(post: question)
-                          : Container(),
-                    ],
-                  ),
-                )
-              ]),
-            ),
-          ],
-        ),
+        child: questionSection(question),
       ),
     );
   }

@@ -9,6 +9,7 @@ class PatientRecords extends StatelessWidget {
   const PatientRecords(this.isDoctor, {super.key});
 
   Widget build(BuildContext context) {
+    // context.read<AppBloc>().add()
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -38,7 +39,7 @@ class PatientRecords extends StatelessWidget {
             //     ? HealthRecordModel.get(doctorId: user!.uid)
             //     : HealthRecordModel.get(patientId: user!.uid),
             builder: (ctx, state) {
-              widget.isDoctor ? state.doctor.
+              isDoctor ? state.doctor.
               return ListView.builder(
                   itemCount: healthRecord.length,
                   itemBuilder: (ctx, index) =>

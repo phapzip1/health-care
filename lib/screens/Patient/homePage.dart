@@ -5,7 +5,6 @@ import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_state.dart';
 // import 'package:health_care/models/patient_model.dart';
 
-import 'package:health_care/models/symptom.dart';
 import 'package:health_care/screens/general/typical_doctor.dart';
 import 'package:health_care/widgets/function_category.dart';
 import 'package:health_care/widgets/home_page/personal_appointment.dart';
@@ -13,36 +12,13 @@ import 'package:health_care/widgets/header_section.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final user = FirebaseAuth.instance.currentUser;
-
-  late List<Symptom> symptoms;
-
-  @override
-  void initState() {
-    super.initState();
-    symptoms = [];
-    loadSymtoms();
-  }
-
-  void loadSymtoms() async {
-    final list = await SymptomsProvider.getSymtoms();
-    setState(() {
-      symptoms.addAll(list);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     // final mediaQuery = MediaQuery.of(context).size;
-
+    final user = FirebaseAuth.instance.currentUser!;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -51,6 +27,7 @@ class _HomePageState extends State<HomePage> {
             child: BlocBuilder<AppBloc, AppState>(
               // future: PatientModel.getById(user!.uid),
               builder: (ctx, state) {
+                final symptoms = state.symptom!;
                 return Column(
                   children: [
                     Padding(
@@ -61,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                           HeaderSection(
                               url: state.patient!.image,
                               userName: state.patient!.name),
-                          FunctionCategory(user!.uid, false),
+                          FunctionCategory(user.uid, false),
                           const Text(
                             'My Appointment',
                             style: TextStyle(

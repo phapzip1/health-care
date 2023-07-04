@@ -3,6 +3,7 @@ class PostModel {
   final String patientId;
   final String? doctorId;
   final String? doctorName;
+  final String? doctorImage;
   final int age;
   final String specialization;
   final String description;
@@ -17,6 +18,7 @@ class PostModel {
         patientId = map["patient_id"],
         doctorId = map["doctor_id"],
         doctorName = map["doctor_name"],
+        doctorImage = map["doctor_image"],
         age = map["age"],
         specialization = map["specialization"],
         description = map["description"],
@@ -32,6 +34,7 @@ class PostModel {
       "patient_id": patientId,
       "doctor_id": doctorId,
       "doctor_name": doctorName,
+      "doctor_image": doctorImage,
       "age": age,
       "specialization": specialization,
       "description": description,
