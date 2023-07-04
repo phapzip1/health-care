@@ -1,5 +1,4 @@
 class FeedbackModel {
-  final String id;
   final String doctorId;
   final String patientId;
   final String patientName;
@@ -9,8 +8,7 @@ class FeedbackModel {
   final String message;
 
   FeedbackModel.fromMap(Map<String, dynamic> map)
-      : id = map["id"],
-        doctorId = map["doctor_id"],
+      : doctorId = map["doctor_id"],
         patientId = map["patient_id"],
         patientName = map["patient_name"],
         patientImage = map["patient_image"],
@@ -20,7 +18,6 @@ class FeedbackModel {
 
   Map<String, dynamic> toMap() {
     return {
-      "id": id,
       "doctor_id": doctorId,
       "patient_id": patientId,
       "patient_name": patientName,

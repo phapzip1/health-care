@@ -7,6 +7,7 @@ abstract class AppointmentRepo {
 
   Future<List<AppointmentModel>> getOldAppointmentByDoctorId(String id);
   Future<List<AppointmentModel>> getOldAppointmentByPatientId(String id);
+  Future<int> getCompletedAppointmentCount(String doctorid);
 
   // for patient
   Future<void> makeAppointment({
