@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,14 +89,22 @@ Widget upperPart(doctor, isDoctor) => Card(
                     const SizedBox(
                       width: 8,
                     ),
-                    // FutureBuilder(
-                    //   future: ReviewModel.getTotalReview(doctor.id),
-                    //   builder: (ctx, review) => Text(
-                    //     review.data.toString(),
-                    //     style: const TextStyle(
-                    //         fontWeight: FontWeight.w600, fontSize: 15),
-                    //   ),
-                    // ),
+                    FutureBuilder(
+                        future: FirebaseFirestore.instance
+                            .collection("review")
+                            .where("doctor_id", isEqualTo: doctor.id)
+                            .get(),
+                        builder: (ctx, review) {
+                          if (review.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+                          return Text(
+                            '${review.hasData ? review.data!.size : 0}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 15),
+                          );
+                        }),
                   ],
                 ),
               ],
@@ -180,11 +189,6 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
     return BlocBuilder<AppBloc, AppState>(
         // future: DoctorModel.getById(widget.doctorId),
         builder: (ctx, state) {
-      // if (futureSnapShot.connectionState == ConnectionState.waiting) {
-      //   return const Center(
-      //     child: CircularProgressIndicator(),
-      //   );
-      // }
       final userDocs = state.doctor!;
 
       return Scaffold(
