@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/widgets/record_screen/record_tag.dart';
 
@@ -9,7 +10,7 @@ class PatientRecords extends StatelessWidget {
   const PatientRecords(this.isDoctor, {super.key});
 
   Widget build(BuildContext context) {
-    // context.read<AppBloc>().add()
+    context.read<AppBloc>().add(const AppEventLoadAppointments());
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -39,11 +40,10 @@ class PatientRecords extends StatelessWidget {
             //     ? HealthRecordModel.get(doctorId: user!.uid)
             //     : HealthRecordModel.get(patientId: user!.uid),
             builder: (ctx, state) {
-              isDoctor ? state.doctor.
               return ListView.builder(
-                  itemCount: healthRecord.length,
+                  itemCount: state.appointments!.length,
                   itemBuilder: (ctx, index) =>
-                      RecordTag(healthRecord[index], widget.isDoctor));
+                      RecordTag(state.appointments![index], isDoctor));
             },
           ),
         ));

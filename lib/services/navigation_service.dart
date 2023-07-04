@@ -115,6 +115,7 @@ class NavigationService {
             builder: (_) => RecordDetail(
               data["record"],
               data["isDoctor"],
+              data["appointmentId"],
             ),
           );
         }

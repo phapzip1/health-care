@@ -1,5 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
+import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/models/health_record_model.dart';
 // import 'package:health_care/services/navigation_service.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +12,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 class RecordDetail extends StatefulWidget {
   final HealthRecordModel record;
   final bool isDoctor;
-  const RecordDetail(this.record, this.isDoctor, {super.key});
+  final AppointmentModel appointment;
+  const RecordDetail(this.record, this.isDoctor, this.appointment, {super.key});
 
   @override
   State<RecordDetail> createState() => _RecordDetailState();
@@ -36,22 +41,10 @@ class _RecordDetailState extends State<RecordDetail> {
     super.dispose();
   }
 
-  void _writeRecord() async {
+  void _writeRecord(BuildContext context) async {
     try {
       if (diagnosticController.text != "") {
-        await HealthRecordModel(
-                widget.record.id,
-                widget.record.doctorId,
-                widget.record.doctorName,
-                widget.record.doctorImage,
-                widget.record.patientId,
-                widget.record.patientName,
-                widget.record.patientImage,
-                widget.record.time,
-                diagnosticController.text,
-                prescriptionController.text,
-                noteController.text)
-            .save();
+        context.read<AppBloc>().add(AppEventUpdateHealthRecord(widget.record, widget.appointment.id));
 
         // NavigationService.navKey.currentState!
         //     .pushNamed('/record', arguments: true);
@@ -80,8 +73,8 @@ class _RecordDetailState extends State<RecordDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final _time = DateFormat('dd-MM-y').format(widget.record.time);
-    final _hour = DateFormat.Hm().format(widget.record.time);
+    final _time = DateFormat('dd-MM-y').format(widget.appointment.datetime);
+    final _hour = DateFormat.Hm().format(widget.appointment.datetime);
 
     return Scaffold(
       appBar: AppBar(
@@ -122,16 +115,16 @@ class _RecordDetailState extends State<RecordDetail> {
                       CircleAvatar(
                         radius: 26.0,
                         backgroundImage: NetworkImage(widget.isDoctor
-                            ? widget.record.patientImage
-                            : widget.record.doctorImage),
+                            ? widget.appointment.patientImage
+                            : widget.appointment.doctorImage),
                       ),
                       const SizedBox(
                         width: 8,
                       ),
                       Text(
                         widget.isDoctor
-                            ? widget.record.patientName
-                            : widget.record.doctorName,
+                            ? widget.appointment.patientName
+                            : widget.appointment.doctorName,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       )
                     ],
@@ -154,7 +147,7 @@ class _RecordDetailState extends State<RecordDetail> {
                           const Text('Doctor: '),
                         ],
                       ),
-                      Text(widget.record.doctorName,
+                      Text(widget.appointment.doctorName,
                           style: const TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
@@ -278,7 +271,7 @@ class _RecordDetailState extends State<RecordDetail> {
                                         elevation: 0,
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 12)),
-                                    onPressed: _writeRecord,
+                                    onPressed: () => _writeRecord(context),
                                     child: const Text(
                                       'Save',
                                       style: TextStyle(

@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
-import "package:health_care/models/appointment_model.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:health_care/bloc/app_bloc.dart";
+import "package:health_care/bloc/app_event.dart";
 import "package:health_care/models/patient_model.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import "package:health_care/services/navigation_service.dart";
@@ -27,25 +29,22 @@ class CardsAndWalletsScreen extends StatelessWidget {
       this.patient,
       {super.key});
 
-  void _makeAppointment(context) async {
-    // context
-    //     .read<AppBloc>()
-    //     .add(AppEventLogin(formData["email"]!, formData["password"]!));
+  void _makeAppointment(BuildContext context) async {
+    context.read<AppBloc>().add(AppEventMakeAppointment(
+          doctorId,
+          doctorName,
+          doctorPhone,
+          doctorImage,
+          patient.id.toString(),
+          patient.name,
+          patient.image,
+          patient.phoneNumber,
+          doctorSpecialization,
+          date,
+        ));
 
-    // final currentAppointment = AppointmentModel.create(
-    //     doctorId,
-    //     doctorName,
-    //     doctorPhone,
-    //     doctorImage,
-    //     patient.id.toString(),
-    //     patient.name,
-    //     patient.phoneNumber,
-    //     patient.image,
-    //     doctorSpecialization,
-    //     date,
-    //     hour,
-    //     0);
-
+    //   NavigationService.navKey.currentState?.pushNamed('/');
+    
     // await currentAppointment.save().then((value) {
     //   Fluttertoast.showToast(
     //     msg: "Make appointment successfully",
@@ -55,7 +54,6 @@ class CardsAndWalletsScreen extends StatelessWidget {
     //     textColor: Colors.black,
     //   );
 
-    //   NavigationService.navKey.currentState?.pushNamed('/');
     // }).catchError((error) {
     //   Fluttertoast.showToast(
     //     msg: "Failed to make appointment",

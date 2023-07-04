@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:health_care/models/health_record_model.dart';
+import 'package:health_care/models/appointment_model.dart';
+// import 'package:health_care/models/health_record_model.dart';
 import 'package:health_care/services/navigation_service.dart';
 import 'package:intl/intl.dart';
 
 class RecordTag extends StatelessWidget {
-  final HealthRecordModel healthRecord;
+  final AppointmentModel healthRecord;
   final bool isDoctor;
   const RecordTag(this.healthRecord, this.isDoctor, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _time = DateFormat('dd-MM-y').format(healthRecord.time);
-    final _hour = DateFormat.Hm().format(healthRecord.time);
+    final _time = DateFormat('dd-MM-y').format(healthRecord.datetime);
+    final _hour = DateFormat.Hm().format(healthRecord.datetime);
 
     return InkWell(
       onTap: () {

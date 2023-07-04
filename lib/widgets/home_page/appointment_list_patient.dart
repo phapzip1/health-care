@@ -104,18 +104,7 @@ class AppointmentListPatient extends StatelessWidget {
                                           const SizedBox(
                                             width: 8,
                                           ),
-                                          FutureBuilder(
-                                              future:
-                                                  ReviewModel.getAverageRating(
-                                                      doctorList[index].id),
-                                              builder: (ctx, rating) {
-                                                if (rating.connectionState ==
-                                                    ConnectionState.waiting) {
-                                                  return const CircularProgressIndicator();
-                                                }
-                                                return Text(
-                                                    rating.data.toString());
-                                              }),
+                                          Text(doctorList[index].data()['rating'] as String),
                                         ],
                                       ),
                                     ],

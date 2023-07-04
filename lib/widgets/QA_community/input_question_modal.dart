@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_state.dart';
-import 'package:health_care/models/post_model.dart';
-import 'package:health_care/screens/general/communityQA.dart';
+// import 'package:health_care/screens/general/communityQA.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
+
 
 class InputQuestionModal extends StatefulWidget {
   const InputQuestionModal({super.key});
@@ -203,7 +202,7 @@ class _InputQuestionModalState extends State<InputQuestionModal> {
                                   _isSelected[index] = false;
                                 }
                               }
-                              _gender = newIndex;
+                              _gender = newIndex + 1;
                             });
                           },
                         ),

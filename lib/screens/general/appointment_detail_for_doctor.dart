@@ -127,7 +127,14 @@ class _AppointmentDetailForDoctorState
                                     elevation: 0,
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 12)),
-                                onPressed: () {},
+                                onPressed: () {
+                                  NavigationService.navKey.currentState!
+                                      .pushNamed('/record', arguments: {
+                                    "record": widget.appointment.healthRecord,
+                                    "isDoctor": true,
+                                    "appointmentId": widget.appointment,
+                                  });
+                                },
                                 child: const Row(
                                   children: [
                                     Icon(Icons.upload),
