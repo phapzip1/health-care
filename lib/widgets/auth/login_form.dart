@@ -29,6 +29,7 @@ class _LoginFormState extends State<LoginForm> {
 
   void _formSubmit(BuildContext context) async {
     forgot = false;
+    widget.formKey.currentState!.save();
     final valid = widget.formKey.currentState!.validate();
 
     if (valid) {

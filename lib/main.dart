@@ -55,9 +55,7 @@ class HomePage extends StatelessWidget {
         if (state.doctor != null) {
           return const DoctorHomeScreen();
         }
-        if (state.patient != null) {
-          return const HomePage();
-        }
+        return const HomePage();
       },
     );
   }
