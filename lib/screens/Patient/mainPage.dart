@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:health_care/screens/Doctor/doctorInformation.dart';
 import 'package:health_care/screens/Doctor/doctorSchedulePage.dart';
+import 'package:health_care/screens/Doctor/doctor_home_screen.dart';
 import 'package:health_care/screens/Doctor/doctor_infor_page.dart';
-import 'package:health_care/screens/Doctor/homePageDoctor.dart';
 import 'package:health_care/screens/general/notification_page.dart';
 import '../../screens/Patient/homePage.dart';
 import './patientSchedulePage.dart';
@@ -40,7 +40,7 @@ class _MyWidgetState extends State<MainPage> {
   Widget currentPageDoctor(int index) {
     switch (index) {
       case 0:
-        return HomePageDoctor();
+        return DoctorHomeScreen();
       case 1:
         return DoctorSchedulePage();
       case 2:
@@ -48,7 +48,7 @@ class _MyWidgetState extends State<MainPage> {
       case 3:
         return NotificationPage();
       default:
-        return HomePageDoctor();
+        return DoctorHomeScreen();
     }
   }
 

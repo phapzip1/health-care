@@ -7,6 +7,16 @@ class PatientModel {
   final String email;
   final String image;
 
+  PatientModel(
+    this.id,
+    this.name,
+    this.phoneNumber,
+    this.gender,
+    this.birthdate,
+    this.email,
+    this.image,
+  );
+
   PatientModel.fromMap(Map<String, dynamic> map)
       : id = map["id"],
         name = map["name"],

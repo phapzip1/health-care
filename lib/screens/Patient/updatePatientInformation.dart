@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:health_care/widgets/update_page/non_rerender_patient.dart';
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/patient_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,7 +31,7 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
   void initState() {
     _enteredUsername.text = widget.patientInfo.name;
     _enteredPhone.text = widget.patientInfo.phoneNumber;
-    _enteredGender = widget.patientInfo.gender;
+    _enteredGender.text = widget.patientInfo.gender as String;
     _enteredBirthday = widget.patientInfo.birthdate;
     dateinput.text = '';
 
@@ -43,7 +43,7 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
 
   final TextEditingController _enteredUsername = TextEditingController();
   final TextEditingController _enteredPhone = TextEditingController();
-  Gender _enteredGender = Gender.male;
+  final TextEditingController _enteredGender = TextEditingController();
   DateTime _enteredBirthday = DateTime.now();
 
   void _pickImage() async {
@@ -94,47 +94,40 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
       );
 
   void _updateInfor(BuildContext context) async {
-    final isValid = _formKey.currentState!.validate();
+    try {
+      final isValid = _formKey.currentState!.validate();
 
-    if (isValid) {
-      _formKey.currentState?.save();
+      if (_selectedImage == null) {
+        return;
+      }
+
+      if (isValid) {
+        _formKey.currentState?.save();
+
+        context.read<AppBloc>().add(AppEventUpdatePatientInfomation(
+              PatientModel(
+                  widget.patientInfo.id,
+                  _enteredUsername.text,
+                  _enteredPhone.text,
+                  int.parse(_enteredGender.text),
+                  _enteredBirthday,
+                  widget.patientInfo.email,
+                  currentUrl ?? widget.patientInfo.image),
+            ));
+      }
+
+      //     .then((value) => Fluttertoast.showToast(
+      //           msg: "Update successfully",
+      //           toastLength: Toast.LENGTH_SHORT,
+      //           timeInSecForIosWeb: 1,
+      //           backgroundColor: Colors.greenAccent,
+      //           textColor: Colors.black,
+      //         ))
+
+      FocusManager.instance.primaryFocus?.unfocus();
+    } catch (e) {
+      print(e);
     }
-
-    if (_selectedImage != null) {
-      final ref = FirebaseStorage.instance
-          .ref()
-          .child('user_image')
-          .child('${user!.uid}.jpg');
-
-      await ref.putFile(File(_selectedImage!.path));
-
-      currentUrl = await ref.getDownloadURL();
-    }
-
-    // await PatientModel(
-    //         widget.patientInfo.id,
-    //         _enteredUsername.text,
-    //         _enteredPhone.text,
-    //         _enteredGender,
-    //         _enteredBirthday,
-    //         widget.patientInfo.email,
-    //         currentUrl ?? widget.patientInfo.image)
-    //     .save()
-    //     .then((value) => Fluttertoast.showToast(
-    //           msg: "Update successfully",
-    //           toastLength: Toast.LENGTH_SHORT,
-    //           timeInSecForIosWeb: 1,
-    //           backgroundColor: Colors.greenAccent,
-    //           textColor: Colors.black,
-    //         ))
-    //     .catchError((error) => Fluttertoast.showToast(
-    //           msg: "Failed to update user",
-    //           toastLength: Toast.LENGTH_SHORT,
-    //           timeInSecForIosWeb: 1,
-    //           backgroundColor: Colors.red,
-    //           textColor: Colors.white,
-    //         ));
-    FocusManager.instance.primaryFocus?.unfocus();
   }
 
   bool _checkChanged() {
@@ -270,8 +263,7 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
                       dropDownItemCount: 3,
                       dropDownList: const [
                         DropDownValueModel(name: 'Male', value: 1),
-                        DropDownValueModel(
-                            name: 'Female', value: 2),
+                        DropDownValueModel(name: 'Female', value: 2),
                         DropDownValueModel(name: 'Other', value: 3),
                       ],
                       textFieldDecoration: InputDecoration(
@@ -286,7 +278,7 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
                             vertical: 16, horizontal: 20),
                       ),
                       onChanged: (value) {
-                        _enteredGender = value.value;
+                        _enteredGender.text = value.value;
                         setState(() {
                           changed += 1;
                         });

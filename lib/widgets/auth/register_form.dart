@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
-import 'package:health_care/models/patient_model.dart';
 
 import 'package:intl/intl.dart';
 
@@ -10,10 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:health_care/widgets/user_image_picker.dart';
 import '../../utils/formstage.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-
-import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -21,7 +17,8 @@ class RegisterForm extends StatefulWidget {
   final GlobalKey<FormState> formkey;
   final Function setFormStage;
 
-  const RegisterForm({super.key, required this.formkey, required this.setFormStage});
+  const RegisterForm(
+      {super.key, required this.formkey, required this.setFormStage});
 
   @override
   State<RegisterForm> createState() => _RegisterFormState();
@@ -41,13 +38,20 @@ class _RegisterFormState extends State<RegisterForm> {
   void _submit(BuildContext context) async {
     try {
       final isValid = widget.formkey.currentState!.validate();
-      if (_selectedImage != null) {
+      if (_selectedImage == null) {
         return;
       }
-      
+
       if (isValid) {
         widget.formkey.currentState?.save();
-        context.read<AppBloc>().add(AppEventCreatePatientAccount(_selectedImage!, _email, _password, _username, _phone, _gender, _birthday));
+        context.read<AppBloc>().add(AppEventCreatePatientAccount(
+            _selectedImage!,
+            _email,
+            _password,
+            _username,
+            _phone,
+            _gender,
+            _birthday));
       }
     } catch (err) {}
   }
@@ -208,7 +212,11 @@ class _RegisterFormState extends State<RegisterForm> {
                   // prevent keyboard showing up
                   FocusScope.of(context).requestFocus(FocusNode());
 
-                  final result = await showDatePicker(context: context, initialDate: now, firstDate: DateTime(1975, 1, 1), lastDate: now);
+                  final result = await showDatePicker(
+                      context: context,
+                      initialDate: now,
+                      firstDate: DateTime(1975, 1, 1),
+                      lastDate: now);
 
                   if (result != null) {
                     DateTime formattedDate = result;
@@ -217,7 +225,8 @@ class _RegisterFormState extends State<RegisterForm> {
                     // setState(() {
                     //   dateinput.text = DateFormat('dd/MM/y').format(formattedDate);
                     // });
-                    dateinput.text = DateFormat('dd/MM/y').format(formattedDate);
+                    dateinput.text =
+                        DateFormat('dd/MM/y').format(formattedDate);
                   }
                 },
               ),
@@ -225,7 +234,8 @@ class _RegisterFormState extends State<RegisterForm> {
               //
               ElevatedButton(
                 style: ButtonStyle(
-                  textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(
+                  textStyle:
+                      MaterialStateProperty.all<TextStyle>(const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                   )),
@@ -238,7 +248,8 @@ class _RegisterFormState extends State<RegisterForm> {
                 children: <Widget>[
                   const Text("Are you a doctor?"),
                   TextButton(
-                    onPressed: () => widget.setFormStage(FormStage.DoctorRegister),
+                    onPressed: () =>
+                        widget.setFormStage(FormStage.DoctorRegister),
                     child: const Text("Register for doctor"),
                   ),
                 ],
