@@ -50,6 +50,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<AppBloc>().add(const AppEventInitialize());
     return BlocBuilder<AppBloc, AppState>(
+      buildWhen: (previous, current) {
+        return (previous.user == null && current.user != null) || (previous.user != null && current.user == null);
+      },
       builder: (ctx, state) {
         if (state.user == null) {
           return LoginScreen();
