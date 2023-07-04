@@ -9,7 +9,7 @@ class DoctorModel {
   final String identityId;
   final String licenseId;
   final int experience;
-  final int price;
+  final double price;
   final String workplace;
   final String specialization;
   final bool verified;

@@ -79,7 +79,16 @@ class AppEventLoadAppointments extends AppEvent {
 }
 
 class AppEventLoadPosts extends AppEvent {
-  const AppEventLoadPosts();
+  final String? specialization;
+  const AppEventLoadPosts(this.specialization);
+}
+class AppEventLoadPostsAsDoctor extends AppEvent {
+  final String doctorId;
+  const AppEventLoadPostsAsDoctor(this.doctorId);
+}
+class AppEventLoadPostsAsPatient extends AppEvent {
+  final String patientId;
+  const AppEventLoadPostsAsPatient(this.patientId);
 }
 
 class AppEventLoadHealthRecords extends AppEvent {

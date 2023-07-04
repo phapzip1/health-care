@@ -22,10 +22,12 @@ abstract class DoctorRepo {
     required String identityId,
     required String licenseId,
     required int experience,
-    required int price,
+    required double price,
     required String workplace,
     required String specialization,
   });
+
+  Future<List<DoctorModel>> getAll();
 
   //feedback
   Future<void> giveFeedback({

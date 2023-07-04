@@ -9,6 +9,7 @@ import 'package:health_care/repos/firebase/appointment_firebase_repo.dart';
 import 'package:health_care/repos/firebase/doctor_firebase_repo.dart';
 import 'package:health_care/repos/firebase/patient_firebase_repo.dart';
 import 'package:health_care/repos/firebase/post_firebase_repo.dart';
+import 'package:health_care/repos/json_symptom_repo.dart';
 import 'package:health_care/screens/Doctor/doctor_home_screen.dart';
 import 'package:health_care/services/auth/firebase_auth_provider.dart';
 import 'package:health_care/services/storage/firebase_storage_provider.dart';
@@ -29,6 +30,7 @@ void main() {
           doctorProvider: DoctorFirebaseRepo(),
           patientProvider: PatientFirebaseRepo(),
           postProvider: PostFirebaseRepo(),
+          symptomRepo: JsonSymptomRepo(),
           authProvider: FirebaseAuthProvider(),
           storageProvider: FirebaseStorageProvider(),
         ),

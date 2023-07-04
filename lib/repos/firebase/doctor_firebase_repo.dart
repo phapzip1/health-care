@@ -19,7 +19,7 @@ class DoctorFirebaseRepo extends DoctorRepo {
     required String identityId,
     required String licenseId,
     required int experience,
-    required int price,
+    required double price,
     required String workplace,
     required String specialization,
   }) async {
@@ -152,7 +152,35 @@ class DoctorFirebaseRepo extends DoctorRepo {
   @override
   Future<List<DoctorModel>> getBySpecification(String spec) async {
     try {
-      final querySnapshot = await _ref.where("specialization", isEqualTo: spec).where("verified", isEqualTo: true).get();
+      final querySnapshot = await _ref.where("specialization", isEqualTo: spec).where("verified", isEqualTo: true).orderBy("rating", descending: true).get();
+      return querySnapshot.docs
+          .map((e) => DoctorModel.fromMap({
+                "id": e.id,
+                "name": e.get("name"),
+                "phone_number": e.get("phone_number"),
+                "image": e.get("image"),
+                "gender": e.get("gender"),
+                "birthday": (e.get("birthday") as Timestamp).toDate(),
+                "email": e.get("email"),
+                "identity_id": e.get("identity_id"),
+                "license_id": e.get("license_id"),
+                "experience": e.get("experience"),
+                "price": e.get("price"),
+                "workplace": e.get("workplace"),
+                "specialization": e.get("specialization"),
+                "verified": e.get("verified"),
+                "rating": e.get("rating"),
+              }))
+          .toList();
+    } catch (e) {
+      throw GenericDBException();
+    }
+  }
+
+  @override
+  Future<List<DoctorModel>> getAll() async {
+    try {
+      final querySnapshot = await _ref.orderBy("rating", descending: true).get();
       return querySnapshot.docs
           .map((e) => DoctorModel.fromMap({
                 "id": e.id,
