@@ -13,6 +13,7 @@ class AppointmentModel {
   final String specialization;
   final double price;
   final DateTime datetime;
+  final HealthRecordModel healthRecord;
   // 0: pending
   // 1: confirmed
   // 2: rejected
@@ -32,7 +33,8 @@ class AppointmentModel {
         specialization = map["specialization"],
         price = map["price"],
         datetime = map["datetime"],
-        status = map["status"];
+        status = map["status"],
+        healthRecord = HealthRecordModel.fromMap(map["record"]);
 
   Map<String, dynamic> toMap() {
     return {
@@ -49,6 +51,7 @@ class AppointmentModel {
       "price": price,
       "datetime": datetime,
       "status": status,
+      "health_record": healthRecord.toMap(),
     };
   }
 }
