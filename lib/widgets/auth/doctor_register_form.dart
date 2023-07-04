@@ -50,8 +50,8 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
   var _specialization = "";
   var _gender = 0;
 
-  DateTime _enteredBirthday = DateTime.now();
-  final now = DateTime.now();
+  DateTime _birthday = DateTime.now();
+
 
   void _submit(BuildContext context) async {
     try {
@@ -77,6 +77,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
             _selectedImage!,
             _username,
             _phone,
+            _birthday,
             _exp,
             _price * 1.0,
             _identityId,
@@ -90,6 +91,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.56,
       child: Form(
@@ -272,7 +274,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                   if (result != null) {
                     DateTime formattedDate = result;
 
-                    _enteredBirthday = formattedDate;
+                    _birthday = formattedDate;
                     // setState(() {
                     //   dateinput.text = DateFormat('dd/MM/y').format(formattedDate);
                     // });

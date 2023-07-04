@@ -26,6 +26,7 @@ class AppEventCreateDoctorAccount extends AppEvent {
   final File image;
   final String username;
   final String phone;
+  final DateTime birthdate;
   final int exp;
   final double price;
   final String identityId;
@@ -40,6 +41,7 @@ class AppEventCreateDoctorAccount extends AppEvent {
     this.image,
     this.username,
     this.phone,
+    this.birthdate,
     this.exp,
     this.price,
     this.identityId,

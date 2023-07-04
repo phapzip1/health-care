@@ -6,7 +6,6 @@ import 'package:health_care/repos/doctor_repo.dart';
 import 'package:health_care/repos/patient_repo.dart';
 import 'package:health_care/repos/post_repo.dart';
 import 'package:health_care/services/auth/auth_provider.dart';
-import 'package:health_care/services/auth/auth_user.dart';
 import 'package:health_care/services/storage/storage_provider.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
@@ -70,8 +69,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventCreateDoctorAccount>((event, emit) async {
       try {
         final user = await authProvider.createUser(email: event.email, password: event.password);
-        final avatar = await storageProvider.uploadImage(event.image, "cover/${user.uid}.jpg")
-        await doctorProvider.add(id: user.uid, name: event.username, phoneNumber: event.phone, image: image, gender: gender, birthdate: birthdate, email: email, identityId: identityId, licenseId: licenseId, experience: experience, price: price, workplace: workplace, specialization: specialization)
+        final avatarurl = await storageProvider.uploadImage(event.image, "cover/${user.uid}.jpg");
+        await doctorProvider.add(id: user.uid, name: event.username, phoneNumber: event.phone, image: avatarurl, gender: event.gender, birthdate: event., email: email, identityId: identityId, licenseId: licenseId, experience: experience, price: price, workplace: workplace, specialization: specialization)
       } catch (e) {
         
       }
