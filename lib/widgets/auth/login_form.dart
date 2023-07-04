@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
 import '../../utils/formstage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -13,7 +12,8 @@ class LoginForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final Function setFormStage;
 
-  const LoginForm({super.key, required this.formKey, required this.setFormStage});
+  const LoginForm(
+      {super.key, required this.formKey, required this.setFormStage});
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -32,14 +32,19 @@ class _LoginFormState extends State<LoginForm> {
     final valid = widget.formKey.currentState!.validate();
 
     if (valid) {
-      context.read<AppBloc>().add(AppEventLogin(formData["email"]!, formData["password"]!));
+      widget.formKey.currentState!.save();
+
+      context
+          .read<AppBloc>()
+          .add(AppEventLogin(formData["email"]!, formData["password"]!));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Form(
         key: widget.formKey,
         child: SingleChildScrollView(
@@ -64,7 +69,8 @@ class _LoginFormState extends State<LoginForm> {
               TextFormField(
                 decoration: const InputDecoration(hintText: "abc@gmail.com"),
                 validator: (value) {
-                  final pattern = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+                  final pattern = RegExp(
+                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
                   if (value == null || value.isEmpty) {
                     return "Email field is required!";
                   }
@@ -124,7 +130,8 @@ class _LoginFormState extends State<LoginForm> {
                       forgot = true;
                       bool isValid = widget.formKey.currentState!.validate();
                       if (isValid) {
-                        widget.setFormStage(FormStage.OTP, email: formData["Email"]);
+                        widget.setFormStage(FormStage.OTP,
+                            email: formData["Email"]);
                       }
                     },
                     child: const Text(
@@ -152,7 +159,8 @@ class _LoginFormState extends State<LoginForm> {
                     style: TextStyle(),
                   ),
                   TextButton(
-                    onPressed: () => widget.setFormStage(FormStage.PatientRegister),
+                    onPressed: () =>
+                        widget.setFormStage(FormStage.PatientRegister),
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all<EdgeInsets>(
                         const EdgeInsets.all(0),

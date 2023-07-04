@@ -91,7 +91,7 @@ class NavigationService {
         }
       case patientSchedule:
         {
-          final data = settings.arguments as bool;
+          final data = settings.arguments as List<AppointmentModel>;
           return MaterialPageRoute(
             builder: (_) => PatientSection(data),
           );

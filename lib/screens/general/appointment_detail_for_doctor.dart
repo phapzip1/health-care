@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/services/navigation_service.dart';
 import 'package:intl/intl.dart';
@@ -37,15 +39,15 @@ class _AppointmentDetailForDoctorState
   @override
   Widget build(BuildContext context) {
     const double listtileVerticalPadding = 4.5;
-    final _time = DateFormat('dd-MM-y').format(widget.appointment.dateTime);
-    final _hour = DateFormat.Hm().format(widget.appointment.dateTime);
+    final _time = DateFormat('dd-MM-y').format(widget.appointment.datetime);
+    final _hour = DateFormat.Hm().format(widget.appointment.datetime);
     final now = DateTime.now();
     final meeting = DateTime(
-      widget.appointment.dateTime.year,
-      widget.appointment.dateTime.month,
-      widget.appointment.dateTime.day,
-      (widget.appointment.meetingTime / 10).truncate(),
-      (widget.appointment.meetingTime % 10) * 10,
+      widget.appointment.datetime.year,
+      widget.appointment.datetime.month,
+      widget.appointment.datetime.day,
+      (widget.appointment.datetime.hour / 10).truncate(),
+      (widget.appointment.datetime.hour % 10) * 10,
     );
     final mediaQuery = MediaQuery.of(context).size;
 
@@ -232,13 +234,13 @@ class _AppointmentDetailForDoctorState
                                 fontWeight: FontWeight.w500,
                                 color: Colors.grey),
                           ),
-                          // subtitle: Text(
-                          //   "$price vnd",
-                          //   style: const TextStyle(
-                          //       fontSize: 16,
-                          //       fontWeight: FontWeight.bold,
-                          //       color: Colors.black),
-                          // ),
+                          subtitle: Text(
+                            "${widget.appointment.price} vnd",
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
                         ),
                         const Divider(
                           thickness: 1,
@@ -360,7 +362,12 @@ class _AppointmentDetailForDoctorState
                                                     mediaQuery.width * 0.05,
                                                 vertical: 12)),
                                         onPressed: () {
-                                          widget.appointment.cancel();
+                                          // widget.appointment.cancel();
+                                          context
+                                              .read<AppBloc>()
+                                              .appointmentProvider
+                                              .cancelAppointment(
+                                                  widget.appointment.id);
                                         },
                                         child: const Text(
                                           'Cancel',

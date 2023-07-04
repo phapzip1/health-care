@@ -12,7 +12,6 @@ class PersonalAppointment extends StatefulWidget {
 }
 
 class _PersonalAppointmentState extends State<PersonalAppointment> {
-  final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:health_care/models/patient_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+// import 'package:health_care/bloc/app_event.dart';
+import 'package:health_care/bloc/app_state.dart';
+// import 'package:health_care/models/patient_model.dart';
 
 import 'package:health_care/models/symptom.dart';
 import 'package:health_care/screens/general/typical_doctor.dart';
@@ -44,15 +48,9 @@ class _HomePageState extends State<HomePage> {
         child: Padding(
           padding: const EdgeInsets.only(top: 16),
           child: SingleChildScrollView(
-            child: FutureBuilder(
-              future: PatientModel.getById(user!.uid),
-              builder: (ctx, futureSnapShot) {
-                if (futureSnapShot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
+            child: BlocBuilder<AppBloc, AppState>(
+              // future: PatientModel.getById(user!.uid),
+              builder: (ctx, state) {
                 return Column(
                   children: [
                     Padding(
@@ -60,11 +58,16 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          HeaderSection(url: futureSnapShot.data!.image, userName: futureSnapShot.data!.name),
+                          HeaderSection(
+                              url: state.patient!.image,
+                              userName: state.patient!.name),
                           FunctionCategory(user!.uid, false),
                           const Text(
                             'My Appointment',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                height: 1.1),
                           ),
                           const SizedBox(
                             height: 16,
@@ -79,7 +82,10 @@ class _HomePageState extends State<HomePage> {
                           ),
                           const Text(
                             'Typical Doctor',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                height: 1.1),
                           ),
                           const SizedBox(
                             height: 16,

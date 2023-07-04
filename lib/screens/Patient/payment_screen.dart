@@ -1,6 +1,7 @@
-import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
-import "package:health_care/models/patient_model.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:health_care/bloc/app_bloc.dart";
+import "package:health_care/bloc/app_state.dart";
 import "package:health_care/services/navigation_service.dart";
 import "package:intl/intl.dart";
 
@@ -31,27 +32,11 @@ class PaymentScreen extends StatelessWidget {
     String time = hour % 10 == 3 ? '${hour ~/ 10}:30' : '${hour ~/ 10}:00';
 
     return Scaffold(
-      body: FutureBuilder(
-          future: PatientModel.getById(FirebaseAuth.instance.currentUser!.uid),
-          builder: (ctx, future) {
-            if (future.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+      body: BlocBuilder<AppBloc, AppState>(
+          // future: PatientModel.getById(FirebaseAuth.instance.currentUser!.uid),
+          builder: (ctx, state) {
 
-            if (!future.hasData) return Container();
-
-            final patientUser = future.data!;
-
-            final patient = PatientModel(
-                patientUser.id,
-                patientUser.name,
-                patientUser.phoneNumber,
-                patientUser.gender,
-                patientUser.birthdate,
-                patientUser.email,
-                patientUser.image);
+            final patientUser = state.patient!;
 
             return SafeArea(
               child: Padding(
@@ -260,7 +245,7 @@ class PaymentScreen extends StatelessWidget {
                             'doctorSpecialization': doctorSpecialization,
                             'date': date,
                             'hour': hour,
-                            'patient': patient
+                            'patient': patientUser
                           });
                         },
                         child: const Padding(

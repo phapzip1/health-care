@@ -4,6 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:health_care/widgets/update_page/non_rerender_patient.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/patient_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -90,7 +93,7 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
         ),
       );
 
-  void _updateInfor() async {
+  void _updateInfor(BuildContext context) async {
     final isValid = _formKey.currentState!.validate();
 
     if (isValid) {
@@ -108,29 +111,29 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
       currentUrl = await ref.getDownloadURL();
     }
 
-    await PatientModel(
-            widget.patientInfo.id,
-            _enteredUsername.text,
-            _enteredPhone.text,
-            _enteredGender,
-            _enteredBirthday,
-            widget.patientInfo.email,
-            currentUrl ?? widget.patientInfo.image)
-        .save()
-        .then((value) => Fluttertoast.showToast(
-              msg: "Update successfully",
-              toastLength: Toast.LENGTH_SHORT,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.greenAccent,
-              textColor: Colors.black,
-            ))
-        .catchError((error) => Fluttertoast.showToast(
-              msg: "Failed to update user",
-              toastLength: Toast.LENGTH_SHORT,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-            ));
+    // await PatientModel(
+    //         widget.patientInfo.id,
+    //         _enteredUsername.text,
+    //         _enteredPhone.text,
+    //         _enteredGender,
+    //         _enteredBirthday,
+    //         widget.patientInfo.email,
+    //         currentUrl ?? widget.patientInfo.image)
+    //     .save()
+    //     .then((value) => Fluttertoast.showToast(
+    //           msg: "Update successfully",
+    //           toastLength: Toast.LENGTH_SHORT,
+    //           timeInSecForIosWeb: 1,
+    //           backgroundColor: Colors.greenAccent,
+    //           textColor: Colors.black,
+    //         ))
+    //     .catchError((error) => Fluttertoast.showToast(
+    //           msg: "Failed to update user",
+    //           toastLength: Toast.LENGTH_SHORT,
+    //           timeInSecForIosWeb: 1,
+    //           backgroundColor: Colors.red,
+    //           textColor: Colors.white,
+    //         ));
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
@@ -170,7 +173,7 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
           ),
           actions: [
             TextButton(
-                onPressed: _checkChanged() ? _updateInfor : null,
+                onPressed: _checkChanged() ? () => _updateInfor(context) : null,
                 child: Text(
                   'Save',
                   style: TextStyle(
@@ -184,146 +187,157 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
         ),
         body: GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  circleAvatar(widget.patientInfo.image),
-                  const Text('Name',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  TextFormField(
-                    controller: _enteredUsername,
-                    style: const TextStyle(fontSize: 16),
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
+          child: BlocBuilder<AppBloc, AppState>(builder: (ctx, state) {
+            return Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    circleAvatar(widget.patientInfo.image),
+                    const Text('Name',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    TextFormField(
+                      controller: _enteredUsername,
+                      style: const TextStyle(fontSize: 16),
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                const BorderSide(color: Color(0xFF3A86FF))),
+                        border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Color(0xFF3A86FF))),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 20),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 20),
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        changed += 1;
-                      });
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text('Phone number',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  TextFormField(
-                    controller: _enteredPhone,
-                    style: const TextStyle(fontSize: 16),
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Color(0xFF3A86FF))),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 20),
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        changed += 1;
-                      });
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text('Gender',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  DropDownTextField(
-                    initialValue:
-                        widget.patientInfo.gender.toString().substring(7),
-                    clearOption: false,
-                    dropDownItemCount: 3,
-                    dropDownList: const [
-                      DropDownValueModel(name: 'male', value: Gender.male),
-                      DropDownValueModel(name: 'female', value: Gender.female),
-                      DropDownValueModel(name: 'other', value: Gender.other),
-                    ],
-                    textFieldDecoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Color(0xFF3A86FF))),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 20),
-                    ),
-                    onChanged: (value) {
-                      _enteredGender = value.value;
-                      setState(() {
-                        changed += 1;
-                      });
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text('Birthday',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  TextFormField(
-                    controller: TextEditingController(
-                      text: DateFormat('dd/MM/y').format(_enteredBirthday),
-                    ),
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Color(0xFF3A86FF))),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 20),
-                    ),
-                    readOnly: true,
-                    onTap: () async {
-                      final DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime.now(),
-                      );
-        
-                      if (pickedDate != null && pickedDate != _enteredBirthday) {
+                      onChanged: (value) {
                         setState(() {
-                          _enteredBirthday = pickedDate;
+                          changed += 1;
                         });
-                      }
-                    },
-                  ),
-                ],
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text('Phone number',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    TextFormField(
+                      controller: _enteredPhone,
+                      style: const TextStyle(fontSize: 16),
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                const BorderSide(color: Color(0xFF3A86FF))),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 20),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          changed += 1;
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text('Gender',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    DropDownTextField(
+                      initialValue: state.patient!.gender == 1
+                          ? "Male"
+                          : state.patient!.gender == 2
+                              ? "Female"
+                              : "Other",
+                      clearOption: false,
+                      dropDownItemCount: 3,
+                      dropDownList: const [
+                        DropDownValueModel(name: 'Male', value: 1),
+                        DropDownValueModel(
+                            name: 'Female', value: 2),
+                        DropDownValueModel(name: 'Other', value: 3),
+                      ],
+                      textFieldDecoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                const BorderSide(color: Color(0xFF3A86FF))),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 20),
+                      ),
+                      onChanged: (value) {
+                        _enteredGender = value.value;
+                        setState(() {
+                          changed += 1;
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text('Birthday',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    TextFormField(
+                      controller: TextEditingController(
+                        text: DateFormat('dd/MM/y').format(_enteredBirthday),
+                      ),
+                      decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                const BorderSide(color: Color(0xFF3A86FF))),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 20),
+                      ),
+                      readOnly: true,
+                      onTap: () async {
+                        final DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime.now(),
+                        );
+
+                        if (pickedDate != null &&
+                            pickedDate != _enteredBirthday) {
+                          setState(() {
+                            _enteredBirthday = pickedDate;
+                          });
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
+            );
+          }),
         ));
   }
 }

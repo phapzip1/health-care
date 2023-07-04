@@ -222,7 +222,7 @@ class _CommunityQAState extends State<CommunityQA> {
     _getMoreData("");
     _controller.addListener(() {
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-        _getMoreData(posts[posts.length - 1].id!);
+        _getMoreData(posts[posts.length - 1].id);
       }
     });
   }
@@ -249,6 +249,7 @@ class _CommunityQAState extends State<CommunityQA> {
     final newPost = _changedPage
         ? await PostModel.getPublic(id)
         : await PostModel.getAsPatient(id, userId);
+        
 
     setState(() {
       isLoading = false;

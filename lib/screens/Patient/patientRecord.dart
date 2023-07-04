@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:health_care/models/health_record_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/widgets/record_screen/record_tag.dart';
 
-class PatientRecords extends StatefulWidget {
+class PatientRecords extends StatelessWidget {
   final bool isDoctor;
   const PatientRecords(this.isDoctor, {super.key});
 
-  @override
-  State<PatientRecords> createState() => _PatientRecordsState();
-}
-
-class _PatientRecordsState extends State<PatientRecords> {
-  final user = FirebaseAuth.instance.currentUser;
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -40,19 +33,12 @@ class _PatientRecordsState extends State<PatientRecords> {
         ),
         body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: FutureBuilder(
-            future: widget.isDoctor
-                ? HealthRecordModel.get(doctorId: user!.uid)
-                : HealthRecordModel.get(patientId: user!.uid),
-            builder: (ctx, futureSnapshot) {
-              if (futureSnapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              final healthRecord = futureSnapshot.data!;
-
+          child: BlocBuilder<AppBloc, AppState>(
+            // future: widget.isDoctor
+            //     ? HealthRecordModel.get(doctorId: user!.uid)
+            //     : HealthRecordModel.get(patientId: user!.uid),
+            builder: (ctx, state) {
+              widget.isDoctor ? state.doctor.
               return ListView.builder(
                   itemCount: healthRecord.length,
                   itemBuilder: (ctx, index) =>

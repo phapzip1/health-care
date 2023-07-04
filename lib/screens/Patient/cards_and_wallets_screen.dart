@@ -28,39 +28,43 @@ class CardsAndWalletsScreen extends StatelessWidget {
       {super.key});
 
   void _makeAppointment(context) async {
-    final currentAppointment = AppointmentModel.create(
-        doctorId,
-        doctorName,
-        doctorPhone,
-        doctorImage,
-        patient.id.toString(),
-        patient.name,
-        patient.phoneNumber,
-        patient.image,
-        doctorSpecialization,
-        date,
-        hour,
-        0);
+    // context
+    //     .read<AppBloc>()
+    //     .add(AppEventLogin(formData["email"]!, formData["password"]!));
 
-    await currentAppointment.save().then((value) {
-      Fluttertoast.showToast(
-        msg: "Make appointment successfully",
-        toastLength: Toast.LENGTH_LONG,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.greenAccent,
-        textColor: Colors.black,
-      );
+    // final currentAppointment = AppointmentModel.create(
+    //     doctorId,
+    //     doctorName,
+    //     doctorPhone,
+    //     doctorImage,
+    //     patient.id.toString(),
+    //     patient.name,
+    //     patient.phoneNumber,
+    //     patient.image,
+    //     doctorSpecialization,
+    //     date,
+    //     hour,
+    //     0);
 
-      NavigationService.navKey.currentState?.pushNamed('/');
-    }).catchError((error) {
-      Fluttertoast.showToast(
-        msg: "Failed to make appointment",
-        toastLength: Toast.LENGTH_SHORT,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-    });
+    // await currentAppointment.save().then((value) {
+    //   Fluttertoast.showToast(
+    //     msg: "Make appointment successfully",
+    //     toastLength: Toast.LENGTH_LONG,
+    //     timeInSecForIosWeb: 1,
+    //     backgroundColor: Colors.greenAccent,
+    //     textColor: Colors.black,
+    //   );
+
+    //   NavigationService.navKey.currentState?.pushNamed('/');
+    // }).catchError((error) {
+    //   Fluttertoast.showToast(
+    //     msg: "Failed to make appointment",
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     timeInSecForIosWeb: 1,
+    //     backgroundColor: Colors.red,
+    //     textColor: Colors.white,
+    //   );
+    // });
   }
 
   @override
