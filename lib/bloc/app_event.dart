@@ -52,6 +52,18 @@ class AppEventCreateDoctorAccount extends AppEvent {
   );
 }
 
+class AppEventCreatePatientAccount extends AppEvent {
+  final File selectedImage;
+  final String email;
+  final String password;
+  final String username;
+  final String phone;
+  final int gender;
+  final DateTime birthday;
+
+  const AppEventCreatePatientAccount(this.selectedImage, this.email, this.password, this.username, this.phone, this.gender, this.birthday);
+}
+
 class AppEventLogout extends AppEvent {
   const AppEventLogout();
 }
@@ -68,6 +80,10 @@ class AppEventLoadAppointments extends AppEvent {
 
 class AppEventLoadPosts extends AppEvent {
   const AppEventLoadPosts();
+}
+
+class AppEventLoadHealthRecords extends AppEvent {
+  const AppEventLoadHealthRecords();
 }
 
 class AppEventLoadDoctorInfomation extends AppEvent {

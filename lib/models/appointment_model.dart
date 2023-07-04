@@ -1,3 +1,5 @@
+import 'package:health_care/models/health_record_model.dart';
+
 class AppointmentModel {
   final String id;
   final String doctorId;

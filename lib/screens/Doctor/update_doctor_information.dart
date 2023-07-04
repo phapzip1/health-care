@@ -155,35 +155,7 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
 
       currentUrl = await ref.getDownloadURL();
     }
-    await DoctorModel(
-            widget.doctorInfo.id,
-            _enteredUsername.text,
-            _enteredPhone.text,
-            _enteredGender,
-            _enteredBirthday,
-            widget.doctorInfo.email,
-            int.parse(_enteredExperience.text),
-            int.parse(_enteredPrice.text),
-            _enteredWorkplace.text,
-            _enteredExpertise,
-            _enteredLicenseId.text,
-            currentUrl ?? widget.doctorInfo.image)
-        .save()
-        .then((value) => Fluttertoast.showToast(
-              msg: "Update successfully",
-              toastLength: Toast.LENGTH_SHORT,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.greenAccent,
-              textColor: Colors.black,
-              fontSize: 16.0,
-            ))
-        .catchError((error) => Fluttertoast.showToast(
-              msg: "Failed to update user",
-              toastLength: Toast.LENGTH_SHORT,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-            ));
+    
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
