@@ -18,6 +18,7 @@ class AppointmentModel {
   // 1: confirmed
   // 2: rejected
   // 3: canceled
+  // 4: completed
   final int status;
 
   AppointmentModel.fromMap(Map<String, dynamic> map)

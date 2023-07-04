@@ -197,4 +197,14 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
       throw GenericDBException();
     }
   }
+  
+  @override
+  Future<int> getCompletedAppointmentCount(String doctorid) async {
+    try {
+      final aggregate = await _ref.where("doctor_id", isEqualTo: doctorid).where("status", isLessThan: 1).where("status", isEqualTo: 4).count().get();
+      return aggregate.count;
+    } catch (e) {
+      throw GenericDBException();
+    }
+  }
 }

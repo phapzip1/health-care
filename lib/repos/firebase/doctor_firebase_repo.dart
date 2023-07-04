@@ -56,8 +56,7 @@ class DoctorFirebaseRepo extends DoctorRepo {
     required String message,
   }) async {
     try {
-      await _ref.doc(patientId).set({
-        "doctor_id": doctorId,
+      await _ref.doc(doctorId).collection("feedback").doc(patientId).set({
         "patient_name": patientName,
         "patient_image": patientImage,
         "create_at": Timestamp.fromDate(createAt),
@@ -70,9 +69,29 @@ class DoctorFirebaseRepo extends DoctorRepo {
   }
 
   @override
-  Future<void> removeFeedback(String feedbackId) async {
+  Future<void> removeFeedback(String doctorId, String patientId) async {
     try {
-      await _ref.doc(feedbackId).delete();
+      await _ref.doc(doctorId).collection("feedback").doc(patientId).delete();
+    } catch (e) {
+      throw GenericDBException();
+    }
+  }
+
+  @override
+  Future<List<FeedbackModel>> getFeedbacks(String doctorid) async {
+    try {
+      final querySnapshot = await _ref.doc(doctorid).collection("feedback").get();
+      return querySnapshot.docs
+          .map((e) => FeedbackModel.fromMap({
+                "doctor_id": doctorid,
+                "patient_id": e.id,
+                "patient_name": e.get("patient_name"),
+                "patient_image": e.get("patient_image"),
+                "create_at": e.get("create_at"),
+                "rating": e.get("rating"),
+                "message": e.get("message"),
+              }))
+          .toList();
     } catch (e) {
       throw GenericDBException();
     }

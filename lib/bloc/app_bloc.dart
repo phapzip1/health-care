@@ -208,5 +208,31 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         await appointmentProvider.updateHeathRecord(event.appointmentId, event.healthRecord);
       } catch (e) {}
     });
+
+    on<AppEventMakeAppointment>((event, emit) async {
+      try {
+        await appointmentProvider.makeAppointment(
+            doctorId: event.doctorId,
+            doctorName: event.doctorName,
+            doctorPhone: event.doctorPhone,
+            doctorImage: event.doctorImage,
+            patientId: state.patient!.id,
+            patientName: state.patient!.name,
+            patientImage: state.patient!.image,
+            patientPhone: state.patient!.phoneNumber,
+            specialization: event.specialization,
+            datetime: event.datetime);
+      } catch (e) {}
+    });
+
+    on<AppEventCancelAppointment>((event, emit) async {
+      try {
+        await appointmentProvider.cancelAppointment(event.appointmentId);
+      } catch (e) {}
+    });
+
+    on<AppEventDeclineAppoitment>((event, emit) async {
+      await appointmentProvider.declineAppointment(event.appointmentId);
+    });
   }
 }

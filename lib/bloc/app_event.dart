@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:health_care/models/doctor_model.dart';
+import 'package:health_care/models/feedback_model.dart';
 import 'package:health_care/models/health_record_model.dart';
 import 'package:health_care/models/patient_model.dart';
 
@@ -122,4 +123,49 @@ class AppEventUpdateHealthRecord extends AppEvent {
   final String appointmentId;
 
   const AppEventUpdateHealthRecord(this.healthRecord, this.appointmentId);
+}
+
+// silent actions
+class AppEventGiveFeedback extends AppEvent {
+  final FeedbackModel feedback;
+
+  const AppEventGiveFeedback(this.feedback);
+}
+
+class AppEventMakeAppointment extends AppEvent {
+  final String doctorId;
+  final String doctorName;
+  final String doctorPhone;
+  final String doctorImage;
+  final String patientId;
+  final String patientName;
+  final String patientImage;
+  final String patientPhone;
+  final String specialization;
+  final DateTime datetime;
+
+  const AppEventMakeAppointment(
+    this.doctorId,
+    this.doctorName,
+    this.doctorPhone,
+    this.doctorImage,
+    this.patientId,
+    this.patientName,
+    this.patientImage,
+    this.patientPhone,
+    this.specialization,
+    this.datetime,
+  );
+}
+
+class AppEventCancelAppointment extends AppEvent {
+  final String appointmentId;
+
+  const AppEventCancelAppointment(this.appointmentId);
+}
+
+class AppEventDeclineAppoitment extends AppEvent {
+  final String appointmentId;
+
+  const AppEventDeclineAppoitment(this.appointmentId);
 }
