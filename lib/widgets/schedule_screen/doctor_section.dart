@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:health_care/widgets/card_appointment_doctor.dart';
-
+import 'package:health_care/widgets/schedule_screen/header.dart';
 
 class DoctorSection extends StatefulWidget {
-  const DoctorSection(this.changedPage, {super.key});
+  const DoctorSection(this.scheduleDocs, {super.key});
 
-  final bool changedPage;
+  final List<AppointmentModel> scheduleDocs;
 
   @override
   State<DoctorSection> createState() => _DoctorSectionState();
 }
 
 class _DoctorSectionState extends State<DoctorSection> {
-  final user = FirebaseAuth.instance.currentUser;
+  bool _changedPage = true;
 
   void _updateStatus(String id, int status) async {
     await FirebaseFirestore.instance
@@ -24,31 +23,46 @@ class _DoctorSectionState extends State<DoctorSection> {
         .update({'status': status});
   }
 
+  void _click(value) {
+    setState(() {
+      _changedPage = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
-    return FutureBuilder(
-        future: !widget.changedPage
-            ? AppointmentModel.getAppointmentHistory(doctorId: user!.uid)
-            : AppointmentModel.getAppointment(doctorId: user!.uid),
-        builder: (ctx, futureSnapshot) {
-          if (futureSnapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final scheduleDocs = futureSnapshot.data!;
 
-          return ListView.builder(
+    var filterList;
+    final now = DateTime.now();
+    if (_changedPage) {
+      filterList = widget.scheduleDocs
+          .where((element) =>
+              element.datetime.isBefore(now) && element.status <= 1)
+          .toList();
+    } else {
+      filterList = widget.scheduleDocs
+          .where(
+              (element) => element.datetime.isAfter(now) || element.status > 1)
+          .toList();
+    }
+
+    return Column(
+      children: [
+        Header(_click, _changedPage),
+        Expanded(
+          child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: scheduleDocs.length,
+              itemCount: filterList.length,
               itemBuilder: (ctx, index) {
-                String time = scheduleDocs[index].meetingTime % 10 == 3
-                    ? '${scheduleDocs[index].meetingTime ~/ 10}:30'
-                    : '${scheduleDocs[index].meetingTime ~/ 10}:00';
-                return CardAppointmentDoctor(widget.changedPage, mediaQuery,
-                    scheduleDocs[index], time, _updateStatus);
-              });
-        });
+                String time = filterList[index].datetime.hour % 10 == 3
+                    ? '${filterList[index].datetime.hour ~/ 10}:30'
+                    : '${filterList[index].datetime.hour ~/ 10}:00';
+                return CardAppointmentDoctor(_changedPage, mediaQuery,
+                    filterList[index], time, _updateStatus);
+              }),
+        ),
+      ],
+    );
   }
 }

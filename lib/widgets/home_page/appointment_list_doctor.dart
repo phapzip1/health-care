@@ -1,32 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:health_care/models/appointment_model.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_state.dart';
 import 'package:intl/intl.dart';
 
 class AppointmentListDoctor extends StatelessWidget {
-  final String doctorId;
-  const AppointmentListDoctor(this.doctorId, {super.key});
+  const AppointmentListDoctor({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: AppointmentModel.getAppointment(doctorId: doctorId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final doctor = snapshot.data!;
+    return BlocBuilder<AppBloc, AppState>(
+        builder: (context, state) {
+
+          final doctor = state.appointments!;
 
           return ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: doctor.length,
               itemBuilder: (ctx, index) {
-                String time = doctor[index].meetingTime % 10 == 3
-                    ? '${doctor[index].meetingTime ~/ 10}:30'
-                    : '${doctor[index].meetingTime ~/ 10}:00';
                 return Container(
                   margin:
                       const EdgeInsets.only(top: 16.0, right: 16.0, left: 16),
@@ -83,7 +76,7 @@ class AppointmentListDoctor extends StatelessWidget {
                                             width: 4,
                                           ),
                                           Text(
-                                            DateFormat('dd-MM-y').format(doctor[index].dateTime),
+                                            DateFormat('dd-MM-y').format(doctor[index].datetime),
                                             style:
                                                 const TextStyle(fontSize: 16),
                                           ),
@@ -100,7 +93,7 @@ class AppointmentListDoctor extends StatelessWidget {
                                             width: 4,
                                           ),
                                           Text(
-                                            time,
+                                            DateFormat.Hm().format(doctor[index].datetime),
                                             style:
                                                 const TextStyle(fontSize: 16),
                                           ),

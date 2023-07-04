@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:health_care/models/review_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:health_care/services/navigation_service.dart';
 

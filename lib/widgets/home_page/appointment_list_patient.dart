@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:health_care/models/review_model.dart';
 import 'package:health_care/screens/Doctor/doctor_infor_page.dart';
 
 class AppointmentListPatient extends StatelessWidget {
-  AppointmentListPatient({
-    required this.spec
-  });
+  AppointmentListPatient({required this.spec});
 
   final String spec;
-
-  final user = FirebaseAuth.instance.currentUser;
   final _ref = FirebaseFirestore.instance.collection('doctor');
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: spec != "All" ? _ref.where("specialization", isEqualTo: spec).get() : _ref.get(),
+        future: spec != "All"
+            ? _ref.where("specialization", isEqualTo: spec).get()
+            : _ref.get(),
         builder: (ctx, futureSnapShot) {
           if (futureSnapShot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -26,7 +23,6 @@ class AppointmentListPatient extends StatelessWidget {
           }
 
           final doctorList = futureSnapShot.data!.docs;
-          // final a = ReviewModel.getAverageRating('Xgh3EC9d7jVeNsaRk6dsVM2Yk9V2');
           return ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -51,7 +47,7 @@ class AppointmentListPatient extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  DoctorInforPage(doctorList[index].id, false)))
+                                  const DoctorInforPage(false)))
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -109,13 +105,17 @@ class AppointmentListPatient extends StatelessWidget {
                                             width: 8,
                                           ),
                                           FutureBuilder(
-                                            future: ReviewModel.getAverageRating(doctorList[index].id),
-                                            builder: (ctx, rating) {
-                                              if(rating.connectionState == ConnectionState.waiting){
-                                                return const CircularProgressIndicator();
-                                              }
-                                              return Text(rating.data.toString());
-                                            }),
+                                              future:
+                                                  ReviewModel.getAverageRating(
+                                                      doctorList[index].id),
+                                              builder: (ctx, rating) {
+                                                if (rating.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return const CircularProgressIndicator();
+                                                }
+                                                return Text(
+                                                    rating.data.toString());
+                                              }),
                                         ],
                                       ),
                                     ],

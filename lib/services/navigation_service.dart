@@ -8,7 +8,6 @@ import 'package:health_care/screens/Patient/patientRecord.dart';
 import 'package:health_care/screens/Patient/updatePatientInformation.dart';
 import 'package:health_care/screens/general/appointment_detail_for_doctor.dart';
 import 'package:health_care/screens/general/appointment_detail_for_patient.dart';
-import 'package:health_care/screens/general/chat.dart';
 import 'package:health_care/screens/general/doctor_schedule_screen.dart';
 import 'package:health_care/screens/Patient/payment_screen.dart';
 import 'package:health_care/screens/general/login_screen.dart';
@@ -28,7 +27,6 @@ class NavigationService {
 
   static const String home = "/";
   static const String community = "/community";
-  static const String chat = "/chat";
   static const String schedule = "/schedule";
   static const String payment = "/payment";
   static const String wallets = "/wallets";
@@ -91,7 +89,7 @@ class NavigationService {
         }
       case patientSchedule:
         {
-          final data = settings.arguments as bool;
+          final data = settings.arguments as List<AppointmentModel>;
           return MaterialPageRoute(
             builder: (_) => PatientSection(data),
           );
@@ -117,15 +115,6 @@ class NavigationService {
             builder: (_) => RecordDetail(
               data["record"],
               data["isDoctor"],
-            ),
-          );
-        }
-      case chat:
-        {
-          final data = settings.arguments as AppointmentModel;
-          return MaterialPageRoute(
-            builder: (_) => ChatScreen(
-              data,
             ),
           );
         }

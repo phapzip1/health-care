@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:health_care/services/notification_service.dart';
+// import 'package:health_care/services/notification_service.dart';
 
 class HeaderSection extends StatelessWidget {
   final String url;
@@ -62,7 +62,7 @@ class HeaderSection extends StatelessWidget {
               ],
               onChanged: (itemIdentifier) async {
                 if (itemIdentifier == 'logout') {
-                  await NotificationService.cancelSchedule();
+                  // await NotificationService.cancelSchedule();
                   await FirebaseAuth.instance.signOut();
                 }
               },

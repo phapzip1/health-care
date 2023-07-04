@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/services/navigation_service.dart';
 import 'package:intl/intl.dart';
@@ -12,21 +14,18 @@ class AppointmentDetailForPatient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const double listtileVerticalPadding = 4.5;
-    final _time = DateFormat('dd-MM-y').format(appointment.dateTime);
-    final _hour = DateFormat.Hm().format(appointment.dateTime);
+    final _time = DateFormat('dd-MM-y').format(appointment.datetime);
+    final _hour = DateFormat.Hm().format(appointment.datetime);
     final now = DateTime.now();
     final meeting = DateTime(
-      appointment.dateTime.year,
-      appointment.dateTime.month,
-      appointment.dateTime.day,
-      (appointment.meetingTime / 10).truncate(),
-      (appointment.meetingTime % 10) * 10,
+      appointment.datetime.year,
+      appointment.datetime.month,
+      appointment.datetime.day,
+      (appointment.datetime.hour / 10).truncate(),
+      (appointment.datetime.hour % 10) * 10,
     );
 
     final mediaQuery = MediaQuery.of(context).size;
-
-    // ignore: avoid_print
-    print(now);
 
     return Scaffold(
         appBar: AppBar(
@@ -334,7 +333,12 @@ class AppointmentDetailForPatient extends StatelessWidget {
                                             MediaQuery.of(context).size.width *
                                                 0.05,
                                         vertical: 12)),
-                                onPressed: () {},
+                                onPressed: () {
+                                  context
+                                      .read<AppBloc>()
+                                      .appointmentProvider
+                                      .cancelAppointment(appointment.id);
+                                },
                                 child: const Text(
                                   'Cancel',
                                   style: TextStyle(

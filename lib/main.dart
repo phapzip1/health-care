@@ -52,11 +52,12 @@ class HomePage extends StatelessWidget {
     return BlocBuilder<AppBloc, AppState>(
       builder: (ctx, state) {
         if (state.user == null) {
-            return LoginScreen();
+          return LoginScreen();
         }
         if (state.doctor != null) {
           return const DoctorHomeScreen();
         }
+
         return const HomePage();
       },
     );

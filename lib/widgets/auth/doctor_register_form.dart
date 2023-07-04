@@ -7,15 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
-import 'package:health_care/models/doctor_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_care/widgets/user_image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../utils/formstage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import 'package:firebase_storage/firebase_storage.dart';
 
 class DoctorRegisterForm extends StatefulWidget {
   final GlobalKey<FormState> formkey;
@@ -51,7 +48,6 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
   var _gender = 0;
 
   DateTime _birthday = DateTime.now();
-
 
   void _submit(BuildContext context) async {
     try {
@@ -269,7 +265,11 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                   // prevent keyboard showing up
                   FocusScope.of(context).requestFocus(FocusNode());
 
-                  final result = await showDatePicker(context: context, initialDate: now, firstDate: DateTime(1975, 1, 1), lastDate: now);
+                  final result = await showDatePicker(
+                      context: context,
+                      initialDate: now,
+                      firstDate: DateTime(1975, 1, 1),
+                      lastDate: now);
 
                   if (result != null) {
                     DateTime formattedDate = result;
@@ -278,7 +278,8 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                     // setState(() {
                     //   dateinput.text = DateFormat('dd/MM/y').format(formattedDate);
                     // });
-                    dateinput.text = DateFormat('dd/MM/y').format(formattedDate);
+                    dateinput.text =
+                        DateFormat('dd/MM/y').format(formattedDate);
                   }
                 },
               ),
@@ -389,7 +390,8 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
 
               ElevatedButton(
                 style: ButtonStyle(
-                  textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(
+                  textStyle:
+                      MaterialStateProperty.all<TextStyle>(const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                   )),
@@ -403,7 +405,8 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                 children: <Widget>[
                   const Text("Are you a patient?"),
                   TextButton(
-                    onPressed: () => widget.setFormStage(FormStage.PatientRegister),
+                    onPressed: () =>
+                        widget.setFormStage(FormStage.PatientRegister),
                     child: const Text("Register for patient"),
                   ),
                 ],
