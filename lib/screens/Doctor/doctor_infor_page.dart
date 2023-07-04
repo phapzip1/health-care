@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/models/doctor_model.dart';
-import 'package:health_care/models/review_model.dart';
 import 'package:health_care/screens/general/review_section.dart';
 import 'package:health_care/services/navigation_service.dart';
 import 'package:health_care/widgets/infomation_page/time_choosing.dart';
@@ -13,8 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class DoctorInforPage extends StatefulWidget {
-  const DoctorInforPage(this.doctorId, this.isDoctor, {super.key});
-  final String doctorId;
+  const DoctorInforPage(this.isDoctor, {super.key});
   final bool isDoctor;
 
   @override
@@ -218,8 +216,9 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                 widget.isDoctor
                     ? IconButton(
                         onPressed: () {
-                          NavigationService.navKey.currentState!
-                              .pushNamed('/doctorupdateinfo', arguments: userDocs);
+                          NavigationService.navKey.currentState!.pushNamed(
+                              '/doctorupdateinfo',
+                              arguments: userDocs);
                         },
                         icon: const Icon(
                           Icons.edit,
