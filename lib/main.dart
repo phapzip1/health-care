@@ -1,104 +1,54 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:health_care/screens/Patient/mainPage.dart';
-// import 'package:health_care/screens/general/splash.dart';
-// import 'package:health_care/screens/doctor_schedule_screen.dart';
-import 'package:health_care/services/notification_service.dart';
-
-import 'firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
+import 'package:health_care/bloc/app_state.dart';
+import 'package:health_care/repos/firebase/appointment_firebase_repo.dart';
+import 'package:health_care/repos/firebase/doctor_firebase_repo.dart';
+import 'package:health_care/repos/firebase/patient_firebase_repo.dart';
+import 'package:health_care/repos/firebase/post_firebase_repo.dart';
+import 'package:health_care/services/auth/firebase_auth_provider.dart';
 
 //screen import
 import './screens/general/login_screen.dart';
-// import './screens/general/page_not_found_screen.dart';
-import './screens/general/loading_screen.dart';
 
-//theme
-import '../utils/app_theme.dart';
-
-// service
-import './services/navigation_service.dart';
-
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  NotificationService.initialize(debug: true);
-  NotificationService.startListeningNotificationEvents();
   runApp(
-    const MyWidget(),
+    MaterialApp(
+      title: "Health Care",
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: BlocProvider<AppBloc>(
+        create: (ctx) => AppBloc(
+          appointmentProvider: AppointmentFirebaseRepo(),
+          doctorProvider: DoctorFirebaseRepo(),
+          patientProvider: PatientFirebaseRepo(),
+          postProvider: PostFirebaseRepo(),
+          authProvider: FirebaseAuthProvider(),
+        ),
+        child: const HomePage(),
+      ),
+      routes: {
+        "/login": (ctx) => LoginScreen(),
+      },
+    ),
   );
 }
 
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
-
-  Widget _render(String collection, String uid, bool isDoctor) {
-    return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection(collection)
-            .doc(uid)
-            .snapshots(),
-        builder: (ctx, snapShot) {
-          if (snapShot.hasData) {
-            return MainPage(isDoctor);
-          }
-          return const Scaffold(
-              body: Center(child: CircularProgressIndicator()));
-        });
-  }
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: getDefaultTheme(),
-      navigatorKey: NavigationService.navKey,
-      initialRoute: "/splash",
-      onGenerateRoute: (RouteSettings settings) =>
-          NavigationService.generateRoute(
-              settings,
-              (_) => StreamBuilder(
-                    stream: FirebaseAuth.instance.authStateChanges(),
-                    builder: (BuildContext ctx, AsyncSnapshot<User?> auth) {
-                      if (auth.hasData) {
-                        return FutureBuilder(
-                          future: FirebaseFirestore.instance
-                              .collection("doctor")
-                              .doc(auth.data!.uid)
-                              .get(),
-                          builder: (ctx2, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const LoadingScreen("Loading...");
-                            }
-                            // if snapshot.hasData == true, then this is doctor vice versa
-                            if (snapshot.data!.exists) {
-                              NotificationService.getFirebaseMessagingToken()
-                                  .then((value) => FirebaseFirestore.instance
-                                          .collection("doctor")
-                                          .doc(auth.data!.uid)
-                                          .update({
-                                        "device": value,
-                                      }));
-                              return _render('doctor', auth.data!.uid, true);
-                            }
-                            NotificationService.getFirebaseMessagingToken()
-                                .then((value) => FirebaseFirestore.instance
-                                        .collection("patient")
-                                        .doc(auth.data!.uid)
-                                        .update({
-                                      "device": value,
-                                    }));
-                            return _render('patient', auth.data!.uid, false);
-                          },
-                        );
-                      }
-                      return LoginScreen();
-                    },
-                  )),
+    context.read<AppBloc>().add(const AppEventInitialize());
+    return BlocBuilder<AppBloc, AppState>(
+      builder: (ctx, state) {
+        return const Scaffold(
+          body: SafeArea(
+            child: Placeholder(),
+          ),
+        );
+      },
     );
   }
 }

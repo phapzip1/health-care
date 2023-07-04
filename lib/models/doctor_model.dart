@@ -1,165 +1,54 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-import './patient_model.dart' show Gender;
-
-const _map = [
-  "mon",
-  "tue",
-  "wed",
-  "thu",
-  "fri",
-  "sat",
-  "sun",
-];
-
 class DoctorModel {
-  String? id;
-  String name;
-  String phoneNumber;
-  String image;
-  Gender gender;
-  DateTime birthdate;
-  String email;
-  String identityId;
-  String licenseId;
-  int experience;
-  int price;
-  String workplace;
-  String specialization;
+  final String id;
+  final String name;
+  final String phoneNumber;
+  final String image;
+  final int gender;
+  final DateTime birthdate;
+  final String email;
+  final String identityId;
+  final String licenseId;
+  final int experience;
+  final int price;
+  final String workplace;
+  final String specialization;
+  final bool verified;
+  final double rating;
 
-  static final CollectionReference _ref =
-      FirebaseFirestore.instance.collection("doctor");
+  DoctorModel.fromMap(Map<String, dynamic> map)
+      : id = map["id"],
+        name = map["name"],
+        phoneNumber = map["phone_number"],
+        image = map["image"],
+        gender = map["gender"],
+        birthdate = map["birthday"],
+        email = map["email"],
+        identityId = map["identity_id"],
+        licenseId = map["license_id"],
+        experience = map["experience"],
+        price = map["price"],
+        workplace = map["workplace"],
+        specialization = map["specialization"],
+        verified = map["verified"],
+        rating = map["rating"];
 
-  DoctorModel(
-    this.id,
-    this.name,
-    this.phoneNumber,
-    this.gender,
-    this.birthdate,
-    this.email,
-    this.experience,
-    this.price,
-    this.workplace,
-    this.specialization,
-    this.identityId,
-    this.licenseId,
-    this.image,
-  );
-
-  Future<void> save() async {
-    try {
-      await _ref.doc(id).set({
-        "name": name,
-        "phone_number": phoneNumber,
-        "gender": gender.name,
-        "birthdate": Timestamp.fromDate(birthdate),
-        "email": email,
-        "experience": experience,
-        "identityId": identityId,
-        "licenseId": licenseId,
-        "price": price,
-        "workplace": workplace,
-        "specialization": specialization,
-        "image": image,
-        "available_time": {},
-      });
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
-  Future<bool> checkTime() async {
-    final snapshot = await _ref.doc(id).get();
-    return (snapshot.get('available_time') as Map).isEmpty;
-  }
-
-  static Gender toGenderEnum(String val) {
-    switch (val) {
-      case "male":
-        return Gender.male;
-      case "female":
-        return Gender.female;
-      default:
-        return Gender.other;
-    }
-  }
-
-  static Future<DoctorModel> getById(String id) async {
-    final snapshot = await _ref.doc(id).get();
-
-    return DoctorModel(
-      snapshot.id,
-      snapshot.get("name"),
-      snapshot.get("phone_number"),
-      toGenderEnum(snapshot.get("gender") as String),
-      (snapshot.get("birthdate") as Timestamp).toDate(),
-      snapshot.get("email"),
-      snapshot.get("experience"),
-      snapshot.get("price"),
-      snapshot.get("workplace"),
-      snapshot.get("specialization"),
-      snapshot.get("identityId"),
-      snapshot.get("licenseId"),
-      snapshot.get("image"),
-    );
-  }
-
-  // 0 = Monday; 6 == Sun
-  Future<List<dynamic>> getSchedule(int weekday) async {
-    final snapshot = await _ref.doc(id).get();
-    final val = snapshot.get("available_time.${_map[weekday]}");
-    return val;
-  }
-
-  Future<void> applySchedule(int weekday, List<int> data) async {
-    await _ref.doc(id).update({
-      "available_time.${_map[weekday]}": data,
-    });
-  }
-
-  Future<void> applyToAllSchedule(List<int> data) async {
-    await _ref.doc(id).update({
-      "available_time.mon": data,
-    });
-    await _ref.doc(id).update({
-      "available_time.tue": data,
-    });
-    await _ref.doc(id).update({
-      "available_time.wed": data,
-    });
-    await _ref.doc(id).update({
-      "available_time.thu": data,
-    });
-    await _ref.doc(id).update({
-      "available_time.fri": data,
-    });
-    await _ref.doc(id).update({
-      "available_time.sat": data,
-    });
-    await _ref.doc(id).update({
-      "available_time.sun": data,
-    });
-  }
-
-  Future<List> getAvailableTime(int day, int month, int year) async {
-    try {
-      if (id != null) {
-        final res = await http.get(
-          Uri.parse(
-              "https://health-care-admin-production.up.railway.app/availabletime/$id/$day/$month/$year"),
-        );
-        final json = jsonDecode(res.body);
-        if (json["status"] == 'Successful!') {
-          return json["data"];
-        }
-      }
-      return [];
-    } catch (e) {
-      return [];
-    }
+  Map<String, dynamic> toMap() {
+    return {
+      "id": id,
+      "name": name,
+      "phone_number": phoneNumber,
+      "image": image,
+      "gender": gender,
+      "birthday": birthdate,
+      "email": email,
+      "identity_id": identityId,
+      "license_id": licenseId,
+      "experience": experience,
+      "price": price,
+      "workplace": workplace,
+      "specialization": specialization,
+      "verified": verified,
+      "rating": rating,
+    };
   }
 }
