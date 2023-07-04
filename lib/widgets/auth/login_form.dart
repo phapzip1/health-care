@@ -1,7 +1,9 @@
 // ignore_for_file: unused_field
 
 import 'package:flutter/material.dart';
-import 'package:health_care/services/notification_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
 import '../../utils/formstage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +13,7 @@ class LoginForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final Function setFormStage;
 
-  LoginForm({required this.formKey, required this.setFormStage});
+  const LoginForm({super.key, required this.formKey, required this.setFormStage});
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -19,70 +21,18 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   bool forgot = false;
-  final _auth = FirebaseAuth.instance;
-  var _isLoading = false;
 
-  final Map<String, dynamic> formData = {
-    "Email": "",
-    "Password": "",
+  final formData = {
+    "email": "",
+    "password": "",
   };
 
-  void _formSubmit() async {
+  void _formSubmit(BuildContext context) async {
     forgot = false;
     final valid = widget.formKey.currentState!.validate();
 
     if (valid) {
-      try {
-        setState(() {
-          _isLoading = true;
-        });
-        UserCredential authResult;
-
-        authResult = await _auth.signInWithEmailAndPassword(email: formData['Email'], password: formData['Password']);
-        Fluttertoast.showToast(
-          msg: "Login successfully!",
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.greenAccent,
-          textColor: Colors.black,
-          fontSize: 16.0,
-        );
-        NotificationService.scheduleAppointmentNoti(authResult.user!.uid);
-      } on PlatformException catch (err) {
-        var message = 'An error occured, please check your credential';
-
-        Fluttertoast.showToast(
-          msg: message,
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
-
-        if (err.message != null) {
-          message = err.message.toString();
-        }
-
-        setState(() {
-          _isLoading = false;
-        });
-      } catch (err) {
-        Fluttertoast.showToast(
-          msg: "Login unsuccessfully!",
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
-
-        // ignore: avoid_print
-        print(err);
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      context.read<AppBloc>().add(AppEventLogin(formData["email"]!, formData["password"]!));
     }
   }
 
@@ -123,8 +73,8 @@ class _LoginFormState extends State<LoginForm> {
                   }
                   return null;
                 },
-                onChanged: (value) {
-                  formData["Email"] = value;
+                onSaved: (value) {
+                  formData["email"] = value!;
                 },
               ),
               const SizedBox(height: 16),
@@ -149,8 +99,8 @@ class _LoginFormState extends State<LoginForm> {
 
                   return null;
                 },
-                onChanged: (value) {
-                  formData["Password"] = value;
+                onSaved: (value) {
+                  formData["password"] = value!;
                 },
               ),
               const SizedBox(height: 8),
@@ -185,7 +135,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
               const SizedBox(height: 10),
               ElevatedButton(
-                onPressed: _formSubmit,
+                onPressed: () => _formSubmit(context),
                 child: const Text(
                   "Login",
                   style: TextStyle(
