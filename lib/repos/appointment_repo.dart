@@ -1,4 +1,5 @@
 import 'package:health_care/models/appointment_model.dart';
+import 'package:health_care/models/health_record_model.dart';
 
 abstract class AppointmentRepo {
   Future<List<AppointmentModel>> getAppointmentByDoctorId(String id);
@@ -26,4 +27,6 @@ abstract class AppointmentRepo {
 
   // for doctor
   Future<void> declineAppointment(String id);
+
+  Future<void> updateHeathRecord(String appointmentId, HealthRecordModel healthrecord);
 }

@@ -86,6 +86,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             user,
             null,
             patient,
+            state.symptom,
             null,
             null,
             null,
@@ -138,7 +139,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventLogout>((event, emit) async {
       try {
         await authProvider.logOut();
-        emit(const AppState(false, null, null, null, null, null, null, null));
+        emit(AppState(false, null, null, null, state.symptom, null, null, null, null));
       } catch (e) {}
     });
 
@@ -199,6 +200,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       try {
         await patientProvider.update(event.patient);
         emit(AppState(false, state.user, state.doctor, event.patient, state.symptom, state.doctors, state.posts, state.appointments, state.records));
+      } catch (e) {}
+    });
+
+    on<AppEventUpdateHealthRecord>((event, emit) async {
+      try {
+        await appointmentProvider.updateHeathRecord(event.appointmentId, event.healthRecord);
       } catch (e) {}
     });
   }

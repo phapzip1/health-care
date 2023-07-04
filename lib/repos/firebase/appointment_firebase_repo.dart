@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:health_care/models/appointment_model.dart';
+import 'package:health_care/models/health_record_model.dart';
 import 'package:health_care/repos/appointment_repo.dart';
 import 'package:health_care/repos/repo_exception.dart';
 
@@ -56,6 +57,11 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
           "specialization": specialization,
           "datetime": datetime,
           "status": 0,
+          "health_record": {
+            "diagnostic": "",
+            "prescription": "",
+            "note": "",
+          }
         });
       } else {
         throw const QueryDBException("Already occupied!");
@@ -85,6 +91,7 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
                 "price": e.get("price"),
                 "datetime": (e.get("datetime") as Timestamp).toDate(),
                 "status": e.get("status"),
+                "health_record": e.get("health_record"),
               }))
           .toList();
     } catch (e) {
@@ -112,6 +119,7 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
                 "price": e.get("price"),
                 "datetime": (e.get("datetime") as Timestamp).toDate(),
                 "status": e.get("status"),
+                "health_record": e.get("health_record"),
               }))
           .toList();
     } catch (e) {
@@ -142,6 +150,7 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
                 "price": e.get("price"),
                 "datetime": (e.get("datetime") as Timestamp).toDate(),
                 "status": e.get("status"),
+                "health_record": e.get("health_record"),
               }))
           .toList();
     } catch (e) {
@@ -172,11 +181,20 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
                 "price": e.get("price"),
                 "datetime": (e.get("datetime") as Timestamp).toDate(),
                 "status": e.get("status"),
+                "health_record": e.get("health_record"),
               }))
           .toList();
     } catch (e) {
       throw GenericDBException();
     }
   }
-
+  
+  @override
+  Future<void> updateHeathRecord(String appointmentId, HealthRecordModel healthrecord) async {
+    try {
+      await _ref.doc(appointmentId).update(healthrecord.toMap());
+    } catch (e) {
+      throw GenericDBException();
+    }
+  }
 }

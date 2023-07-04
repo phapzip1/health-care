@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:health_care/models/doctor_model.dart';
+import 'package:health_care/models/health_record_model.dart';
 import 'package:health_care/models/patient_model.dart';
 
 @immutable
@@ -35,7 +36,7 @@ class AppEventCreateDoctorAccount extends AppEvent {
   final String specialization;
   final int gender;
 
-   const AppEventCreateDoctorAccount(
+  const AppEventCreateDoctorAccount(
     this.email,
     this.password,
     this.image,
@@ -82,10 +83,12 @@ class AppEventLoadPosts extends AppEvent {
   final String? specialization;
   const AppEventLoadPosts(this.specialization);
 }
+
 class AppEventLoadPostsAsDoctor extends AppEvent {
   final String doctorId;
   const AppEventLoadPostsAsDoctor(this.doctorId);
 }
+
 class AppEventLoadPostsAsPatient extends AppEvent {
   final String patientId;
   const AppEventLoadPostsAsPatient(this.patientId);
@@ -112,4 +115,11 @@ class AppEventUpdateDoctorInfomation extends AppEvent {
 class AppEventUpdatePatientInfomation extends AppEvent {
   final PatientModel patient;
   const AppEventUpdatePatientInfomation(this.patient);
+}
+
+class AppEventUpdateHealthRecord extends AppEvent {
+  final HealthRecordModel healthRecord;
+  final String appointmentId;
+
+  const AppEventUpdateHealthRecord(this.healthRecord, this.appointmentId);
 }
