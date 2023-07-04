@@ -15,6 +15,24 @@ class DoctorModel {
   final bool verified;
   final double rating;
 
+  DoctorModel(
+    this.id,
+    this.name,
+    this.phoneNumber,
+    this.image,
+    this.gender,
+    this.birthdate,
+    this.email,
+    this.identityId,
+    this.licenseId,
+    this.experience,
+    this.price,
+    this.workplace,
+    this.specialization,
+    this.verified,
+    this.rating,
+  );
+
   DoctorModel.fromMap(Map<String, dynamic> map)
       : id = map["id"],
         name = map["name"],
