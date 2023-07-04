@@ -3,6 +3,8 @@ class HealthRecordModel {
   final String prescription;
   final String note;
 
+  HealthRecordModel(this.diagnostic, this.prescription, this.note);
+
   HealthRecordModel.fromMap(Map<String, dynamic> map)
       : diagnostic = map["diagnostic"],
         prescription = map["prescription"],

@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/models/health_record_model.dart';
 import 'package:health_care/services/navigation_service.dart';
@@ -28,20 +31,13 @@ class _RecordDetailState extends State<WriteRecord> {
     super.dispose();
   }
 
-  void _writeRecord() async {
+  void _writeRecord(BuildContext context) async {
     if (diagnosticController.text != "") {
-      await HealthRecordModel.create(
-              widget.record.doctorId,
-              widget.record.doctorName,
-              widget.record.doctorImage,
-              widget.record.patientId,
-              widget.record.patientName,
-              widget.record.patientImage,
-              widget.record.datetime,
-              diagnosticController.text,
-              prescriptionController.text,
-              noteController.text)
-          .save();
+      context.read<AppBloc>().add(AppEventUpdateHealthRecord(
+          HealthRecordModel(diagnosticController.text,
+              prescriptionController.text, noteController.text),
+          widget.record.id));
+
       NavigationService.navKey.currentState!
           .pushNamed('/record', arguments: true);
     } else {
@@ -240,7 +236,7 @@ class _RecordDetailState extends State<WriteRecord> {
                               elevation: 0,
                               padding:
                                   const EdgeInsets.symmetric(vertical: 12)),
-                          onPressed: _writeRecord,
+                          onPressed:() => _writeRecord(context),
                           child: const Text(
                             'Save',
                             style: TextStyle(
