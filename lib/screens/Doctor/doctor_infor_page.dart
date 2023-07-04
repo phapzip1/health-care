@@ -2,7 +2,10 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/models/doctor_model.dart';
 import 'package:health_care/screens/general/review_section.dart';
@@ -183,16 +186,15 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
-    return FutureBuilder(
-        future: DoctorModel.getById(widget.doctorId),
-        builder: (ctx, futureSnapShot) {
-          if (futureSnapShot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          final userDocs = futureSnapShot.data!;
+    return BlocBuilder<AppBloc, AppState>(
+        // future: DoctorModel.getById(widget.doctorId),
+        builder: (ctx, state) {
+          // if (futureSnapShot.connectionState == ConnectionState.waiting) {
+          //   return const Center(
+          //     child: CircularProgressIndicator(),
+          //   );
+          // }
+          final userDocs = state.doctor!;
 
           return Scaffold(
             appBar: AppBar(
@@ -281,16 +283,16 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                     'Patients checked',
                                     style: TextStyle(),
                                   ),
-                                  FutureBuilder(
-                                    future: AppointmentModel
-                                        .countTotalAppointmentHistory(
-                                            doctorId: userDocs.id),
-                                    builder: (ctx, total) => Text(
-                                      total.data.toString(),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  )
+                                  // FutureBuilder(
+                                  //   future: AppointmentModel
+                                  //       .countTotalAppointmentHistory(
+                                  //           doctorId: userDocs.id),
+                                  //   builder: (ctx, total) => Text(
+                                  //     total.data.toString(),
+                                  //     style: const TextStyle(
+                                  //         fontWeight: FontWeight.bold),
+                                  //   ),
+                                  // )
                                 ],
                               ),
                               const SizedBox(
@@ -345,62 +347,63 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                             ],
                           ),
                         ),
-                        FutureBuilder(
-                            future: userDocs.checkTime(),
-                            builder: (ctx, futureCheck) {
-                              if (futureCheck.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              if (futureCheck.data!) {
-                                return ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 12),
-                                  ),
-                                  onPressed: () {
-                                    NavigationService.navKey.currentState
-                                        ?.pushNamed('/schedule',
-                                            arguments: userDocs.id);
-                                  },
-                                  child: const Text(
-                                    'Choose your time for consultant',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
-                                  ),
-                                );
-                              }
 
-                              return FutureBuilder(
-                                  future: userDocs.getAvailableTime(
-                                    _selectedDate.day,
-                                    _selectedDate.month,
-                                    _selectedDate.year,
-                                  ),
-                                  builder: (ctx, future) {
-                                    if (future.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-                                    final time = future.data!;
-                                    return time.isEmpty
-                                        ? const Text(
-                                            'There is no time frame available')
-                                        : TimeChoosing(
-                                            time,
-                                            mediaQuery,
-                                            _selectedDate.day,
-                                            _selectedDate.month,
-                                            _selectedDate.year,
-                                            _onChange,
-                                            widget.isDoctor);
-                                  });
-                            }),
+                        // FutureBuilder(
+                        //     future: userDocs.checkTime(),
+                        //     builder: (ctx, futureCheck) {
+                        //       if (futureCheck.connectionState ==
+                        //           ConnectionState.waiting) {
+                        //         return const Center(
+                        //           child: CircularProgressIndicator(),
+                        //         );
+                        //       }
+                        //       if (futureCheck.data!) {
+                        //         return ElevatedButton(
+                        //           style: ElevatedButton.styleFrom(
+                        //             padding: const EdgeInsets.symmetric(
+                        //                 horizontal: 16, vertical: 12),
+                        //           ),
+                        //           onPressed: () {
+                        //             NavigationService.navKey.currentState
+                        //                 ?.pushNamed('/schedule',
+                        //                     arguments: userDocs.id);
+                        //           },
+                        //           child: const Text(
+                        //             'Choose your time for consultant',
+                        //             style: TextStyle(
+                        //                 fontWeight: FontWeight.bold,
+                        //                 fontSize: 16),
+                        //           ),
+                        //         );
+                        //       }
+
+                        //       return FutureBuilder(
+                        //           future: userDocs.getAvailableTime(
+                        //             _selectedDate.day,
+                        //             _selectedDate.month,
+                        //             _selectedDate.year,
+                        //           ),
+                        //           builder: (ctx, future) {
+                        //             if (future.connectionState ==
+                        //                 ConnectionState.waiting) {
+                        //               return const Center(
+                        //                 child: CircularProgressIndicator(),
+                        //               );
+                        //             }
+                        //             final time = future.data!;
+                        //             return time.isEmpty
+                        //                 ? const Text(
+                        //                     'There is no time frame available')
+                        //                 : TimeChoosing(
+                        //                     time,
+                        //                     mediaQuery,
+                        //                     _selectedDate.day,
+                        //                     _selectedDate.month,
+                        //                     _selectedDate.year,
+                        //                     _onChange,
+                        //                     widget.isDoctor);
+                        //           });
+                        //     }),
                         widget.isDoctor
                             ? Container()
                             : const SizedBox(
