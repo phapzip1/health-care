@@ -1,19 +1,24 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/bloc/app_state.dart';
+import 'package:health_care/firebase_options.dart';
 import 'package:health_care/repos/firebase/appointment_firebase_repo.dart';
 import 'package:health_care/repos/firebase/doctor_firebase_repo.dart';
 import 'package:health_care/repos/firebase/patient_firebase_repo.dart';
 import 'package:health_care/repos/firebase/post_firebase_repo.dart';
+import 'package:health_care/screens/Doctor/doctor_home_screen.dart';
 import 'package:health_care/services/auth/firebase_auth_provider.dart';
+import 'package:health_care/services/storage/firebase_storage_provider.dart';
 
 //screen import
 import './screens/general/login_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MaterialApp(
       title: "Health Care",
@@ -25,6 +30,7 @@ void main() {
           patientProvider: PatientFirebaseRepo(),
           postProvider: PostFirebaseRepo(),
           authProvider: FirebaseAuthProvider(),
+          storageProvider: FirebaseStorageProvider(),
         ),
         child: const HomePage(),
       ),
@@ -43,11 +49,15 @@ class HomePage extends StatelessWidget {
     context.read<AppBloc>().add(const AppEventInitialize());
     return BlocBuilder<AppBloc, AppState>(
       builder: (ctx, state) {
-        return const Scaffold(
-          body: SafeArea(
-            child: Placeholder(),
-          ),
-        );
+        if (state.user == null) {
+            return LoginScreen();
+        }
+        if (state.doctor != null) {
+          return const DoctorHomeScreen();
+        }
+        if (state.patient != null) {
+          return const HomePage();
+        }
       },
     );
   }

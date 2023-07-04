@@ -121,26 +121,29 @@ class DoctorFirebaseRepo extends DoctorRepo {
   }
 
   @override
-  Future<DoctorModel> getById(String id) async {
+  Future<DoctorModel?> getById(String id) async {
     try {
       final snapshot = await _ref.doc(id).get();
-      return DoctorModel.fromMap({
-        "id": snapshot.id,
-        "name": snapshot.get("name"),
-        "phone_number": snapshot.get("phone_number"),
-        "image": snapshot.get("image"),
-        "gender": snapshot.get("gender"),
-        "birthday": (snapshot.get("birthday") as Timestamp).toDate(),
-        "email": snapshot.get("email"),
-        "identity_id": snapshot.get("identity_id"),
-        "license_id": snapshot.get("license_id"),
-        "experience": snapshot.get("experience"),
-        "price": snapshot.get("price"),
-        "workplace": snapshot.get("workplace"),
-        "specialization": snapshot.get("specialization"),
-        "verified": snapshot.get("verified"),
-        "rating": snapshot.get("rating"),
-      });
+      if (snapshot.exists) {
+        return DoctorModel.fromMap({
+          "id": snapshot.id,
+          "name": snapshot.get("name"),
+          "phone_number": snapshot.get("phone_number"),
+          "image": snapshot.get("image"),
+          "gender": snapshot.get("gender"),
+          "birthday": (snapshot.get("birthday") as Timestamp).toDate(),
+          "email": snapshot.get("email"),
+          "identity_id": snapshot.get("identity_id"),
+          "license_id": snapshot.get("license_id"),
+          "experience": snapshot.get("experience"),
+          "price": snapshot.get("price"),
+          "workplace": snapshot.get("workplace"),
+          "specialization": snapshot.get("specialization"),
+          "verified": snapshot.get("verified"),
+          "rating": snapshot.get("rating"),
+        });
+      }
+      return null;
     } catch (e) {
       throw GenericDBException();
     }

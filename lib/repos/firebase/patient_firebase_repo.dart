@@ -47,18 +47,21 @@ class PatientFirebaseRepo extends PatientRepo {
   }
 
   @override
-  Future<PatientModel> getById(String id) async {
+  Future<PatientModel?> getById(String id) async {
     try {
       final snapshot = await _ref.doc(id).get();
-      return PatientModel.fromMap({
-        "id": snapshot.id,
-        "name": snapshot.get("name"),
-        "phone_number": snapshot.get("phone_number"),
-        "gender": snapshot.get("gender"),
-        "birthdate": (snapshot.get("birthdate") as Timestamp).toDate(),
-        "email": snapshot.get("email"),
-        "image": snapshot.get("image"),
-      });
+      if (snapshot.exists) {
+        return PatientModel.fromMap({
+          "id": snapshot.id,
+          "name": snapshot.get("name"),
+          "phone_number": snapshot.get("phone_number"),
+          "gender": snapshot.get("gender"),
+          "birthdate": (snapshot.get("birthdate") as Timestamp).toDate(),
+          "email": snapshot.get("email"),
+          "image": snapshot.get("image"),
+        });
+      }
+      return null;
     } catch (e) {
       throw GenericDBException();
     }

@@ -6,7 +6,7 @@ abstract class DoctorRepo {
   const DoctorRepo();
 
   // get current doctor
-  Future<DoctorModel> getById(String id);
+  Future<DoctorModel?> getById(String id);
 
   // get multiple doctors
   Future<List<DoctorModel>> getBySpecification(String spec);

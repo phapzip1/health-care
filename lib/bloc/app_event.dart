@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:health_care/models/doctor_model.dart';
 import 'package:health_care/models/patient_model.dart';
@@ -8,7 +10,7 @@ abstract class AppEvent {
 }
 
 // authentication
-class AppEventInitialize extends AppEvent{
+class AppEventInitialize extends AppEvent {
   const AppEventInitialize();
 }
 
@@ -18,13 +20,37 @@ class AppEventLogin extends AppEvent {
   const AppEventLogin(this.email, this.password);
 }
 
-class AppEventCreateAccount extends AppEvent {
+class AppEventCreateDoctorAccount extends AppEvent {
   final String email;
   final String password;
-  const AppEventCreateAccount(this.email, this.password);
+  final File image;
+  final String username;
+  final String phone;
+  final int exp;
+  final double price;
+  final String identityId;
+  final String licenseId;
+  final String workplace;
+  final String specialization;
+  final int gender;
+
+   const AppEventCreateDoctorAccount(
+    this.email,
+    this.password,
+    this.image,
+    this.username,
+    this.phone,
+    this.exp,
+    this.price,
+    this.identityId,
+    this.licenseId,
+    this.workplace,
+    this.specialization,
+    this.gender,
+  );
 }
 
-class AppEventLogout extends AppEvent{
+class AppEventLogout extends AppEvent {
   const AppEventLogout();
 }
 
@@ -55,6 +81,7 @@ class AppEventUpdateDoctorInfomation extends AppEvent {
   final DoctorModel doctor;
   const AppEventUpdateDoctorInfomation(this.doctor);
 }
+
 class AppEventUpdatePatientInfomation extends AppEvent {
   final PatientModel patient;
   const AppEventUpdatePatientInfomation(this.patient);

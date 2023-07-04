@@ -3,7 +3,7 @@ import 'package:health_care/models/patient_model.dart';
 abstract class PatientRepo {
   const PatientRepo();
 
-  Future<PatientModel> getById(String id);
+  Future<PatientModel?> getById(String id);
   Future<void> add({
     required String id,
     required String name,

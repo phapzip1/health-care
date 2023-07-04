@@ -7,14 +7,14 @@ import 'package:intl/intl.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
-class HomePageDoctor extends StatefulWidget {
-  const HomePageDoctor({super.key});
+class DoctorHomeScreen extends StatefulWidget {
+  const DoctorHomeScreen({super.key});
 
   @override
-  State<HomePageDoctor> createState() => _HomePageDoctor();
+  State<DoctorHomeScreen> createState() => _DoctorHomeScreen();
 }
 
-class _HomePageDoctor extends State<HomePageDoctor> {
+class _DoctorHomeScreen extends State<DoctorHomeScreen> {
   final String formattedTime = DateFormat.jm().format(DateTime.now());
   final String formattedDate = DateFormat.yMd().format(DateTime.now());
 

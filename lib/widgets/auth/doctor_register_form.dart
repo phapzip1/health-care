@@ -4,8 +4,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/models/doctor_model.dart';
-import 'package:health_care/models/patient_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_care/widgets/user_image_picker.dart';
 import 'package:intl/intl.dart';
@@ -36,29 +38,28 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
 
   final _auth = FirebaseAuth.instance;
   File? _selectedImage;
-  var _enteredEmail = "";
-  var _enteredPassword = "";
-  var _enteredUsername = "";
-  var _enteredPhone = "";
-  var _enteredExp = 0;
-  var _enteredPrice = 0;
-  var _enteredIdentityId = "";
-  var _enteredLicenseId = "";
-  var _enteredWorkplace = "";
-  var _enteredSpecialization = "";
-  Gender _enteredGender = Gender.male;
+  var _email = "";
+  var _password = "";
+  var _username = "";
+  var _phone = "";
+  var _exp = 0;
+  var _price = 0;
+  var _identityId = "";
+  var _licenseId = "";
+  var _workplace = "";
+  var _specialization = "";
+  var _gender = 0;
+
   DateTime _enteredBirthday = DateTime.now();
   final now = DateTime.now();
 
-  void _submit() async {
+  void _submit(BuildContext context) async {
     try {
       final isValid = widget.formkey.currentState!.validate();
 
       if (isValid) {
         widget.formkey.currentState?.save();
       }
-
-      UserCredential authResult;
 
       if (!isValid || _selectedImage == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -70,83 +71,21 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
         return;
       }
 
-      authResult = await _auth.createUserWithEmailAndPassword(
-          email: _enteredEmail, password: _enteredPassword);
-
-      final ref_img = FirebaseStorage.instance
-          .ref()
-          .child('user_image')
-          .child('${authResult.user!.uid}.jpg');
-
-      await ref_img.putFile(File(_selectedImage!.path));
-
-      final url = await ref_img.getDownloadURL();
-
-      final user = DoctorModel(
-          authResult.user!.uid,
-          _enteredUsername,
-          _enteredPhone,
-          _enteredGender,
-          _enteredBirthday,
-          _enteredEmail,
-          _enteredExp,
-          _enteredPrice,
-          _enteredWorkplace,
-          _enteredSpecialization,
-          _enteredLicenseId,
-          url);
-
-      await user
-          .save()
-          .onError((error, stackTrace) => Fluttertoast.showToast(
-                msg: "Register unsuccessfully!",
-                toastLength: Toast.LENGTH_SHORT,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              ))
-          .whenComplete(() => Fluttertoast.showToast(
-                msg: "Register successfully!",
-                toastLength: Toast.LENGTH_SHORT,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.greenAccent,
-                textColor: Colors.black,
-                fontSize: 16.0,
-              ));
-    } on PlatformException catch (err) {
-      var message = 'An error occured, please check your credential';
-
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-
-      if (err.message != null) {
-        message = err.message.toString();
-      }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Theme.of(context).errorColor,
-        ),
-      );
-    } catch (err) {
-      Fluttertoast.showToast(
-        msg: "Register unsuccessfully!",
-        toastLength: Toast.LENGTH_SHORT,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-      print(err);
-    }
+      context.read<AppBloc>().add(AppEventCreateDoctorAccount(
+            _email,
+            _password,
+            _selectedImage!,
+            _username,
+            _phone,
+            _exp,
+            _price * 1.0,
+            _identityId,
+            _licenseId,
+            _workplace,
+            _specialization,
+            _gender,
+          ));
+    } catch (err) {}
   }
 
   @override
@@ -178,7 +117,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                 ),
                 keyboardType: TextInputType.emailAddress,
                 onSaved: (value) {
-                  _enteredIdentityId = value.toString();
+                  _identityId = value.toString();
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -199,7 +138,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                 ),
                 keyboardType: TextInputType.emailAddress,
                 onSaved: (value) {
-                  _enteredEmail = value.toString();
+                  _email = value.toString();
                 },
                 validator: (value) {
                   if (value!.isEmpty || !value.contains('@')) {
@@ -219,8 +158,8 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                 ),
                 obscureText: true,
                 obscuringCharacter: "•",
-                onChanged: (value) {
-                  _enteredPassword = value.toString();
+                onSaved: (value) {
+                  _password = value.toString();
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -242,7 +181,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                 validator: (value) {
                   if (value!.isEmpty ||
                       // ignore: unnecessary_null_comparison
-                      (value != _enteredPassword && _enteredPassword != null)) {
+                      (value != _password && _password != null)) {
                     return 'Please enter valid password';
                   }
                   return null;
@@ -259,7 +198,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                   labelStyle: Theme.of(context).textTheme.displayMedium,
                 ),
                 onSaved: (value) {
-                  _enteredUsername = value.toString();
+                  _username = value.toString();
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -279,7 +218,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                 ),
                 keyboardType: TextInputType.phone,
                 onSaved: (value) {
-                  _enteredPhone = value.toString();
+                  _phone = value.toString();
                 },
                 validator: (value) {
                   if (value!.isEmpty || value.length < 10) {
@@ -298,20 +237,20 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                 ),
                 items: const <DropdownMenuItem<dynamic>>[
                   DropdownMenuItem(
-                    value: Gender.male,
+                    value: 0,
                     child: Text("Male"),
                   ),
                   DropdownMenuItem(
-                    value: Gender.female,
+                    value: 1,
                     child: Text("Female"),
                   ),
                   DropdownMenuItem(
-                    value: Gender.other,
+                    value: 2,
                     child: Text("Other"),
                   ),
                 ],
                 onChanged: (value) {
-                  _enteredGender = value;
+                  _gender = value as int;
                 },
               ),
               const SizedBox(height: 16),
@@ -328,20 +267,16 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                   // prevent keyboard showing up
                   FocusScope.of(context).requestFocus(FocusNode());
 
-                  final result = await showDatePicker(
-                      context: context,
-                      initialDate: now,
-                      firstDate: DateTime(1975, 1, 1),
-                      lastDate: now);
+                  final result = await showDatePicker(context: context, initialDate: now, firstDate: DateTime(1975, 1, 1), lastDate: now);
 
                   if (result != null) {
                     DateTime formattedDate = result;
 
                     _enteredBirthday = formattedDate;
-                    setState(() {
-                      dateinput.text =
-                          DateFormat('dd/MM/y').format(formattedDate);
-                    });
+                    // setState(() {
+                    //   dateinput.text = DateFormat('dd/MM/y').format(formattedDate);
+                    // });
+                    dateinput.text = DateFormat('dd/MM/y').format(formattedDate);
                   }
                 },
               ),
@@ -356,7 +291,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                   labelStyle: Theme.of(context).textTheme.displayMedium,
                 ),
                 onSaved: (value) {
-                  _enteredLicenseId = value.toString();
+                  _licenseId = value.toString();
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -376,7 +311,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                   labelStyle: Theme.of(context).textTheme.displayMedium,
                 ),
                 onSaved: (value) {
-                  _enteredWorkplace = value.toString();
+                  _workplace = value.toString();
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -396,7 +331,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                   labelStyle: Theme.of(context).textTheme.displayMedium,
                 ),
                 onSaved: (value) {
-                  _enteredSpecialization = value.toString();
+                  _specialization = value.toString();
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -417,7 +352,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                 ),
                 keyboardType: TextInputType.number,
                 onSaved: (value) {
-                  _enteredExp = int.parse(value!);
+                  _exp = int.parse(value!);
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -438,7 +373,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                 ),
                 keyboardType: TextInputType.number,
                 onSaved: (value) {
-                  _enteredPrice = int.parse(value!);
+                  _price = int.parse(value!);
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -452,13 +387,12 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
 
               ElevatedButton(
                 style: ButtonStyle(
-                  textStyle:
-                      MaterialStateProperty.all<TextStyle>(const TextStyle(
+                  textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                   )),
                 ),
-                onPressed: _submit,
+                onPressed: () => _submit(context),
                 child: const Text("Sign up"),
               ),
               const SizedBox(height: 10),
@@ -467,8 +401,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                 children: <Widget>[
                   const Text("Are you a patient?"),
                   TextButton(
-                    onPressed: () =>
-                        widget.setFormStage(FormStage.PatientRegister),
+                    onPressed: () => widget.setFormStage(FormStage.PatientRegister),
                     child: const Text("Register for patient"),
                   ),
                 ],

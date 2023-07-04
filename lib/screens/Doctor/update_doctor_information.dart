@@ -10,7 +10,6 @@ import 'package:health_care/widgets/infomation_page/time_choosing.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:health_care/models/patient_model.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -32,14 +31,6 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
 
   final TextEditingController dateinput = TextEditingController();
 
-  late List<Symptom> symptoms;
-
-  void loadDropdown() async {
-    final list = await SymptomsProvider.getSymtoms();
-    setState(() {
-      symptoms.addAll(list);
-    });
-  }
 
   // ignore: unused_field
   int _choosingTime = -1;
@@ -80,6 +71,12 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
     _enteredPrice.text = widget.doctorInfo.price.toString();
     dateinput.text = '';
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    dateinput.dispose();
   }
 
   var currentUrl;
