@@ -114,15 +114,14 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
                   widget.patientInfo.email,
                   currentUrl ?? widget.patientInfo.image),
             ));
+        Fluttertoast.showToast(
+          msg: "Update successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.greenAccent,
+          textColor: Colors.black,
+        );
       }
-
-      //     .then((value) => Fluttertoast.showToast(
-      //           msg: "Update successfully",
-      //           toastLength: Toast.LENGTH_SHORT,
-      //           timeInSecForIosWeb: 1,
-      //           backgroundColor: Colors.greenAccent,
-      //           textColor: Colors.black,
-      //         ))
 
       FocusManager.instance.primaryFocus?.unfocus();
     } catch (e) {

@@ -25,48 +25,49 @@ class _ReviewModalState extends State<ReviewModal> {
 
   void _submitFeedback() async {
     try {
-      final review = await ReviewModel.getByDoctorIdAndPatientId(
-        widget.doctorId,
-        widget.patientId,
-      );
-      if (review == null) {
-        await ReviewModel.create(
-                widget.doctorId,
-                widget.patientId,
-                widget.patientName,
-                widget.patientImage,
-                DateTime.now(),
-                _rating,
-                _feedback.text)
-            .save();
-        Fluttertoast.showToast(
-          msg: "Rating successfully",
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.greenAccent,
-          textColor: Colors.black,
-          fontSize: 16.0,
-        );
-      } else {
-        await ReviewModel(
-                review.id,
-                review.doctorId,
-                review.patientId,
-                review.patientName,
-                widget.patientImage,
-                DateTime.now(),
-                _rating,
-                _feedback.text)
-            .save();
-        Fluttertoast.showToast(
-          msg: "Update successfully",
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.grey,
-          textColor: Colors.black,
-          fontSize: 16.0,
-        );
-      }
+      
+      // final review = await ReviewModel.getByDoctorIdAndPatientId(
+      //   widget.doctorId,
+      //   widget.patientId,
+      // );
+      // if (review == null) {
+      //   await ReviewModel.create(
+      //           widget.doctorId,
+      //           widget.patientId,
+      //           widget.patientName,
+      //           widget.patientImage,
+      //           DateTime.now(),
+      //           _rating,
+      //           _feedback.text)
+      //       .save();
+      //   Fluttertoast.showToast(
+      //     msg: "Rating successfully",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Colors.greenAccent,
+      //     textColor: Colors.black,
+      //     fontSize: 16.0,
+      //   );
+      // } else {
+      //   await ReviewModel(
+      //           review.id,
+      //           review.doctorId,
+      //           review.patientId,
+      //           review.patientName,
+      //           widget.patientImage,
+      //           DateTime.now(),
+      //           _rating,
+      //           _feedback.text)
+      //       .save();
+      //   Fluttertoast.showToast(
+      //     msg: "Update successfully",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Colors.grey,
+      //     textColor: Colors.black,
+      //     fontSize: 16.0,
+      //   );
+      // }
       _feedback.clear();
       NavigationService.navKey.currentState!.pop();
     } catch (e) {

@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:health_care/models/appointment_model.dart";
 import "package:health_care/models/patient_model.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import "package:health_care/services/navigation_service.dart";
@@ -28,6 +27,7 @@ class CardsAndWalletsScreen extends StatelessWidget {
       {super.key});
 
   void _makeAppointment(context) async {
+
     // context
     //     .read<AppBloc>()
     //     .add(AppEventLogin(formData["email"]!, formData["password"]!));
