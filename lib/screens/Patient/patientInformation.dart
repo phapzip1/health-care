@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:health_care/models/patient_model.dart';
-import 'package:health_care/screens/Patient/updatePatientInformation.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:health_care/services/navigation_service.dart';
 import 'package:intl/intl.dart';
 
 class PatientInformation extends StatefulWidget {
@@ -31,13 +32,6 @@ class _PatientInformationState extends State<PatientInformation> {
 
                 return Stack(
                   children: [
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(FontAwesomeIcons.gear)),
-                    ),
                     Center(
                       child: Stack(children: [
                         SizedBox(
@@ -74,11 +68,13 @@ class _PatientInformationState extends State<PatientInformation> {
                                                 minimumSize: const Size(30, 30),
                                               ),
                                               onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const UpdatePatientInfo()));
+                                                NavigationService
+                                                    .navKey.currentState!
+                                                    .pushNamed(
+                                                        '/patientupdateinfo',
+                                                        arguments:
+                                                            futureSnapshot
+                                                                .data!);
                                               },
                                               child: const ImageIcon(
                                                 AssetImage(
@@ -132,7 +128,8 @@ class _PatientInformationState extends State<PatientInformation> {
                                           ),
                                           Text(
                                               futureSnapshot.data!.gender
-                                                  .toString().substring(7),
+                                                  .toString()
+                                                  .substring(7),
                                               style: const TextStyle(
                                                   fontSize: 16)),
                                         ],

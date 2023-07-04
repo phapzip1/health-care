@@ -48,24 +48,32 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
         actions: [
-          isDoctor ? IconButton(
-            onPressed: () {
-              widget.appointment.makeCall().then((value) => NavigationService
-                      .navKey.currentState!
-                      .pushNamed("/call", arguments: {
-                    'token': value,
-                    'channel_id': widget.appointment.id,
-                    'remote_name': widget.appointment.patientName,
-                    'remote_cover': widget.appointment.patientImage,
-                    'caller': true,
-                  }));
-            },
-            icon: const Icon(Icons.videocam),
-            color: Colors.black,
-          ): Container()
+          isDoctor
+              ? IconButton(
+                  onPressed: () {
+                    widget.appointment.makeCall().then((value) =>
+                        NavigationService.navKey.currentState!
+                            .pushNamed("/call", arguments: {
+                          'token': value,
+                          'channel_id': widget.appointment.id,
+                          'remote_name': widget.appointment.patientName,
+                          'remote_cover': widget.appointment.patientImage,
+                          'caller': true,
+                        }));
+                  },
+                  icon: const Icon(Icons.videocam),
+                  color: Colors.black,
+                )
+              : Container()
         ],
-        leading: const BackButton(
-          color: Colors.black,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.black, //change your color here
         ),
       ),
       body: Container(

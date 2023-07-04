@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:health_care/screens/Doctor/doctorSchedulePage.dart';
 import 'package:health_care/screens/Doctor/doctor_infor_page.dart';
 import 'package:health_care/screens/Doctor/homePageDoctor.dart';
+import 'package:health_care/screens/general/notification_page.dart';
 import '../../screens/Patient/homePage.dart';
 import './patientSchedulePage.dart';
 import '../../components/bottomNavigation.dart';
@@ -29,6 +30,8 @@ class _MyWidgetState extends State<MainPage> {
         return PatientSchedulePage();
       case 2:
         return PatientInformation();
+      case 3:
+        return NotificationPage();
       default:
         return HomePage();
     }
@@ -42,6 +45,8 @@ class _MyWidgetState extends State<MainPage> {
         return DoctorSchedulePage();
       case 2:
         return DoctorInforPage(user, widget.isDoctor);
+      case 3:
+        return NotificationPage();
       default:
         return HomePageDoctor();
     }

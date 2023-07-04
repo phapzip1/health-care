@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/models/appointment_model.dart';
-// import 'package:health_care/models/health_record_model.dart';
+import 'package:health_care/models/doctor_model.dart';
+import 'package:health_care/models/patient_model.dart';
+import 'package:health_care/screens/Doctor/update_doctor_information.dart';
 import 'package:health_care/screens/Patient/cards_and_wallets_screen.dart';
 import 'package:health_care/screens/Patient/patientRecord.dart';
+import 'package:health_care/screens/Patient/updatePatientInformation.dart';
+import 'package:health_care/screens/general/appointment_detail_for_doctor.dart';
+import 'package:health_care/screens/general/appointment_detail_for_patient.dart';
 import 'package:health_care/screens/general/chat.dart';
 import 'package:health_care/screens/general/doctor_schedule_screen.dart';
 import 'package:health_care/screens/Patient/payment_screen.dart';
@@ -34,6 +39,11 @@ class NavigationService {
   static const String writeRecord = "/writerecord";
   static const String recordPage = "/recordpage";
   static const String patientSchedule = "/patientschedule";
+  static const String doctorUpdateInfo = "/doctorupdateinfo";
+  static const String patientUpdateInfo = "/patientupdateinfo";
+  static const String appointmenDetailForPatient =
+      "/appointmentdetailforpatient";
+  static const String appointmenDetailForDoctor = "/appointmentdetailfordoctor";
 
   static final GlobalKey<NavigatorState> _navState =
       GlobalKey<NavigatorState>();
@@ -51,6 +61,34 @@ class NavigationService {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case splash:
         return MaterialPageRoute(builder: (_) => SplashScreen());
+      case doctorUpdateInfo:
+        {
+          final data = settings.arguments as DoctorModel;
+          return MaterialPageRoute(
+              builder: (_) => UpdateDoctorInformation(data));
+        }
+      case appointmenDetailForDoctor:
+        {
+          final data = settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+              builder: (_) => AppointmentDetailForDoctor(
+                    data["appointment"],
+                    data["updateStatus"],
+                  ));
+        }
+      case appointmenDetailForPatient:
+        {
+          final data = settings.arguments as AppointmentModel;
+          return MaterialPageRoute(
+              builder: (_) => AppointmentDetailForPatient(data));
+        }
+      case patientUpdateInfo:
+        {
+          final data = settings.arguments as PatientModel;
+          return MaterialPageRoute(
+            builder: (_) => UpdatePatientInfo(data),
+          );
+        }
       case patientSchedule:
         {
           final data = settings.arguments as bool;

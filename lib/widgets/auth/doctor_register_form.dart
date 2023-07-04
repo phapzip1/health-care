@@ -93,7 +93,6 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
           _enteredPrice,
           _enteredWorkplace,
           _enteredSpecialization,
-          _enteredIdentityId,
           _enteredLicenseId,
           url);
 

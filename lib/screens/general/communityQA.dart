@@ -269,8 +269,14 @@ class _CommunityQAState extends State<CommunityQA> {
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
-        leading: const BackButton(
-          color: Colors.black,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.black, //change your color here
         ),
       ),
       body: Column(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class ButtonSchedule extends StatefulWidget {
   ButtonSchedule(this.changedPage, this.status, this.mediaQuery,
       this.updateStatus, this.appointmentId,

@@ -47,8 +47,14 @@ class _NewAppointmentState extends State<NewAppointment> {
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
-        leading: const BackButton(
-          color: Colors.black,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.black, //change your color here
         ),
       ),
       body: Column(
@@ -61,7 +67,9 @@ class _NewAppointmentState extends State<NewAppointment> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             width: double.infinity,
             child: DropDownTextField(
-              initialValue: "All",
+              controller: SingleValueDropDownController(
+                  data: DropDownValueModel(
+                      name: _selectedValue, value: _selectedValue)),
               clearOption: false,
               dropDownItemCount: 6,
               dropDownList: symptoms
@@ -70,7 +78,8 @@ class _NewAppointmentState extends State<NewAppointment> {
                   )
                   .toList(),
               textFieldDecoration: const InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               ),
               onChanged: (value) {
                 _selectedValue = value.name.toString();
