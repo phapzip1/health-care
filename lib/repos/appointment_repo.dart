@@ -23,6 +23,8 @@ abstract class AppointmentRepo {
     required DateTime datetime,
   });
 
+  Future<List<DateTime>> getAvailableTime(DateTime date, String doctorid);
+
   // for both
   Future<void> cancelAppointment(String id);
 

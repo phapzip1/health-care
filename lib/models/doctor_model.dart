@@ -14,6 +14,7 @@ class DoctorModel {
   final String specialization;
   final bool verified;
   final double rating;
+  final Map<String, dynamic> availableTime;
 
   DoctorModel(
     this.id,
@@ -31,6 +32,7 @@ class DoctorModel {
     this.specialization,
     this.verified,
     this.rating,
+    this.availableTime,
   );
 
   DoctorModel.fromMap(Map<String, dynamic> map)
@@ -48,7 +50,8 @@ class DoctorModel {
         workplace = map["workplace"],
         specialization = map["specialization"],
         verified = map["verified"],
-        rating = map["rating"];
+        rating = map["rating"],
+        availableTime = map["available_time"];
 
   Map<String, dynamic> toMap() {
     return {
@@ -67,6 +70,7 @@ class DoctorModel {
       "specialization": specialization,
       "verified": verified,
       "rating": rating,
+      "available_time": availableTime,
     };
   }
 }

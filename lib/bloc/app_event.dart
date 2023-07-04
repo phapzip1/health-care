@@ -107,6 +107,18 @@ class AppEventLoadPatientInfomation extends AppEvent {
   const AppEventLoadPatientInfomation();
 }
 
+class AppEventLoadHistory extends AppEvent {
+  final String doctorId;
+
+  const AppEventLoadHistory(this.doctorId);
+}
+
+class AppEventLoadAvailableTime extends AppEvent {
+  final String doctorId;
+  final DateTime date;
+  const AppEventLoadAvailableTime(this.doctorId, this.date);
+}
+
 // update data
 class AppEventUpdateDoctorInfomation extends AppEvent {
   final DoctorModel doctor;
@@ -168,4 +180,10 @@ class AppEventDeclineAppoitment extends AppEvent {
   final String appointmentId;
 
   const AppEventDeclineAppoitment(this.appointmentId);
+}
+
+class AppEventSendFeedback extends AppEvent {
+  final FeedbackModel feedback;
+
+  const AppEventSendFeedback(this.feedback);
 }

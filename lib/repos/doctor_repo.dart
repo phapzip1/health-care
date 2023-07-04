@@ -7,6 +7,8 @@ abstract class DoctorRepo {
   // get current doctor
   Future<DoctorModel?> getById(String id);
 
+  Future<void> updateAvailableTime(String doctorid, List<double> time, String weekday);
+
   // get multiple doctors
   Future<List<DoctorModel>> getBySpecification(String spec);
   Future<void> update(DoctorModel model);

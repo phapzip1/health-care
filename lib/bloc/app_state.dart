@@ -18,6 +18,8 @@ class AppState {
   final List<PostModel>? posts;
   final List<AppointmentModel>? appointments;
   final List<HealthRecordModel>? records;
+  final int? history;
+  final List<DateTime>? availableTime;
 
-  const AppState(this.isLoading, this.user, this.doctor, this.patient, this.symptom, this.doctors, this.posts, this.appointments, this.records);
+  const AppState(this.isLoading, this.user, this.doctor, this.patient, this.symptom, this.doctors, this.posts, this.appointments, this.records, this.history, this.availableTime);
 }

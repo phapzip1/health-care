@@ -7,6 +7,26 @@ import 'package:health_care/repos/repo_exception.dart';
 class AppointmentFirebaseRepo extends AppointmentRepo {
   final CollectionReference _ref = FirebaseFirestore.instance.collection("appointment");
 
+  String _weekday(int wd) {
+    switch (wd) {
+      case 1:
+        return "mon";
+      case 2:
+        return "tue";
+      case 3:
+        return "wed";
+      case 4:
+        return "thu";
+      case 5:
+        return "fri";
+      case 6:
+        return "sat";
+      case 7:
+        return "sun";
+    }
+    throw Exception("Invalid value");
+  }
+
   @override
   Future<void> cancelAppointment(String id) async {
     try {
@@ -188,7 +208,7 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
       throw GenericDBException();
     }
   }
-  
+
   @override
   Future<void> updateHeathRecord(String appointmentId, HealthRecordModel healthrecord) async {
     try {
@@ -197,12 +217,45 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
       throw GenericDBException();
     }
   }
-  
+
   @override
   Future<int> getCompletedAppointmentCount(String doctorid) async {
     try {
       final aggregate = await _ref.where("doctor_id", isEqualTo: doctorid).where("status", isLessThan: 1).where("status", isEqualTo: 4).count().get();
       return aggregate.count;
+    } catch (e) {
+      throw GenericDBException();
+    }
+  }
+
+  @override
+  Future<List<DateTime>> getAvailableTime(DateTime date, String doctorid) async {
+    try {
+      final start = DateTime(date.year, date.month, date.day, 0, 0, 0, 0, 0);
+      final end = DateTime(date.year, date.month, date.day, 23, 59, 0, 0, 0);
+
+      final doctorSnapshot = await FirebaseFirestore.instance.collection("doctor").doc(doctorid).get();
+      final appointmentSnapshot = await _ref.where("doctor_id", isEqualTo: doctorid).where("datetime", isLessThan: end).where("datetime", isGreaterThan: start).get();
+
+      final availableTime = doctorSnapshot.get("available_time.${_weekday(date.weekday)}") as List<dynamic>;
+      final booked = appointmentSnapshot.docs.map((e) {
+        final date = (e.get("datetime") as Timestamp).toDate();
+        return date.hour * 10 + (date.minute / 10).truncate();
+      });
+
+      return availableTime
+          .map((e) => e as int)
+          .where((e) => !booked.contains(e))
+          .map((e) => DateTime(
+                date.year,
+                date.month,
+                date.day,
+                (e / 10).truncate(),
+                (e % 10) * 10,
+                0,
+                0,
+              ))
+          .toList();
     } catch (e) {
       throw GenericDBException();
     }

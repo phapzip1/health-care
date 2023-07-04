@@ -27,7 +27,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.symptomRepo,
     required this.authProvider,
     required this.storageProvider,
-  }) : super(const AppState(false, null, null, null, null, null, null, null, null)) {
+  }) : super(const AppState(false, null, null, null, null, null, null, null, null, null, null)) {
     on<AppEventInitialize>((event, emit) async {
       try {
         final symptom = await symptomRepo.getAll();
@@ -44,6 +44,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             null,
             null,
             null,
+            null,
+            null,
           ));
         } else {
           final patient = await patientProvider.getById(user.uid);
@@ -53,6 +55,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             null,
             patient,
             symptom,
+            null,
+            null,
             null,
             null,
             null,
@@ -78,6 +82,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             null,
             null,
             null,
+            null,
+            null,
           ));
         } else {
           final patient = await patientProvider.getById(user.uid);
@@ -87,6 +93,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             null,
             patient,
             state.symptom,
+            null,
+            null,
             null,
             null,
             null,
@@ -131,15 +139,24 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           event.specialization,
           false,
           0,
+          {
+            "mon": [],
+            "tue": [],
+            "wed": [],
+            "thu": [],
+            "fri": [],
+            "sat": [],
+            "sun": [],
+          },
         );
-        emit(AppState(false, user, doctor, null, state.symptom, state.doctors, state.posts, state.appointments, state.records));
+        emit(AppState(false, user, doctor, null, state.symptom, state.doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
       } catch (e) {}
     });
 
     on<AppEventLogout>((event, emit) async {
       try {
         await authProvider.logOut();
-        emit(AppState(false, null, null, null, state.symptom, null, null, null, null));
+        emit(AppState(false, null, null, null, state.symptom, null, null, null, null, null, null));
       } catch (e) {}
     });
 
@@ -148,11 +165,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         if (state.doctor != null) {
           final list1 = await appointmentProvider.getAppointmentByDoctorId(state.user!.uid);
           final list2 = await appointmentProvider.getOldAppointmentByDoctorId(state.user!.uid);
-          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, state.posts, [...list1, ...list2], state.records));
+          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, state.posts, [...list1, ...list2], state.records, state.history, state.availableTime));
         } else if (state.patient != null) {
           final list1 = await appointmentProvider.getAppointmentByPatientId(state.user!.uid);
           final list2 = await appointmentProvider.getOldAppointmentByPatientId(state.user!.uid);
-          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, state.posts, [...list1, ...list2], state.records));
+          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, state.posts, [...list1, ...list2], state.records, state.history, state.availableTime));
         }
       } catch (e) {}
     });
@@ -161,7 +178,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       try {
         if (event.specialization != null) {
           final doctors = await doctorProvider.getBySpecification(event.specialization!);
-          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, doctors, state.posts, state.appointments, state.records));
+          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
         }
       } catch (e) {}
     });
@@ -170,36 +187,62 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       try {
         if (event.specialization != null) {
           final posts = await postProvider.getByField(event.specialization);
-          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, posts, state.appointments, state.records));
+          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, posts, state.appointments, state.records, state.history, state.availableTime));
         }
+      } catch (e) {}
+    });
+
+    on<AppEventLoadHistory>((event, emit) async {
+      try {
+        final history = await appointmentProvider.getCompletedAppointmentCount(event.doctorId);
+        emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, state.posts, state.appointments, state.records, history, state.availableTime));
       } catch (e) {}
     });
 
     on<AppEventLoadPostsAsPatient>((event, emit) async {
       try {
         final posts = await postProvider.getByPatientId(authProvider.currentUser!.uid);
-        emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, posts, state.appointments, state.records));
+        emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, posts, state.appointments, state.records, state.history, state.availableTime));
       } catch (e) {}
     });
 
     on<AppEventLoadPostsAsDoctor>((event, emit) async {
       try {
         final posts = await postProvider.getByPatientId(authProvider.currentUser!.uid);
-        emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, posts, state.appointments, state.records));
+        emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, posts, state.appointments, state.records, state.history, state.availableTime));
+      } catch (e) {}
+    });
+
+    on<AppEventLoadAvailableTime>((event, emit) async {
+      try {
+        final available = await appointmentProvider.getAvailableTime(event.date, event.doctorId);
+        emit(AppState(
+          false,
+          state.user,
+          state.doctor,
+          state.patient,
+          state.symptom,
+          state.doctors,
+          state.posts,
+          state.appointments,
+          state.records,
+          state.history,
+          available,
+        ));
       } catch (e) {}
     });
 
     on<AppEventUpdateDoctorInfomation>((event, emit) async {
       try {
         await doctorProvider.update(event.doctor);
-        emit(AppState(false, state.user, event.doctor, state.patient, state.symptom, state.doctors, state.posts, state.appointments, state.records));
+        emit(AppState(false, state.user, event.doctor, state.patient, state.symptom, state.doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
       } catch (e) {}
     });
 
     on<AppEventUpdatePatientInfomation>((event, emit) async {
       try {
         await patientProvider.update(event.patient);
-        emit(AppState(false, state.user, state.doctor, event.patient, state.symptom, state.doctors, state.posts, state.appointments, state.records));
+        emit(AppState(false, state.user, state.doctor, event.patient, state.symptom, state.doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
       } catch (e) {}
     });
 
@@ -212,16 +255,17 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventMakeAppointment>((event, emit) async {
       try {
         await appointmentProvider.makeAppointment(
-            doctorId: event.doctorId,
-            doctorName: event.doctorName,
-            doctorPhone: event.doctorPhone,
-            doctorImage: event.doctorImage,
-            patientId: state.patient!.id,
-            patientName: state.patient!.name,
-            patientImage: state.patient!.image,
-            patientPhone: state.patient!.phoneNumber,
-            specialization: event.specialization,
-            datetime: event.datetime);
+          doctorId: event.doctorId,
+          doctorName: event.doctorName,
+          doctorPhone: event.doctorPhone,
+          doctorImage: event.doctorImage,
+          patientId: state.patient!.id,
+          patientName: state.patient!.name,
+          patientImage: state.patient!.image,
+          patientPhone: state.patient!.phoneNumber,
+          specialization: event.specialization,
+          datetime: event.datetime,
+        );
       } catch (e) {}
     });
 
@@ -233,6 +277,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppEventDeclineAppoitment>((event, emit) async {
       await appointmentProvider.declineAppointment(event.appointmentId);
+    });
+
+    on<AppEventSendFeedback>((event, emit) async {
+      try {
+        await doctorProvider.giveFeedback(
+          doctorId: event.feedback.doctorId,
+          patientId: event.feedback.patientId,
+          patientName: event.feedback.patientName,
+          patientImage: event.feedback.patientImage,
+          createAt: event.feedback.createAt,
+          rating: event.feedback.rating,
+          message: event.feedback.message,
+        );
+      } catch (e) {}
     });
   }
 }

@@ -39,6 +39,15 @@ class DoctorFirebaseRepo extends DoctorRepo {
         "specialization": specialization,
         "verified": false,
         "rating": 0.0,
+        "available_time": {
+          "mon": [],
+          "tue": [],
+          "wed": [],
+          "thu": [],
+          "fri": [],
+          "sat": [],
+          "sun": [],
+        }
       });
     } catch (e) {
       throw GenericDBException();
@@ -142,6 +151,7 @@ class DoctorFirebaseRepo extends DoctorRepo {
           "specialization": snapshot.get("specialization"),
           "verified": snapshot.get("verified"),
           "rating": snapshot.get("rating"),
+          "available_time": snapshot.get("available_time"),
         });
       }
       return null;
@@ -171,6 +181,7 @@ class DoctorFirebaseRepo extends DoctorRepo {
                 "specialization": e.get("specialization"),
                 "verified": e.get("verified"),
                 "rating": e.get("rating"),
+                "available_time": e.get("available_time"),
               }))
           .toList();
     } catch (e) {
@@ -201,6 +212,17 @@ class DoctorFirebaseRepo extends DoctorRepo {
                 "rating": e.get("rating"),
               }))
           .toList();
+    } catch (e) {
+      throw GenericDBException();
+    }
+  }
+
+  @override
+  Future<void> updateAvailableTime(String doctorid, List<double> time, String weekday) async {
+    try {
+      await _ref.doc(doctorid).update({
+        "available_time.$weekday": time,
+      });
     } catch (e) {
       throw GenericDBException();
     }
