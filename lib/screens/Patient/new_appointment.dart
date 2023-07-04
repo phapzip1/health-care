@@ -1,7 +1,7 @@
 // ignore_for_file: unused_field
 
 import 'package:flutter/material.dart';
-import 'package:health_care/models/symptom.dart';
+import 'package:health_care/models/symptom_model.dart';
 import 'package:health_care/widgets/home_page/appointment_list_patient.dart';
 import 'package:health_care/widgets/search.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
@@ -16,7 +16,7 @@ class NewAppointment extends StatefulWidget {
 
 class _NewAppointmentState extends State<NewAppointment> {
   final TextEditingController _searchController = TextEditingController();
-  late List<Symptom> symptoms;
+  late List<SymptomModel> symptoms;
   String _selectedValue = "All";
 
   @override

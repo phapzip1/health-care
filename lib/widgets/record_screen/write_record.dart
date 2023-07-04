@@ -37,7 +37,7 @@ class _RecordDetailState extends State<WriteRecord> {
               widget.record.patientId,
               widget.record.patientName,
               widget.record.patientImage,
-              widget.record.dateTime,
+              widget.record.datetime,
               diagnosticController.text,
               prescriptionController.text,
               noteController.text)
@@ -58,11 +58,6 @@ class _RecordDetailState extends State<WriteRecord> {
 
   @override
   Widget build(BuildContext context) {
-    String _hour = widget.record.meetingTime % 10 == 3
-        ? '${widget.record.meetingTime ~/ 10}:30'
-        : '${widget.record.meetingTime ~/ 10}:00';
-    final _time = DateFormat('dd-MM-y').format(widget.record.dateTime);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -148,7 +143,8 @@ class _RecordDetailState extends State<WriteRecord> {
                           const Text('Time: '),
                         ],
                       ),
-                      Text('${_time} ${_hour}',
+                      Text(
+                          '${DateFormat('dd/MM/YYYY').format(widget.record.datetime)} ${DateFormat.Hm().format(widget.record.datetime)}',
                           style: const TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
