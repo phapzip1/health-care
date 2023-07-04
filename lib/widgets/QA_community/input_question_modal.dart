@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/post_model.dart';
-import 'package:health_care/models/symptom.dart';
 import 'package:health_care/screens/general/communityQA.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,7 +24,7 @@ class _InputQuestionModalState extends State<InputQuestionModal> {
   final userId = FirebaseAuth.instance.currentUser!;
   int _gender = 0;
 
-  dynamic _selectedValue;
+  var _selectedValue = "All";
   List<bool> _isSelected = [true, false, false];
   double _value = 20;
   File? _pickImageFile;
@@ -30,70 +32,56 @@ class _InputQuestionModalState extends State<InputQuestionModal> {
   bool _isLoading = false;
 
   List<File> _fileImage = [];
-  late List<Symptom> symptoms;
-
-  @override
-  void initState() {
-    symptoms = [];
-    loadSymtoms();
-
-    _selectedValue = "All";
-    super.initState();
-  }
-
-  void loadSymtoms() async {
-    final list = await SymptomsProvider.getSymtoms();
-    setState(() {
-      symptoms.addAll(list);
-    });
-  }
 
   void _submitData() async {
     setState(() {
       _isLoading = true;
     });
-    List<String>? images = [];
-    for (int i = 0; i < _fileImage.length; i++) {
-      final ref_img = FirebaseStorage.instance
-          .ref()
-          .child('user_image')
-          .child('${userId.uid}/${userId.email}')
-          .child('post_image_${userId.uid}_${i}.jpg');
 
-      await ref_img.putFile(File(_fileImage[i].path));
+    //Có thể up được nhiều hình trong 1 bài post
+    // List<String>? images = [];
+    // for (int i = 0; i < _fileImage.length; i++) {
+    //   final ref_img = FirebaseStorage.instance
+    //       .ref()
+    //       .child('user_image')
+    //       .child('${userId.uid}/${userId.email}')
+    //       .child('post_image_${userId.uid}_${i}.jpg');
 
-      final url = await ref_img.getDownloadURL();
-      images.add(url);
-    }
+    //   await ref_img.putFile(File(_fileImage[i].path));
 
-    await PostModel.create(
-            userId.uid,
-            _selectedValue,
-            _value.round(),
-            _textController.text,
-            _gender,
-            "",
-            "",
-            "",
-            _light,
-            DateTime.now(),
-            images)
-        .post()
-        .onError((error, stackTrace) => Fluttertoast.showToast(
-              msg: "Post unsuccessfully!",
-              toastLength: Toast.LENGTH_SHORT,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0,
-            ))
-        .then((value) {
-      setState(() {
-        _isLoading = false;
-      });
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => CommunityQA()));
-    });
+    //   final url = await ref_img.getDownloadURL();
+    //   images.add(url);
+    // }
+
+    //public bài post và navigate về CommunityQA()
+    // await PostModel.create(
+    //         userId.uid,
+    //         _selectedValue,
+    //         _value.round(),
+    //         _textController.text,
+    //         _gender,
+    //         "",
+    //         "",
+    //         "",
+    //         _light,
+    //         DateTime.now(),
+    //         images)
+    //     .post()
+    //     .onError((error, stackTrace) => Fluttertoast.showToast(
+    //           msg: "Post unsuccessfully!",
+    //           toastLength: Toast.LENGTH_SHORT,
+    //           timeInSecForIosWeb: 1,
+    //           backgroundColor: Colors.red,
+    //           textColor: Colors.white,
+    //           fontSize: 16.0,
+    //         ))
+    //     .then((value) {
+    //   setState(() {
+    //     _isLoading = false;
+    //   });
+    //   Navigator.push(
+    //       context, MaterialPageRoute(builder: (context) => CommunityQA()));
+    // });
   }
 
   void _pickImage() async {
@@ -275,33 +263,40 @@ class _InputQuestionModalState extends State<InputQuestionModal> {
                       const SizedBox(
                         height: 8,
                       ),
-                      DropDownTextField(
-                        controller: SingleValueDropDownController(
-                            data: DropDownValueModel(
-                                name: _selectedValue, value: _selectedValue)),
-                        clearOption: false,
-                        dropDownItemCount: 6,
-                        dropDownList: symptoms
-                            .map(
-                              (e) => DropDownValueModel(
-                                  name: e.name, value: e.name),
-                            )
-                            .toList(),
-                        textFieldDecoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFF3A86FF))),
-                        ),
-                        onChanged: (value) {
-                          _selectedValue = value.name.toString();
+                      BlocBuilder<AppBloc, AppState>(
+                        builder: (context, state) {
+                          final symptoms = state.symptom!;
+
+                          return DropDownTextField(
+                            controller: SingleValueDropDownController(
+                                data: DropDownValueModel(
+                                    name: _selectedValue,
+                                    value: _selectedValue)),
+                            clearOption: false,
+                            dropDownItemCount: 6,
+                            dropDownList: symptoms
+                                .map(
+                                  (e) => DropDownValueModel(
+                                      name: e.name, value: e.name),
+                                )
+                                .toList(),
+                            textFieldDecoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                      color: Color(0xFF3A86FF))),
+                            ),
+                            onChanged: (value) {
+                              _selectedValue = value.name.toString();
+                            },
+                            enableSearch: true,
+                          );
                         },
-                        enableSearch: true,
                       ),
                       const SizedBox(
                         height: 16,

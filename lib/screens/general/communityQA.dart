@@ -135,7 +135,7 @@ Widget questionCard(PostModel question, context) {
         const SizedBox(
           height: 16,
         ),
-        Text(question.descriptions),
+        Text(question.description),
         const SizedBox(
           height: 16,
         ),
@@ -148,7 +148,7 @@ Widget questionCard(PostModel question, context) {
                     children: [
                       CircleAvatar(
                         radius: 24.0,
-                        backgroundImage: NetworkImage(question.doctorImage),
+                        backgroundImage: NetworkImage(question.doctorImage!),
                       ),
                       const SizedBox(
                         width: 8,
@@ -158,7 +158,7 @@ Widget questionCard(PostModel question, context) {
                         children: [
                           const Text('Answered by'),
                           Text(
-                            question.doctorName,
+                            question.doctorName!,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -185,23 +185,23 @@ Widget questionCard(PostModel question, context) {
                     color: Color(0xFFFFBE0B), fontWeight: FontWeight.w600),
               ),
             ),
-            Row(
-              children: [
-                const Icon(FontAwesomeIcons.comment),
-                const SizedBox(
-                  width: 4,
-                ),
-                FutureBuilder(
-                  future: PostModel.getTotalChat(question.id!),
-                  builder: (ctx, comment) {
-                    if (comment.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    return Text(comment.data.toString());
-                  },
-                )
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     const Icon(FontAwesomeIcons.comment),
+            //     const SizedBox(
+            //       width: 4,
+            //     ),
+            //     FutureBuilder(
+            //       future: PostModel.getTotalChat(question.id!),
+            //       builder: (ctx, comment) {
+            //         if (comment.connectionState == ConnectionState.waiting) {
+            //           return const CircularProgressIndicator();
+            //         }
+            //         return Text(comment.data.toString());
+            //       },
+            //     )
+            //   ],
+            // ),
           ],
         ),
       ]),

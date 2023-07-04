@@ -9,7 +9,7 @@ class PatientRecords extends StatelessWidget {
   const PatientRecords(this.isDoctor, {super.key});
 
   Widget build(BuildContext context) {
-    context.read<AppBloc>().add()
+    // context.read<AppBloc>().add()
     return Scaffold(
         appBar: AppBar(
           title: const Text(

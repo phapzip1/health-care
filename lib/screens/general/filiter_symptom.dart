@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:health_care/models/symptom.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_state.dart';
 
 class FilterSymptom extends StatefulWidget {
   const FilterSymptom({super.key});
@@ -49,15 +51,12 @@ class _FilterSymptomState extends State<FilterSymptom> {
             ),
           ),
           Expanded(
-            child: FutureBuilder(
-                future: SymptomsProvider.getSymtoms(),
-                builder: (ctx, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  }
+            child: BlocBuilder<AppBloc, AppState>(
+                // future: SymptomsProvider.getSymtoms(),
+                builder: (ctx, state) {
           
                   return ListView.builder(
-                      itemCount: snapshot.data!.length,
+                      itemCount: state.symptom!.length,
                       itemBuilder: (ctx, index) {
                         return Column(
                           children: [
@@ -66,7 +65,7 @@ class _FilterSymptomState extends State<FilterSymptom> {
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 8),
                                 child: Text(
-                                  snapshot.data![index].name,
+                                  state.symptom![index].name,
                                   style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600),

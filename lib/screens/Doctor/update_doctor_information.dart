@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/doctor_model.dart';
-import 'package:health_care/models/symptom.dart';
 import 'package:health_care/services/navigation_service.dart';
 import 'package:health_care/widgets/infomation_page/time_choosing.dart';
 import 'dart:io';
@@ -30,7 +32,6 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
   DateTime _selectedDate = DateTime.now();
 
   final TextEditingController dateinput = TextEditingController();
-
 
   // ignore: unused_field
   int _choosingTime = -1;
@@ -58,11 +59,9 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
 
   @override
   void initState() {
-    symptoms = [];
-    loadDropdown();
     _enteredUsername.text = widget.doctorInfo.name;
     _enteredPhone.text = widget.doctorInfo.phoneNumber;
-    _enteredGender = widget.doctorInfo.gender;
+    _enteredGender.text = widget.doctorInfo.gender as String;
     _enteredBirthday = widget.doctorInfo.birthdate;
     _enteredLicenseId.text = widget.doctorInfo.licenseId;
     _enteredWorkplace.text = widget.doctorInfo.workplace;
@@ -89,8 +88,7 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
   String _enteredExpertise = "";
   final TextEditingController _enteredExperience = TextEditingController();
   final TextEditingController _enteredPrice = TextEditingController();
-  // ignore: unused_field
-  Gender _enteredGender = Gender.male;
+  final TextEditingController _enteredGender = TextEditingController();
   DateTime _enteredBirthday = DateTime.now();
 
   void _pickImage() async {
@@ -155,7 +153,9 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
 
       currentUrl = await ref.getDownloadURL();
     }
-    
+
+    //Thực hiện update
+
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
@@ -168,7 +168,7 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
         _enteredExperience.text != widget.doctorInfo.experience.toString() ||
         _enteredPrice.text != widget.doctorInfo.price.toString() ||
         _enteredBirthday != widget.doctorInfo.birthdate ||
-        _enteredGender != widget.doctorInfo.gender ||
+        _enteredGender.text != widget.doctorInfo.gender ||
         _selectedImageCheck == true;
   }
 
@@ -331,9 +331,9 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                     clearOption: false,
                     dropDownItemCount: 3,
                     dropDownList: const [
-                      DropDownValueModel(name: 'male', value: Gender.male),
-                      DropDownValueModel(name: 'female', value: Gender.female),
-                      DropDownValueModel(name: 'other', value: Gender.other),
+                      DropDownValueModel(name: 'Male', value: 1),
+                      DropDownValueModel(name: 'Female', value: 2),
+                      DropDownValueModel(name: 'Other', value: 3),
                     ],
                     textFieldDecoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
@@ -347,7 +347,7 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                           vertical: 16, horizontal: 20),
                     ),
                     onChanged: (value) {
-                      _enteredGender = value.value;
+                      _enteredGender.text = value.value;
                       setState(() {
                         changed += 1;
                       });
@@ -432,32 +432,38 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                   const SizedBox(
                     height: 8,
                   ),
-                  DropDownTextField(
-                    controller: SingleValueDropDownController(
-                        data: DropDownValueModel(
-                            name: _enteredExpertise, value: _enteredExpertise)),
-                    // initialValue: _enteredExpertise,
-                    clearOption: false,
-                    dropDownItemCount: 6,
-                    dropDownList: symptoms
-                        .map(
-                          (e) =>
-                              DropDownValueModel(name: e.name, value: e.name),
-                        )
-                        .toList(),
-                    textFieldDecoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: Color(0xFF3A86FF))),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                    ),
-                    onChanged: (value) {
-                      _enteredExpertise = value.name.toString();
+                  BlocBuilder<AppBloc, AppState>(
+                    builder: (context, state) {
+                      final symptoms = state.symptom!;
+                      return DropDownTextField(
+                        controller: SingleValueDropDownController(
+                            data: DropDownValueModel(
+                                name: _enteredExpertise,
+                                value: _enteredExpertise)),
+                        // initialValue: _enteredExpertise,
+                        clearOption: false,
+                        dropDownItemCount: 6,
+                        dropDownList: symptoms
+                            .map(
+                              (e) => DropDownValueModel(
+                                  name: e.name, value: e.name),
+                            )
+                            .toList(),
+                        textFieldDecoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF3A86FF))),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                        ),
+                        onChanged: (value) {
+                          _enteredExpertise = value.name.toString();
+                        },
+                      );
                     },
                   ),
                   const SizedBox(
@@ -530,93 +536,95 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                   const SizedBox(
                     height: 8,
                   ),
-                  FutureBuilder(
-                      future: widget.doctorInfo.checkTime(),
-                      builder: (ctx, futureCheck) {
-                        if (futureCheck.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        if (futureCheck.data!) {
-                          return Center(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 12),
-                              ),
-                              onPressed: () {
-                                NavigationService.navKey.currentState
-                                    ?.pushNamed('/schedule',
-                                        arguments: widget.doctorInfo.id);
-                              },
-                              child: const Text(
-                                'Change your time for consultant',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                            ),
-                          );
-                        }
 
-                        return Column(
-                          children: [
-                            OutlinedButton(
-                              onPressed: () {
-                                _selectDate(context);
-                              },
-                              style: OutlinedButton.styleFrom(
-                                primary: Colors.black,
-                                textStyle: const TextStyle(fontSize: 16),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 8),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(50)),
-                                ),
-                              ),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(DateFormat('dd/MM/y')
-                                        .format(_selectedDate)),
-                                    const Icon(
-                                      FontAwesomeIcons.calendar,
-                                      color: Colors.black,
-                                    ),
-                                  ]),
-                            ),
-                            FutureBuilder(
-                                future: widget.doctorInfo.getAvailableTime(
-                                  _selectedDate.day,
-                                  _selectedDate.month,
-                                  _selectedDate.year,
-                                ),
-                                builder: (ctx, future) {
-                                  if (future.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-                                  final time = future.data!;
-                                  return time.isEmpty
-                                      ? const Text(
-                                          'There is no time frame available')
-                                      : TimeChoosing(
-                                          time,
-                                          mediaQuery,
-                                          _selectedDate.day,
-                                          _selectedDate.month,
-                                          _selectedDate.year,
-                                          _onChange,
-                                          true);
-                                }),
-                          ],
-                        );
-                      }),
+                  //áoguihasioguhasgioughoasiguashog
+                  // FutureBuilder(
+                  //     future: widget.doctorInfo.checkTime(),
+                  //     builder: (ctx, futureCheck) {
+                  //       if (futureCheck.connectionState ==
+                  //           ConnectionState.waiting) {
+                  //         return const Center(
+                  //           child: CircularProgressIndicator(),
+                  //         );
+                  //       }
+                  //       if (futureCheck.data!) {
+                  //         return Center(
+                  //           child: ElevatedButton(
+                  //             style: ElevatedButton.styleFrom(
+                  //               padding: const EdgeInsets.symmetric(
+                  //                   horizontal: 16, vertical: 12),
+                  //             ),
+                  //             onPressed: () {
+                  //               NavigationService.navKey.currentState
+                  //                   ?.pushNamed('/schedule',
+                  //                       arguments: widget.doctorInfo.id);
+                  //             },
+                  //             child: const Text(
+                  //               'Change your time for consultant',
+                  //               style: TextStyle(
+                  //                   fontWeight: FontWeight.bold, fontSize: 16),
+                  //             ),
+                  //           ),
+                  //         );
+                  //       }
+
+                  //       return Column(
+                  //         children: [
+                  //           OutlinedButton(
+                  //             onPressed: () {
+                  //               _selectDate(context);
+                  //             },
+                  //             style: OutlinedButton.styleFrom(
+                  //               primary: Colors.black,
+                  //               textStyle: const TextStyle(fontSize: 16),
+                  //               padding: const EdgeInsets.symmetric(
+                  //                   horizontal: 16, vertical: 8),
+                  //               shape: const RoundedRectangleBorder(
+                  //                 borderRadius:
+                  //                     BorderRadius.all(Radius.circular(50)),
+                  //               ),
+                  //             ),
+                  //             child: Row(
+                  //                 mainAxisAlignment:
+                  //                     MainAxisAlignment.spaceBetween,
+                  //                 children: [
+                  //                   Text(DateFormat('dd/MM/y')
+                  //                       .format(_selectedDate)),
+                  //                   const Icon(
+                  //                     FontAwesomeIcons.calendar,
+                  //                     color: Colors.black,
+                  //                   ),
+                  //                 ]),
+                  //           ),
+                  //           FutureBuilder(
+                  //               future: widget.doctorInfo.getAvailableTime(
+                  //                 _selectedDate.day,
+                  //                 _selectedDate.month,
+                  //                 _selectedDate.year,
+                  //               ),
+                  //               builder: (ctx, future) {
+                  //                 if (future.connectionState ==
+                  //                     ConnectionState.waiting) {
+                  //                   return const Center(
+                  //                     child: CircularProgressIndicator(),
+                  //                   );
+                  //                 }
+                  //                 final time = future.data!;
+                  //                 return time.isEmpty
+                  //                     ? const Text(
+                  //                         'There is no time frame available')
+                  //                     : TimeChoosing(
+                  //                         time,
+                  //                         mediaQuery,
+                  //                         _selectedDate.day,
+                  //                         _selectedDate.month,
+                  //                         _selectedDate.year,
+                  //                         _onChange,
+                  //                         true);
+                  //               }),
+                  //         ],
+                  //       );
+                  //     }),
                   const SizedBox(
                     height: 20,
                   ),
