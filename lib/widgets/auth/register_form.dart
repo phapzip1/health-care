@@ -26,6 +26,7 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   TextEditingController dateinput = TextEditingController(text: "");
+  TextEditingController _passwordController = TextEditingController(text: "");
 
   File? _selectedImage;
   var _email = "";
@@ -101,6 +102,7 @@ class _RegisterFormState extends State<RegisterForm> {
               const SizedBox(height: 16),
 
               TextFormField(
+                controller: _passwordController,
                 key: const ValueKey('password'),
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -130,7 +132,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 validator: (value) {
                   if (value!.isEmpty ||
                       // ignore: unnecessary_null_comparison
-                      (value != _password && _password != null)) {
+                      (value != _passwordController.text && _passwordController.text != "")) {
                     return 'Please enter valid password';
                   }
                   return null;
