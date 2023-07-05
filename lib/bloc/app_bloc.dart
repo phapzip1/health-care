@@ -200,17 +200,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       } catch (e) {}
     });
 
-    on<AppEventLoadPostsAsPatient>((event, emit) async {
+    on<AppEventLoadOwnPosts>((event, emit) async {
       try {
-        final posts = await postProvider.getByPatientId(authProvider.currentUser!.uid);
-        emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, posts, state.appointments, state.records, state.history, state.availableTime));
-      } catch (e) {}
-    });
-
-    on<AppEventLoadPostsAsDoctor>((event, emit) async {
-      try {
-        final posts = await postProvider.getByPatientId(authProvider.currentUser!.uid);
-        emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, posts, state.appointments, state.records, state.history, state.availableTime));
+        if (state.doctor != null) {
+          final posts = await postProvider.getByDoctorId(authProvider.currentUser!.uid);
+          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, posts, state.appointments, state.records, state.history, state.availableTime));
+        } else {
+          final posts = await postProvider.getByPatientId(authProvider.currentUser!.uid);
+          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, posts, state.appointments, state.records, state.history, state.availableTime));
+        }
       } catch (e) {}
     });
 
@@ -281,7 +279,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         }
         await patientProvider.update(id: state.patient!.id, name: event.name, gender: event.gender, birthdate: event.birthdate, phoneNumber: event.phoneNumber, image: avatar);
         final oldPatient = state.patient!;
-        final newPatient = PatientModel(oldPatient.id, event.name, event.phoneNumber, event.gender, event.birthdate, event.email, avatar ?? oldPatient.image);
+        final newPatient = PatientModel(oldPatient.id, event.name, event.phoneNumber, event.gender, event.birthdate, oldPatient.email, avatar ?? oldPatient.image);
 
         emit(AppState(false, state.user, state.doctor, newPatient, state.symptom, state.doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
       } catch (e) {}

@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 List<int> _time = [70, 73, 8, 83, 90, 93, 100, 103, 110, 113, 120, 123, 130, 133, 140, 143, 150, 153, 160, 163, 170, 173, 180, 183, 190, 193, 200, 203, 210, 213, 220, 223];
 
-class MyWidget extends StatefulWidget {
+class CheckList extends StatefulWidget {
   final List<int> initial;
   final void Function(List<int> list)? onChange;
   final void Function()? revert;
 
-  const MyWidget({super.key, this.onChange, this.revert, this.initial = const []});
+  const CheckList({super.key, this.onChange, this.revert, this.initial = const []});
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<CheckList> createState() => _CheckListState();
 }
 
-class _MyWidgetState extends State<MyWidget> {
+class _CheckListState extends State<CheckList> {
   late List<int> _list;
 
   @override

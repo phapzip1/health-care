@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/models/appointment_model.dart';
-import 'package:health_care/models/doctor_model.dart';
 import 'package:health_care/models/patient_model.dart';
 import 'package:health_care/screens/Doctor/update_doctor_information.dart';
 import 'package:health_care/screens/Patient/cards_and_wallets_screen.dart';
@@ -16,10 +15,7 @@ import 'package:health_care/widgets/record_screen/record_detail.dart';
 import 'package:health_care/widgets/record_screen/write_record.dart';
 import 'package:health_care/widgets/schedule_screen/patient_section.dart';
 
-// screens
-// import '../screens/page_not_found_screen.dart';
 import '../screens/general/call_screen.dart';
-// import '../screens/Doctor/homePageDoctor.dart';
 import '../screens/general/communityQA.dart';
 
 class NavigationService {
@@ -61,9 +57,8 @@ class NavigationService {
         return MaterialPageRoute(builder: (_) => SplashScreen());
       case doctorUpdateInfo:
         {
-          final data = settings.arguments as DoctorModel;
           return MaterialPageRoute(
-              builder: (_) => UpdateDoctorInformation(data));
+              builder: (_) => const UpdateDoctorInformation());
         }
       case appointmenDetailForDoctor:
         {
@@ -82,9 +77,8 @@ class NavigationService {
         }
       case patientUpdateInfo:
         {
-          final data = settings.arguments as PatientModel;
           return MaterialPageRoute(
-            builder: (_) => UpdatePatientInfo(data),
+            builder: (_) => const UpdatePatientInfo(),
           );
         }
       case patientSchedule:
@@ -124,11 +118,8 @@ class NavigationService {
           final data = settings.arguments as Map<String, dynamic>;
           return MaterialPageRoute(
             builder: (_) => CallScreen(
-              token: data["token"],
-              channelId: data["channel_id"],
               remotename: data["remote_name"],
               remotecover: data["remote_cover"],
-              caller: data["caller"],
             ),
           );
         }

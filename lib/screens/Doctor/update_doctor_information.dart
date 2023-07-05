@@ -13,10 +13,8 @@ import 'package:health_care/widgets/avatar_picker.dart';
 import 'package:health_care/widgets/date_picker_textfield.dart';
 import 'dart:io';
 
-// ignore: must_be_immutable
 class UpdateDoctorInformation extends StatefulWidget {
-  DoctorModel doctorInfo;
-  UpdateDoctorInformation(this.doctorInfo, {super.key});
+  const UpdateDoctorInformation( {super.key});
 
   @override
   State<UpdateDoctorInformation> createState() => _UpdateDoctorInformationState();
@@ -32,7 +30,6 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
   int _gender = 0;
   String _workplace = "";
   int _experience = 0;
-  String _expertise = "";
   double _price = 0;
   DateTime? _birthdate;
 
@@ -48,7 +45,6 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
               _phone,
               _gender,
               _workplace,
-              _expertise,
               _experience,
               _price,
               _birthdate!,
@@ -375,7 +371,7 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       ),
                       onPressed: () {
-                        NavigationService.navKey.currentState?.pushNamed('/schedule', arguments: widget.doctorInfo.id);
+                        NavigationService.navKey.currentState?.pushNamed('/schedule', arguments: state.doctor!.id);
                       },
                       child: const Text(
                         'Change your time for consultant',

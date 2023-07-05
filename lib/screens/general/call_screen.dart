@@ -1,34 +1,24 @@
 import 'dart:async';
-import 'dart:isolate';
-import 'dart:ui';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-// import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-import 'package:health_care/models/appointment_model.dart';
+
 import 'package:health_care/services/navigation_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-// widgets
-// import '../../widgets/call_picking.dart';
+
 import '../../widgets/video_call_view.dart';
 import '../../widgets/video_call_panel.dart';
 
 class CallScreen extends StatefulWidget {
   final String remotename;
   final String remotecover;
-  final String channelId;
-  final String token;
-  final bool caller;
+
 
   const CallScreen({
     super.key,
-    required this.token,
-    required this.channelId,
     required this.remotename,
     required this.remotecover,
-    required this.caller,
   });
 
   @override
@@ -37,8 +27,7 @@ class CallScreen extends StatefulWidget {
 
 class _CallScreenState extends State<CallScreen> {
   final RtcEngine _engine = createAgoraRtcEngine();
-  final ReceivePort _port = ReceivePort();
-  late Timer timer;
+  final String _token = "007eJxTYJgZcFpE7N+vfZ9OVKyoOJ1n+iv251QXHf6U/fO8ZzouOnFMgSExxSDN0NzQPMk82cLELM080Swt2cTYNNnS0tLIMjXRXNt+aUpDICPDrzfFLIwMEAjiMzMkJiUzMAAA7tchiA==";
   int _remoteUid = -1;
 
   // local
@@ -68,9 +57,6 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   Future<void> _endCall() async {
-    if (_remoteUid == -1) {
-      AppointmentModel.getById(widget.channelId).then((value) => value.cancelCall());
-    }
     _leave();
   }
 
@@ -107,41 +93,15 @@ class _CallScreenState extends State<CallScreen> {
         }
       },
       onUserOffline: (connection, remoteUid, reason) {
-        NavigationService.isCalling = false;
-        if (mounted) {
-          NavigationService.navKey.currentState!.pop();
-        }
-      },
-      onJoinChannelSuccess: (connection, elapsed) {
-        NavigationService.isCalling = true;
+        NavigationService.navKey.currentState!.pop();
       },
     ));
-
-    if (widget.caller) {
-      timer = Timer(
-        const Duration(seconds: 29),
-        () {
-          if (_remoteUid == -1) {
-            AppointmentModel.getById(widget.channelId).then((value) => value.cancelCall());
-            _leave();
-          }
-        },
-      );
-    }
 
     _join();
   }
 
-  void _bindIsolate() {
-    IsolateNameServer.registerPortWithName(_port.sendPort, "background_notification_action");
-    _port.listen((message) {
-      NavigationService.navKey.currentState!.pop();
-    });
-  }
 
-  void _unbindIsolate() {
-    IsolateNameServer.removePortNameMapping("background_notification_action");
-  }
+
 
   Future<void> _join() async {
     try {
@@ -153,8 +113,8 @@ class _CallScreenState extends State<CallScreen> {
       );
 
       await _engine.joinChannel(
-        token: widget.token,
-        channelId: widget.channelId,
+        token: _token,
+        channelId: "abc",
         options: options,
         uid: 0,
       );
@@ -171,17 +131,12 @@ class _CallScreenState extends State<CallScreen> {
   @override
   void initState() {
     super.initState();
-    _bindIsolate();
     _setupVideoCall();
   }
 
   @override
   Future<void> dispose() async {
     super.dispose();
-    _unbindIsolate();
-    if (widget.caller) {
-      timer.cancel();
-    }
     await _engine.stopPreview();
     await _engine.leaveChannel();
     await _engine.release();
@@ -191,7 +146,7 @@ class _CallScreenState extends State<CallScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: _remoteUid == -1 && !widget.caller
+        child: _remoteUid == -1
             ? Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
@@ -206,7 +161,7 @@ class _CallScreenState extends State<CallScreen> {
                     child: VideoCallView(
                       engine: _engine,
                       remoteUid: _remoteUid,
-                      channelId: widget.channelId,
+                      channelId: "abc",
                       remoteName: widget.remotename,
                       remoteCover: widget.remotecover,
                       remoteCamoff: _rCamOff,

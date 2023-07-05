@@ -84,14 +84,8 @@ class AppEventLoadPosts extends AppEvent {
   const AppEventLoadPosts(this.specialization);
 }
 
-class AppEventLoadPostsAsDoctor extends AppEvent {
-  final String doctorId;
-  const AppEventLoadPostsAsDoctor(this.doctorId);
-}
-
-class AppEventLoadPostsAsPatient extends AppEvent {
-  final String patientId;
-  const AppEventLoadPostsAsPatient(this.patientId);
+class AppEventLoadOwnPosts extends AppEvent {
+  const AppEventLoadOwnPosts();
 }
 
 class AppEventLoadHealthRecords extends AppEvent {
@@ -137,10 +131,9 @@ class AppEventUpdatePatientInfomation extends AppEvent {
   final String phoneNumber;
   final int gender;
   final DateTime birthdate;
-  final String email;
   final File? image;
 
-  const AppEventUpdatePatientInfomation(this.name, this.phoneNumber, this.gender, this.birthdate, this.email, this.image);
+  const AppEventUpdatePatientInfomation(this.name, this.phoneNumber, this.gender, this.birthdate, this.image);
 }
 
 // silent actions

@@ -71,7 +71,6 @@ class NotificationService {
           "caller": false,
         });
       } else if (receivedAction.actionType == ActionType.SilentAction) {
-        AppointmentModel.getById(payload["channel_id"]!).then((value) => value.declineCall());
       }
     }
   }
@@ -174,27 +173,25 @@ class NotificationService {
     return res;
   }
 
-  static Future<bool> scheduleAppointmentNoti(String doctorid) async {
-    final appointments = await AppointmentModel.getConfirmedAppointment(doctorid);
-
+  static Future<bool> scheduleAppointmentNoti(List<AppointmentModel> appointments, bool isDoctor) async {
     try {
       int i = 1;
 
       appointments.forEach((element) async {
-        final date = DateTime(element.dateTime.year, element.dateTime.month, element.dateTime.day, (element.meetingTime / 10).floor(), (element.meetingTime % 10) * 10, 0);
-
+        final date = DateTime(element.datetime.year, element.datetime.month, element.datetime.day, element.datetime.hour , element.datetime.minute, 0);
+        final object = isDoctor ? element.patientName : element.doctorName;
         await AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: i++,
             channelKey: "schedule",
             groupKey: _scheduleGroupkey,
             title: "Reminder",
-            body: "You have an appointment with ${element.doctorName}",
+            body: "You have an appointment with $object in 15 minutes",
             notificationLayout: NotificationLayout.Default,
           ),
           schedule: NotificationCalendar.fromDate(
             date: date.subtract(
-              const Duration(minutes: 5),
+              const Duration(minutes: 15),
             ),
           ),
         );
@@ -205,13 +202,11 @@ class NotificationService {
             channelKey: "schedule",
             groupKey: _scheduleGroupkey,
             title: "Reminder",
-            body: "You have an appointment with ${element.doctorName}",
+            body: "Appointment with $object started",
             notificationLayout: NotificationLayout.Default,
           ),
           schedule: NotificationCalendar.fromDate(
-            date: date.subtract(
-              const Duration(minutes: 30),
-            ),
+            date: date,
           ),
         );
       });

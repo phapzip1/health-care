@@ -361,9 +361,13 @@ class AppointmentDetailForPatient extends StatelessWidget {
                                               0.05,
                                       vertical: 12)),
                               onPressed: () {
-                                // NavigationService.navKey.currentState
-                                //     ?.pushNamed('/chat',
-                                //         arguments: appointment);
+                                NavigationService.navKey.currentState?.pushNamed(
+                                          '/call',
+                                          arguments: {
+                                            "remotename": appointment.doctorName,
+                                            "remotecover": appointment.doctorImage,
+                                          },
+                                        );
                               },
                               child: const Text(
                                 'Join the meeting room',

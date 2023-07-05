@@ -1,6 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
+import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/post_model.dart';
 import 'package:health_care/screens/general/filiter_symptom.dart';
 import 'package:health_care/widgets/QA_community/header_navigate_section.dart';
@@ -17,28 +19,14 @@ class CommunityQA extends StatefulWidget {
 
 class _CommunityQAState extends State<CommunityQA> {
   final String formattedDate = DateFormat.yMd().format(DateTime.now());
-  bool isLoading = false;
   bool _changedPage = true;
-  List<PostModel> posts = [];
-  ScrollController _controller = ScrollController();
   final TextEditingController _searchController = TextEditingController();
-  final userId = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   void initState() {
     super.initState();
-    _getMoreData("");
-    _controller.addListener(() {
-      if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-        _getMoreData(posts[posts.length - 1].id);
-      }
-    });
-  }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    context.read<AppBloc>().add(const AppEventLoadPosts(null));
   }
 
   void _openFilterSymptom(BuildContext ctx) {
@@ -47,8 +35,8 @@ class _CommunityQAState extends State<CommunityQA> {
       builder: (_) {
         return GestureDetector(
           onTap: () {},
-          child: FilterSymptom(),
           behavior: HitTestBehavior.opaque,
+          child: const FilterSymptom(),
         );
       },
     );
@@ -57,46 +45,16 @@ class _CommunityQAState extends State<CommunityQA> {
   void _click(value) {
     setState(() {
       _changedPage = value;
-      posts = [];
-      _getMoreData("");
     });
   }
 
-  void _getMoreData(String id) async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final newPost = _changedPage
-        ? await PostModel.getPublic(id)
-        : await PostModel.getAsPatient(id, userId);
-
-    setState(() {
-      isLoading = false;
-      posts.addAll(newPost);
-    });
-  }
-
-  Widget _buildListAll(socialPost) {
+  Widget _buildListAll(List<PostModel> socialPost) {
     return Expanded(
       child: ListView.builder(
-        itemCount: socialPost.length + 1,
+        itemCount: socialPost.length,
         itemBuilder: (context, index) {
-          if (index == socialPost.length) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Opacity(
-                  opacity: isLoading ? 1.0 : 00,
-                  child: const CircularProgressIndicator(),
-                ),
-              ),
-            );
-          } else {
-            return QuestionCard(socialPost[index], context);
-          }
+          return QuestionCard(socialPost[index], context);
         },
-        controller: _controller,
       ),
     );
   }
@@ -109,8 +67,7 @@ class _CommunityQAState extends State<CommunityQA> {
       appBar: AppBar(
         title: const Text(
           'Q&A community',
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -126,9 +83,13 @@ class _CommunityQAState extends State<CommunityQA> {
       ),
       body: Column(
         children: [
-          HeaderNavigateSection(_click, _changedPage, mediaQuery, context,
-              _searchController, _openFilterSymptom),
-          _buildListAll(posts),
+          HeaderNavigateSection(_click, _changedPage, mediaQuery, context, _searchController, _openFilterSymptom),
+          BlocBuilder<AppBloc, AppState>(builder: (context, state) {
+            if (state.posts == null) {
+              return Container();
+            }
+            return _buildListAll(state.posts!);
+          }),
         ],
       ),
       floatingActionButton: FloatingActionButton(
