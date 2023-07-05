@@ -2,12 +2,14 @@
 
 import 'dart:io';
 
+import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:health_care/models/symptom_model.dart';
 import 'package:health_care/widgets/user_image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -26,11 +28,12 @@ class DoctorRegisterForm extends StatefulWidget {
 
 class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
   TextEditingController dateinput = TextEditingController();
-
+  late List<SymptomModel> symptoms = [];
   @override
   void initState() {
-    dateinput.text = '';
     super.initState();
+    dateinput.text = '';
+    symptoms.addAll(context.read<AppBloc>().state.symptom!);
   }
 
   final _auth = FirebaseAuth.instance;
@@ -318,7 +321,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter expertise';
+                    return 'Please enter workplace';
                   }
                   return null;
                 },
@@ -326,21 +329,10 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
               const SizedBox(height: 16),
               //
 
-              TextFormField(
-                key: const ValueKey('specialization'),
-                decoration: InputDecoration(
-                  hintText: "Dermatology...",
-                  labelText: 'Expertise',
-                  labelStyle: Theme.of(context).textTheme.displayMedium,
-                ),
-                onSaved: (value) {
-                  _specialization = value.toString();
-                },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter expertise';
-                  }
-                  return null;
+              DropDownTextField(
+                dropDownList: symptoms.map((e) => DropDownValueModel(name: e.name, value: e.name)).toList(),
+                onChanged: (value) {
+                  _specialization = (value as DropDownValueModel).name;
                 },
               ),
               const SizedBox(height: 16),

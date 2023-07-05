@@ -170,4 +170,9 @@ class PostFirebaseRepo extends PostRepo {
       throw GenericDBException();
     }
   }
+  
+  @override
+  Stream getStreamChat(String postid) {
+    return _ref.doc(postid).collection("chat").snapshots();
+  }
 }
