@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/models/post_model.dart';
 import 'package:health_care/screens/general/filiter_symptom.dart';
+import 'package:health_care/widgets/QA_community/header_navigate_section.dart';
 import 'package:health_care/widgets/QA_community/input_question_modal.dart';
-import 'package:health_care/widgets/button_section.dart';
-import 'package:health_care/widgets/QA_community/particular_question.dart';
+import 'package:health_care/widgets/QA_community/question_card.dart';
 import 'package:intl/intl.dart';
 
 class CommunityQA extends StatefulWidget {
@@ -15,205 +15,13 @@ class CommunityQA extends StatefulWidget {
   State<CommunityQA> createState() => _CommunityQAState();
 }
 
-final TextEditingController _searchController = TextEditingController();
-
-void _openFilterSymptom(BuildContext ctx) {
-    showModalBottomSheet(
-      context: ctx,
-      builder: (_) {
-        return GestureDetector(
-          onTap: () {},
-          child: FilterSymptom(),
-          behavior: HitTestBehavior.opaque,
-        );
-      },
-    );
-  }
-
-Widget headerNavigateSection(click, changedPage, mediaQuery, context) => Padding(
-      padding: const EdgeInsets.only(top: 24, right: 16, left: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ButtonSection(
-            click: click,
-            status: changedPage,
-            mediaQuery: mediaQuery,
-            sampleData: [
-              RadioModel(true, "All", 0),
-              RadioModel(false, "Your Question", 1)
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.only(
-              top: 24,
-            ),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search...',
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () => _openFilterSymptom(context),
-                ),
-                prefixIcon: IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    // Perform the search here
-                  },
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-        ],
-      ),
-    );
-
-final String formattedDate = DateFormat.yMd().format(DateTime.now());
-
-Widget questionCard(PostModel question, context) {
-  String gender = question.gender == 0
-      ? "Male"
-      : question.gender == 1
-          ? "Female"
-          : "Other";
-
-  return InkWell(
-    onTap: () {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ParticularQuestion(question)));
-    },
-    child: Container(
-      margin: const EdgeInsets.only(top: 16),
-      decoration: const BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Color(0xFFC9C9C9),
-            blurRadius: 1,
-            spreadRadius: 1,
-          ),
-        ],
-        color: Colors.white,
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(
-          children: [
-            const CircleAvatar(
-              radius: 26.0,
-              backgroundImage: AssetImage('assets/images/avatartUser.png'),
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "$gender, ${question.age} aged",
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  DateFormat('dd/MM/y').format(question.time),
-                  style: const TextStyle(color: Color(0xFF828282)),
-                ),
-              ],
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        Text(question.description),
-        const SizedBox(
-          height: 16,
-        ),
-        question.doctorId != ""
-            ? Column(children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  color: const Color(0xFFAEE6FF).withOpacity(0.5),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 24.0,
-                        backgroundImage: NetworkImage(question.doctorImage!),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Answered by'),
-                          Text(
-                            question.doctorName!,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-              ])
-            : Container(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-              decoration: BoxDecoration(
-                  color: const Color(0xFFFFE6A1).withOpacity(0.5),
-                  borderRadius: const BorderRadius.all(Radius.circular(20))),
-              child: Text(
-                question.specialization,
-                style: const TextStyle(
-                    color: Color(0xFFFFBE0B), fontWeight: FontWeight.w600),
-              ),
-            ),
-            // Row(
-            //   children: [
-            //     const Icon(FontAwesomeIcons.comment),
-            //     const SizedBox(
-            //       width: 4,
-            //     ),
-            //     FutureBuilder(
-            //       future: PostModel.getTotalChat(question.id!),
-            //       builder: (ctx, comment) {
-            //         if (comment.connectionState == ConnectionState.waiting) {
-            //           return const CircularProgressIndicator();
-            //         }
-            //         return Text(comment.data.toString());
-            //       },
-            //     )
-            //   ],
-            // ),
-          ],
-        ),
-      ]),
-    ),
-  );
-}
-
 class _CommunityQAState extends State<CommunityQA> {
+  final String formattedDate = DateFormat.yMd().format(DateTime.now());
   bool isLoading = false;
   bool _changedPage = true;
   List<PostModel> posts = [];
   ScrollController _controller = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
   final userId = FirebaseAuth.instance.currentUser!.uid;
 
   @override
@@ -233,6 +41,19 @@ class _CommunityQAState extends State<CommunityQA> {
     super.dispose();
   }
 
+  void _openFilterSymptom(BuildContext ctx) {
+    showModalBottomSheet(
+      context: ctx,
+      builder: (_) {
+        return GestureDetector(
+          onTap: () {},
+          child: FilterSymptom(),
+          behavior: HitTestBehavior.opaque,
+        );
+      },
+    );
+  }
+
   void _click(value) {
     setState(() {
       _changedPage = value;
@@ -249,12 +70,35 @@ class _CommunityQAState extends State<CommunityQA> {
     final newPost = _changedPage
         ? await PostModel.getPublic(id)
         : await PostModel.getAsPatient(id, userId);
-        
 
     setState(() {
       isLoading = false;
       posts.addAll(newPost);
     });
+  }
+
+  Widget _buildListAll(socialPost) {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: socialPost.length + 1,
+        itemBuilder: (context, index) {
+          if (index == socialPost.length) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Opacity(
+                  opacity: isLoading ? 1.0 : 00,
+                  child: const CircularProgressIndicator(),
+                ),
+              ),
+            );
+          } else {
+            return QuestionCard(socialPost[index], context);
+          }
+        },
+        controller: _controller,
+      ),
+    );
   }
 
   @override
@@ -282,7 +126,8 @@ class _CommunityQAState extends State<CommunityQA> {
       ),
       body: Column(
         children: [
-          headerNavigateSection(_click, _changedPage, mediaQuery, context),
+          HeaderNavigateSection(_click, _changedPage, mediaQuery, context,
+              _searchController, _openFilterSymptom),
           _buildListAll(posts),
         ],
       ),
@@ -296,34 +141,6 @@ class _CommunityQAState extends State<CommunityQA> {
               ));
         },
         child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  Widget _buildListAll(socialPost) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: socialPost.length + 1,
-        itemBuilder: (context, index) {
-          if (index == socialPost.length) {
-            return _buildProgressIndicator();
-          } else {
-            return questionCard(socialPost[index], context);
-          }
-        },
-        controller: _controller,
-      ),
-    );
-  }
-
-  Widget _buildProgressIndicator() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
-        child: Opacity(
-          opacity: isLoading ? 1.0 : 00,
-          child: const CircularProgressIndicator(),
-        ),
       ),
     );
   }

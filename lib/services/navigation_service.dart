@@ -134,11 +134,8 @@ class NavigationService {
         }
       case schedule:
         {
-          final data = settings.arguments as String;
           return MaterialPageRoute(
-            builder: (_) => DoctorScheduleScreen(
-              data,
-            ),
+            builder: (_) => DoctorScheduleScreen(),
           );
         }
       case payment:
