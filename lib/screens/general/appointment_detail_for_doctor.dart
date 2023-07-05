@@ -398,12 +398,12 @@ class _AppointmentDetailForDoctorState
                                                   mediaQuery.width * 0.05,
                                               vertical: 12)),
                                       onPressed: () {
-                                        NavigationService.navKey.currentState
-                                            ?.pushNamed('/chat',
-                                                arguments: widget.appointment);
+                                        // NavigationService.navKey.currentState
+                                        //     ?.pushNamed('/chat',
+                                        //         arguments: widget.appointment);
                                       },
                                       child: const Text(
-                                        'Send message',
+                                        'Join the meeting room',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,

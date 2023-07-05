@@ -361,12 +361,12 @@ class AppointmentDetailForPatient extends StatelessWidget {
                                               0.05,
                                       vertical: 12)),
                               onPressed: () {
-                                NavigationService.navKey.currentState
-                                    ?.pushNamed('/chat',
-                                        arguments: appointment);
+                                // NavigationService.navKey.currentState
+                                //     ?.pushNamed('/chat',
+                                //         arguments: appointment);
                               },
                               child: const Text(
-                                'Send message',
+                                'Join the meeting room',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
