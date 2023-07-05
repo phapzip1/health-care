@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health_care/models/post_model.dart';
+import 'package:health_care/widgets/chat/messages.dart';
+import 'package:health_care/widgets/chat/new_message.dart';
 import 'package:intl/intl.dart';
 
 class ParticularQuestion extends StatelessWidget {
@@ -102,7 +105,7 @@ class ParticularQuestion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    final userId = FirebaseAuth.instance.currentUser!.uid;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -123,7 +126,43 @@ class ParticularQuestion extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: questionSection(question),
+        child: Column(
+          children: [
+            questionSection(question),
+            const Divider(
+              color: Colors.black,
+              thickness: 0.3,
+            ),
+            Expanded(
+              child: Column(children: [
+                Text(
+                  DateFormat('hh:mm dd/MM/y').format(DateTime.now()),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF828282),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Messages(
+                          post: question,
+                        ),
+                      ),
+                      question.patientId == userId
+                          ? NewMessage(post: question)
+                          : Container(),
+                    ],
+                  ),
+                )
+              ]),
+            ),
+          ],
+        ),
       ),
     );
   }
