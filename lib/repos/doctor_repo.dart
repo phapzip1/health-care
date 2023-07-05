@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:health_care/models/doctor_model.dart';
 import 'package:health_care/models/feedback_model.dart';
 
@@ -7,11 +9,21 @@ abstract class DoctorRepo {
   // get current doctor
   Future<DoctorModel?> getById(String id);
 
-  Future<void> updateAvailableTime(String doctorid, List<double> time, String weekday);
+  Future<void> updateAvailableTime(String doctorid, List<int> time, String weekday);
 
   // get multiple doctors
   Future<List<DoctorModel>> getBySpecification(String spec);
-  Future<void> update(DoctorModel model);
+  Future<void> update({
+    required String id,
+    required String? avatar,
+    required String username,
+    required String phone,
+    required int gender,
+    required String workplace,
+    required int exp,
+    required double price,
+    required DateTime birthdate,
+  });
   Future<void> add({
     required String id,
     required String name,

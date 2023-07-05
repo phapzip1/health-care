@@ -1,110 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
+import 'package:health_care/bloc/app_state.dart';
+import 'package:health_care/widgets/check_list.dart';
 
-// model
-import '../../models/doctor_model.dart';
-
-const week = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
-const map = {
-  "0.0": "00",
-  "0.5": "30",
-};
+const week = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
 class DoctorScheduleScreen extends StatefulWidget {
-  final String doctorId;
-  const DoctorScheduleScreen(
-    this.doctorId, {
-    super.key,
-  });
+  const DoctorScheduleScreen({super.key});
 
   @override
   State<DoctorScheduleScreen> createState() => _DoctorScheduleScreenState();
 }
 
 class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
-  List<int> def = [0, 0, 0];
-
   int _weekday = 0;
 
-  // ignore: unused_field
-  bool _changed = false;
-
-  void _getData(int weekday) async {
-    // Todo: fetch data from firebase
-    final data =
-        await (await DoctorModel.getById(widget.doctorId)).getSchedule(weekday);
-    setState(() {
-      checkedTime = def = data as List<int>;
-    });
+  void _save(BuildContext context) {
+    if (_checkedTime.isNotEmpty) {
+      context.read<AppBloc>().add(AppEventUpdateDoctorSchedule(times: _checkedTime, weekday: week[_weekday]));
+    }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _getData(_weekday);
-  }
-
-  void _save() async {
-    final data = await DoctorModel.getById(widget.doctorId);
-    def = [...checkedTime];
-    setState(() {
-      _changed = false;
-    });
-
-    await data.applySchedule(_weekday, checkedTime);
-  }
-
-  void _saveToAll() async {
-    final data = await DoctorModel.getById(widget.doctorId);
-    def = [...checkedTime];
-
-    setState(() {
-      _changed = false;
-    });
-    await data.applyToAllSchedule(checkedTime);
+  void _saveForAll(BuildContext context) {
+    if (_checkedTime.isNotEmpty) {
+      context.read<AppBloc>().add(AppEventUpdateDoctorSchedule(times: _checkedTime));
+    }
   }
 
   void _discard() {
     setState(() {
-      checkedTime = def;
+      _checkedTime = [];
     });
   }
 
-  List<int> time = [
-    70,
-    73,
-    8,
-    83,
-    90,
-    93,
-    100,
-    103,
-    110,
-    113,
-    120,
-    123,
-    130,
-    133,
-    140,
-    143,
-    150,
-    153,
-    160,
-    163,
-    170,
-    173,
-    180,
-    183,
-    190,
-    193,
-    200,
-    203,
-    210,
-    213,
-    220,
-    223
-  ];
-
-  List<int> checkedTime = [];
+  List<int> _checkedTime = [];
 
   @override
   Widget build(BuildContext context) {
@@ -123,23 +54,19 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                     return GestureDetector(
                       onTap: () async {
                         if (i != _weekday) {
-                          _getData(i);
                           setState(() {
                             _weekday = i;
                           });
                         }
                       },
                       child: Card(
-                        color: i == _weekday
-                            ? const Color(0xFF3A86FF)
-                            : Colors.white,
+                        color: i == _weekday ? const Color(0xFF3A86FF) : Colors.white,
                         child: SizedBox(
                           width: size.width / 5,
                           child: Center(
                             child: Text(
                               week[i],
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                              style: const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -167,32 +94,14 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                     horizontal: 5,
                     vertical: 10,
                   ),
-                  child: ListView.builder(
-                      itemCount: time.length,
-                      itemBuilder: (ctx, index) {
-                        bool checked = checkedTime.contains(time[index]);
-                        return ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: checked
-                                    ? Colors.red
-                                    : const Color(0xFF3A86FF)),
-                            onPressed: () {
-                              if (!checked) {
-                                setState(() {
-                                  checkedTime.add(time[index]);
-                                });
-                              } else {
-                                setState(() {
-                                  checkedTime.remove(time[index]);
-                                });
-                              }
-                            },
-                            child: Text(
-                              '${time[index]}',
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ));
-                      }),
+                  child: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
+                    return CheckList(
+                      onChange: (list) {
+                        _checkedTime = list;
+                      },
+                      initial: (state.doctor!.availableTime["$_weekday"] as List<int>),
+                    );
+                  }),
                 ),
               ),
 
@@ -210,8 +119,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: Text(
                           "Undo",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ),
                     ),
@@ -221,13 +129,12 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                   ),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: _save,
+                      onPressed: () => _save(context),
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: Text(
                           "Save",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ),
                     ),
@@ -237,13 +144,12 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                   ),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: _saveToAll,
+                      onPressed: () => _saveForAll(context),
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: Text(
                           "Apply to all",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ),
                     ),

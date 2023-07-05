@@ -13,5 +13,12 @@ abstract class PatientRepo {
     required String email,
     required String image,
   });
-  Future<void> update(PatientModel patient);
+  Future<void> update({
+    required String id,
+    required String name,
+    required String phoneNumber,
+    required int gender,
+    required DateTime birthdate,
+    String? image,
+  });
 }

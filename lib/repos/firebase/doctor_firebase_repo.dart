@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:health_care/models/feedback_model.dart';
 import 'package:health_care/models/doctor_model.dart';
@@ -107,24 +109,40 @@ class DoctorFirebaseRepo extends DoctorRepo {
   }
 
   @override
-  Future<void> update(DoctorModel model) async {
+  Future<void> update({
+    required String id,
+    required String? avatar,
+    required String username,
+    required String phone,
+    required int gender,
+    required String workplace,
+    required int exp,
+    required double price,
+    required DateTime birthdate,
+  }) async {
     try {
-      await _ref.doc(model.id).update({
-        "name": model.name,
-        "phone_number": model.phoneNumber,
-        "image": model.image,
-        "gender": model.gender,
-        "birthday": (model.birthdate as Timestamp).toDate(),
-        "email": model.email,
-        "identity_id": model.identityId,
-        "license_id": model.licenseId,
-        "experience": model.experience,
-        "price": model.price,
-        "workplace": model.workplace,
-        "specialization": model.specialization,
-        "verified": model.verified,
-        "rating": model.rating,
-      });
+      if (avatar != null) {
+        await _ref.doc(id).update({
+          "name": username,
+          "phone_number": phone,
+          "image": avatar,
+          "gender": gender,
+          "birthday": (birthdate as Timestamp).toDate(),
+          "price": price,
+          "workplace": workplace,
+          "experience": exp,
+        });
+      } else {
+        await _ref.doc(id).update({
+          "name": username,
+          "phone_number": phone,
+          "gender": gender,
+          "birthday": (birthdate as Timestamp).toDate(),
+          "price": price,
+          "workplace": workplace,
+          "experience": exp,
+        });
+      }
     } catch (e) {
       throw GenericDBException();
     }
@@ -218,7 +236,7 @@ class DoctorFirebaseRepo extends DoctorRepo {
   }
 
   @override
-  Future<void> updateAvailableTime(String doctorid, List<double> time, String weekday) async {
+  Future<void> updateAvailableTime(String doctorid, List<int> time, String weekday) async {
     try {
       await _ref.doc(doctorid).update({
         "available_time.$weekday": time,

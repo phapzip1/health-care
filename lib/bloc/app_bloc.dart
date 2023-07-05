@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/doctor_model.dart';
+import 'package:health_care/models/patient_model.dart';
 import 'package:health_care/repos/appointment_repo.dart';
 import 'package:health_care/repos/doctor_repo.dart';
 import 'package:health_care/repos/patient_repo.dart';
@@ -234,15 +235,55 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppEventUpdateDoctorInfomation>((event, emit) async {
       try {
-        await doctorProvider.update(event.doctor);
-        emit(AppState(false, state.user, event.doctor, state.patient, state.symptom, state.doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
+        String? avatar;
+        if (event.avatar != null) {
+          avatar = await storageProvider.uploadImage(event.avatar!, "cover/${state.doctor!.id}.jpg");
+        }
+        await doctorProvider.update(
+          id: state.doctor!.id,
+          avatar: avatar,
+          birthdate: event.birthdate,
+          exp: event.exp,
+          gender: event.gender,
+          phone: event.phone,
+          price: event.price,
+          username: event.username,
+          workplace: event.workplace,
+        );
+        final oldDoctor = state.doctor!;
+        final newDoctor = DoctorModel(
+          oldDoctor.id,
+          event.username,
+          event.phone,
+          avatar ?? oldDoctor.image,
+          event.gender,
+          event.birthdate,
+          event.phone,
+          oldDoctor.identityId,
+          oldDoctor.licenseId,
+          event.exp,
+          event.price,
+          event.workplace,
+          oldDoctor.specialization,
+          oldDoctor.verified,
+          oldDoctor.rating,
+          oldDoctor.availableTime,
+        );
+        emit(AppState(false, state.user, newDoctor, state.patient, state.symptom, state.doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
       } catch (e) {}
     });
 
     on<AppEventUpdatePatientInfomation>((event, emit) async {
       try {
-        await patientProvider.update(event.patient);
-        emit(AppState(false, state.user, state.doctor, event.patient, state.symptom, state.doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
+        String? avatar;
+        if (event.image != null) {
+          avatar = await storageProvider.uploadImage(event.image!, "cover/${state.patient!.id}.jpg");
+        }
+        await patientProvider.update(id: state.patient!.id, name: event.name, gender: event.gender, birthdate: event.birthdate, phoneNumber: event.phoneNumber, image: avatar);
+        final oldPatient = state.patient!;
+        final newPatient = PatientModel(oldPatient.id, event.name, event.phoneNumber, event.gender, event.birthdate, event.email, avatar ?? oldPatient.image);
+
+        emit(AppState(false, state.user, state.doctor, newPatient, state.symptom, state.doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
       } catch (e) {}
     });
 
@@ -290,6 +331,62 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           rating: event.feedback.rating,
           message: event.feedback.message,
         );
+      } catch (e) {}
+    });
+
+    on<AppEventUpdateDoctorSchedule>((event, emit) async {
+      try {
+        if (event.weekday != null) {
+          await doctorProvider.updateAvailableTime(state.doctor!.id, event.times, event.weekday!);
+          final old = state.doctor!.toMap();
+          (old["available_time"] as Map).update("${event.weekday}", (value) => event.times);
+          emit(AppState(
+            false,
+            state.user,
+            DoctorModel.fromMap(old),
+            state.patient,
+            state.symptom,
+            state.doctors,
+            state.posts,
+            state.appointments,
+            state.records,
+            state.history,
+            state.availableTime,
+          ));
+        } else {
+          await Future.wait([
+            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "mon"),
+            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "tue"),
+            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "wed"),
+            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "thu"),
+            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "fri"),
+            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "sat"),
+            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "sun"),
+          ]);
+          final old = state.doctor!.toMap();
+          old["available_time"] = {
+            "mon": event.times,
+            "tue": event.times,
+            "wed": event.times,
+            "thu": event.times,
+            "fri": event.times,
+            "sat": event.times,
+            "sun": event.times,
+          };
+          emit(AppState(
+            false,
+            state.user,
+            DoctorModel.fromMap(old),
+            state.patient,
+            state.symptom,
+            state.doctors,
+            state.posts,
+            state.appointments,
+            state.records,
+            state.history,
+            state.availableTime,
+          ));
+        }
       } catch (e) {}
     });
   }

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart' show immutable;
-import 'package:health_care/models/doctor_model.dart';
 import 'package:health_care/models/feedback_model.dart';
 import 'package:health_care/models/health_record_model.dart';
 import 'package:health_care/models/patient_model.dart';
@@ -121,20 +120,27 @@ class AppEventLoadAvailableTime extends AppEvent {
 
 // update data
 class AppEventUpdateDoctorInfomation extends AppEvent {
-  final DoctorModel doctor;
-  const AppEventUpdateDoctorInfomation(this.doctor);
+  final File? avatar;
+  final String username;
+  final String phone;
+  final int gender;
+  final String workplace;
+  final int exp;
+  final double price;
+  final DateTime birthdate;
+
+  const AppEventUpdateDoctorInfomation(this.avatar, this.username, this.phone, this.gender, this.workplace, this.exp, this.price, this.birthdate);
 }
 
 class AppEventUpdatePatientInfomation extends AppEvent {
-  final PatientModel patient;
-  const AppEventUpdatePatientInfomation(this.patient);
-}
+  final String name;
+  final String phoneNumber;
+  final int gender;
+  final DateTime birthdate;
+  final String email;
+  final File? image;
 
-class AppEventUpdateHealthRecord extends AppEvent {
-  final HealthRecordModel healthRecord;
-  final String appointmentId;
-
-  const AppEventUpdateHealthRecord(this.healthRecord, this.appointmentId);
+  const AppEventUpdatePatientInfomation(this.name, this.phoneNumber, this.gender, this.birthdate, this.email, this.image);
 }
 
 // silent actions
@@ -186,4 +192,18 @@ class AppEventSendFeedback extends AppEvent {
   final FeedbackModel feedback;
 
   const AppEventSendFeedback(this.feedback);
+}
+
+class AppEventUpdateDoctorSchedule extends AppEvent {
+  final List<int> times;
+  final String? weekday;
+
+  const AppEventUpdateDoctorSchedule({required this.times, this.weekday});
+}
+
+class AppEventUpdateHealthRecord extends AppEvent {
+  final HealthRecordModel healthRecord;
+  final String appointmentId;
+
+  const AppEventUpdateHealthRecord(this.healthRecord, this.appointmentId);
 }

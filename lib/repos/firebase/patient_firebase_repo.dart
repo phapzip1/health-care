@@ -30,17 +30,31 @@ class PatientFirebaseRepo extends PatientRepo {
   }
 
   @override
-  Future<void> update(PatientModel patient) async {
+  Future<void> update({
+    required String id,
+    required String name,
+    required String phoneNumber,
+    required int gender,
+    required DateTime birthdate,
+    String? image,
+  }) async {
     try {
-      await _ref.doc(patient.id).update({
-        "id": patient.id,
-        "name": patient.name,
-        "phone_number": patient.phoneNumber,
-        "gender": patient.gender,
-        "birthdate": patient.birthdate,
-        "email": patient.email,
-        "image": patient.image,
-      });
+      if (image != null) {
+        await _ref.doc(id).update({
+          "name": name,
+          "phone_number": phoneNumber,
+          "gender": gender,
+          "birthdate": birthdate,
+          "image": image,
+        });
+      } else {
+        await _ref.doc(id).update({
+          "name": name,
+          "phone_number": phoneNumber,
+          "gender": gender,
+          "birthdate": birthdate,
+        });
+      }
     } catch (e) {
       throw GenericDBException();
     }
