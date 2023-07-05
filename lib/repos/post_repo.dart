@@ -21,4 +21,7 @@ abstract class PostRepo {
 
   // nhung cau hoi cua bac si da tra loi
   Future<List<PostModel>> getByDoctorId(String id);
+
+  // get stream chat
+  Stream<dynamic> getStreamChat(String postid);
 }
