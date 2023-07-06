@@ -6,7 +6,6 @@ class DoctorModel {
   final int gender;
   final DateTime birthdate;
   final String email;
-  final String identityId;
   final String licenseId;
   final int experience;
   final double price;
@@ -24,7 +23,6 @@ class DoctorModel {
     this.gender,
     this.birthdate,
     this.email,
-    this.identityId,
     this.licenseId,
     this.experience,
     this.price,
@@ -43,7 +41,6 @@ class DoctorModel {
         gender = map["gender"],
         birthdate = map["birthday"],
         email = map["email"],
-        identityId = map["identity_id"],
         licenseId = map["license_id"],
         experience = map["experience"],
         price = map["price"],
@@ -62,7 +59,6 @@ class DoctorModel {
       "gender": gender,
       "birthday": birthdate,
       "email": email,
-      "identity_id": identityId,
       "license_id": licenseId,
       "experience": experience,
       "price": price,

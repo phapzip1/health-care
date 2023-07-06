@@ -13,17 +13,18 @@ import 'package:health_care/repos/json_symptom_repo.dart';
 import 'package:health_care/screens/Doctor/doctor_home_screen.dart';
 import 'package:health_care/services/auth/firebase_auth_provider.dart';
 import 'package:health_care/services/storage/firebase_storage_provider.dart';
+import 'package:health_care/utils/app_theme.dart';
 
 //screen import
 import './screens/general/login_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MaterialApp(
       title: "Health Care",
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: getDefaultTheme(),
       home: BlocProvider<AppBloc>(
         create: (ctx) => AppBloc(
           appointmentProvider: AppointmentFirebaseRepo(),

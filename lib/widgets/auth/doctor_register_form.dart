@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/symptom_model.dart';
 import 'package:health_care/widgets/user_image_picker.dart';
 import 'package:intl/intl.dart';
@@ -28,12 +29,12 @@ class DoctorRegisterForm extends StatefulWidget {
 
 class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
   TextEditingController dateinput = TextEditingController();
-  late List<SymptomModel> symptoms = [];
+  TextEditingController _passwordController = TextEditingController(text: "");
+
   @override
   void initState() {
     super.initState();
     dateinput.text = '';
-    symptoms.addAll(context.read<AppBloc>().state.symptom!);
   }
 
   final _auth = FirebaseAuth.instance;
@@ -44,7 +45,6 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
   var _phone = "";
   var _exp = 0;
   var _price = 0;
-  var _identityId = "";
   var _licenseId = "";
   var _workplace = "";
   var _specialization = "";
@@ -56,11 +56,9 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
     try {
       final isValid = widget.formkey.currentState!.validate();
 
-      if (isValid) {
-        widget.formkey.currentState?.save();
-      }
+      if (!isValid) return;
 
-      if (!isValid || _selectedImage == null) {
+      if (_selectedImage == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Please pick an image'),
@@ -69,7 +67,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
         );
         return;
       }
-
+      widget.formkey.currentState?.save();
       context.read<AppBloc>().add(AppEventCreateDoctorAccount(
             _email,
             _password,
@@ -79,7 +77,6 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
             _birthday,
             _exp,
             _price * 1.0,
-            _identityId,
             _licenseId,
             _workplace,
             _specialization,
@@ -109,25 +106,6 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                   _selectedImage = pickedImage;
                 },
               ),
-              TextFormField(
-                key: const ValueKey('identity'),
-                decoration: InputDecoration(
-                  hintText: "...",
-                  labelText: 'Identity Id',
-                  labelStyle: Theme.of(context).textTheme.displayMedium,
-                ),
-                keyboardType: TextInputType.emailAddress,
-                onSaved: (value) {
-                  _identityId = value.toString();
-                },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your identity id';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
 
               //
               TextFormField(
@@ -152,6 +130,7 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
 
               //
               TextFormField(
+                controller: _passwordController,
                 key: const ValueKey('password'),
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -182,7 +161,8 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
                 validator: (value) {
                   if (value!.isEmpty ||
                       // ignore: unnecessary_null_comparison
-                      (value != _password && _password != null)) {
+                      (value != _passwordController.text &&
+                          _passwordController.text != "")) {
                     return 'Please enter valid password';
                   }
                   return null;
@@ -329,12 +309,24 @@ class _DoctorRegisterFormState extends State<DoctorRegisterForm> {
               const SizedBox(height: 16),
               //
 
-              DropDownTextField(
-                dropDownList: symptoms.map((e) => DropDownValueModel(name: e.name, value: e.name)).toList(),
-                onChanged: (value) {
-                  _specialization = (value as DropDownValueModel).name;
-                },
-              ),
+              BlocBuilder<AppBloc, AppState>(builder: (ctx, state) {
+                return DropDownTextField(
+                  textFieldDecoration: const InputDecoration(
+                    hintText: "Expertise",
+                    hintStyle: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.black),
+                  ),
+                  dropDownList: state.symptom == null
+                      ? []
+                      : state.symptom!
+                          .map((e) =>
+                              DropDownValueModel(name: e.name, value: e.name))
+                          .toList(),
+                  onChanged: (value) {
+                    _specialization = (value as DropDownValueModel).name;
+                  },
+                );
+              }),
               const SizedBox(height: 16),
               //
 

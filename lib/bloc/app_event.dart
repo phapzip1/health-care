@@ -30,7 +30,6 @@ class AppEventCreateDoctorAccount extends AppEvent {
   final DateTime birthdate;
   final int exp;
   final double price;
-  final String identityId;
   final String licenseId;
   final String workplace;
   final String specialization;
@@ -45,7 +44,6 @@ class AppEventCreateDoctorAccount extends AppEvent {
     this.birthdate,
     this.exp,
     this.price,
-    this.identityId,
     this.licenseId,
     this.workplace,
     this.specialization,
@@ -62,7 +60,8 @@ class AppEventCreatePatientAccount extends AppEvent {
   final int gender;
   final DateTime birthday;
 
-  const AppEventCreatePatientAccount(this.selectedImage, this.email, this.password, this.username, this.phone, this.gender, this.birthday);
+  const AppEventCreatePatientAccount(this.selectedImage, this.email,
+      this.password, this.username, this.phone, this.gender, this.birthday);
 }
 
 class AppEventLogout extends AppEvent {
@@ -123,7 +122,8 @@ class AppEventUpdateDoctorInfomation extends AppEvent {
   final double price;
   final DateTime birthdate;
 
-  const AppEventUpdateDoctorInfomation(this.avatar, this.username, this.phone, this.gender, this.workplace, this.exp, this.price, this.birthdate);
+  const AppEventUpdateDoctorInfomation(this.avatar, this.username, this.phone,
+      this.gender, this.workplace, this.exp, this.price, this.birthdate);
 }
 
 class AppEventUpdatePatientInfomation extends AppEvent {
@@ -133,7 +133,8 @@ class AppEventUpdatePatientInfomation extends AppEvent {
   final DateTime birthdate;
   final File? image;
 
-  const AppEventUpdatePatientInfomation(this.name, this.phoneNumber, this.gender, this.birthdate, this.image);
+  const AppEventUpdatePatientInfomation(
+      this.name, this.phoneNumber, this.gender, this.birthdate, this.image);
 }
 
 // silent actions

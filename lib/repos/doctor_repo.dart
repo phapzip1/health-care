@@ -32,7 +32,6 @@ abstract class DoctorRepo {
     required int gender,
     required DateTime birthdate,
     required String email,
-    required String identityId,
     required String licenseId,
     required int experience,
     required double price,

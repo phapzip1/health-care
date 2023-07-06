@@ -28,11 +28,28 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required this.symptomRepo,
     required this.authProvider,
     required this.storageProvider,
-  }) : super(const AppState(false, null, null, null, null, null, null, null, null, null, null)) {
+  }) : super(const AppState(false, null, null, null, null, null, null, null,
+            null, null, null)) {
     on<AppEventInitialize>((event, emit) async {
       try {
         final symptom = await symptomRepo.getAll();
         final user = authProvider.currentUser;
+        if (user == null) {
+          emit(AppState(
+            false,
+            user,
+            null,
+            null,
+            symptom,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+          ));
+          return;
+        }
         final doctor = await doctorProvider.getById(user!.uid);
         if (doctor != null) {
           emit(AppState(
@@ -64,12 +81,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             null,
           ));
         }
-      } catch (e) {}
+      } catch (e) {
+        // ignore: avoid_print
+        print(e);
+      }
     });
 
     on<AppEventLogin>((event, emit) async {
       try {
-        final user = await authProvider.logIn(email: event.email, password: event.password);
+        final user = await authProvider.logIn(
+            email: event.email, password: event.password);
 
         final doctor = await doctorProvider.getById(user.uid);
         if (doctor != null) {
@@ -107,8 +128,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppEventCreateDoctorAccount>((event, emit) async {
       try {
-        final user = await authProvider.createUser(email: event.email, password: event.password);
-        final avatarurl = await storageProvider.uploadImage(event.image, "cover/${user.uid}.jpg");
+        final user = await authProvider.createUser(
+            email: event.email, password: event.password);
+        final avatarurl = await storageProvider.uploadImage(
+            event.image, "cover/${user.uid}.jpg");
         await doctorProvider.add(
           id: user.uid,
           name: event.username,
@@ -117,7 +140,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           gender: event.gender,
           birthdate: event.birthdate,
           email: event.email,
-          identityId: event.identityId,
           licenseId: event.licenseId,
           experience: event.exp,
           price: event.price,
@@ -132,7 +154,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           event.gender,
           event.birthdate,
           event.email,
-          event.identityId,
           event.licenseId,
           event.exp,
           event.price,
@@ -150,27 +171,65 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             "sun": [],
           },
         );
-        emit(AppState(false, user, doctor, null, state.symptom, state.doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
+        emit(AppState(
+            false,
+            user,
+            doctor,
+            null,
+            state.symptom,
+            state.doctors,
+            state.posts,
+            state.appointments,
+            state.records,
+            state.history,
+            state.availableTime));
       } catch (e) {}
     });
 
     on<AppEventLogout>((event, emit) async {
       try {
         await authProvider.logOut();
-        emit(AppState(false, null, null, null, state.symptom, null, null, null, null, null, null));
+        emit(AppState(false, null, null, null, state.symptom, null, null, null,
+            null, null, null));
       } catch (e) {}
     });
 
     on<AppEventLoadAppointments>((event, emit) async {
       try {
         if (state.doctor != null) {
-          final list1 = await appointmentProvider.getAppointmentByDoctorId(state.user!.uid);
-          final list2 = await appointmentProvider.getOldAppointmentByDoctorId(state.user!.uid);
-          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, state.posts, [...list1, ...list2], state.records, state.history, state.availableTime));
+          final list1 = await appointmentProvider
+              .getAppointmentByDoctorId(state.user!.uid);
+          final list2 = await appointmentProvider
+              .getOldAppointmentByDoctorId(state.user!.uid);
+          emit(AppState(
+              false,
+              state.user,
+              state.doctor,
+              state.patient,
+              state.symptom,
+              state.doctors,
+              state.posts,
+              [...list1, ...list2],
+              state.records,
+              state.history,
+              state.availableTime));
         } else if (state.patient != null) {
-          final list1 = await appointmentProvider.getAppointmentByPatientId(state.user!.uid);
-          final list2 = await appointmentProvider.getOldAppointmentByPatientId(state.user!.uid);
-          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, state.posts, [...list1, ...list2], state.records, state.history, state.availableTime));
+          final list1 = await appointmentProvider
+              .getAppointmentByPatientId(state.user!.uid);
+          final list2 = await appointmentProvider
+              .getOldAppointmentByPatientId(state.user!.uid);
+          emit(AppState(
+              false,
+              state.user,
+              state.doctor,
+              state.patient,
+              state.symptom,
+              state.doctors,
+              state.posts,
+              [...list1, ...list2],
+              state.records,
+              state.history,
+              state.availableTime));
         }
       } catch (e) {}
     });
@@ -178,8 +237,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventLoadDoctors>((event, emit) async {
       try {
         if (event.specialization != null) {
-          final doctors = await doctorProvider.getBySpecification(event.specialization!);
-          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
+          final doctors =
+              await doctorProvider.getBySpecification(event.specialization!);
+          emit(AppState(
+              false,
+              state.user,
+              state.doctor,
+              state.patient,
+              state.symptom,
+              doctors,
+              state.posts,
+              state.appointments,
+              state.records,
+              state.history,
+              state.availableTime));
         }
       } catch (e) {}
     });
@@ -188,33 +259,81 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       try {
         if (event.specialization != null) {
           final posts = await postProvider.getByField(event.specialization);
-          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, posts, state.appointments, state.records, state.history, state.availableTime));
+          emit(AppState(
+              false,
+              state.user,
+              state.doctor,
+              state.patient,
+              state.symptom,
+              state.doctors,
+              posts,
+              state.appointments,
+              state.records,
+              state.history,
+              state.availableTime));
         }
       } catch (e) {}
     });
 
     on<AppEventLoadHistory>((event, emit) async {
       try {
-        final history = await appointmentProvider.getCompletedAppointmentCount(event.doctorId);
-        emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, state.posts, state.appointments, state.records, history, state.availableTime));
+        final history = await appointmentProvider
+            .getCompletedAppointmentCount(event.doctorId);
+        emit(AppState(
+            false,
+            state.user,
+            state.doctor,
+            state.patient,
+            state.symptom,
+            state.doctors,
+            state.posts,
+            state.appointments,
+            state.records,
+            history,
+            state.availableTime));
       } catch (e) {}
     });
 
     on<AppEventLoadOwnPosts>((event, emit) async {
       try {
         if (state.doctor != null) {
-          final posts = await postProvider.getByDoctorId(authProvider.currentUser!.uid);
-          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, posts, state.appointments, state.records, state.history, state.availableTime));
+          final posts =
+              await postProvider.getByDoctorId(authProvider.currentUser!.uid);
+          emit(AppState(
+              false,
+              state.user,
+              state.doctor,
+              state.patient,
+              state.symptom,
+              state.doctors,
+              posts,
+              state.appointments,
+              state.records,
+              state.history,
+              state.availableTime));
         } else {
-          final posts = await postProvider.getByPatientId(authProvider.currentUser!.uid);
-          emit(AppState(false, state.user, state.doctor, state.patient, state.symptom, state.doctors, posts, state.appointments, state.records, state.history, state.availableTime));
+          final posts =
+              await postProvider.getByPatientId(authProvider.currentUser!.uid);
+          emit(AppState(
+              false,
+              state.user,
+              state.doctor,
+              state.patient,
+              state.symptom,
+              state.doctors,
+              posts,
+              state.appointments,
+              state.records,
+              state.history,
+              state.availableTime));
         }
       } catch (e) {}
     });
 
     on<AppEventLoadAvailableTime>((event, emit) async {
       try {
-        final available = await appointmentProvider.getAvailableTime(event.date, event.doctorId);
+        final available = await appointmentProvider.getAvailableTime(
+            event.date, event.doctorId);
         emit(AppState(
           false,
           state.user,
@@ -235,7 +354,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       try {
         String? avatar;
         if (event.avatar != null) {
-          avatar = await storageProvider.uploadImage(event.avatar!, "cover/${state.doctor!.id}.jpg");
+          avatar = await storageProvider.uploadImage(
+              event.avatar!, "cover/${state.doctor!.id}.jpg");
         }
         await doctorProvider.update(
           id: state.doctor!.id,
@@ -257,7 +377,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           event.gender,
           event.birthdate,
           event.phone,
-          oldDoctor.identityId,
           oldDoctor.licenseId,
           event.exp,
           event.price,
@@ -267,7 +386,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           oldDoctor.rating,
           oldDoctor.availableTime,
         );
-        emit(AppState(false, state.user, newDoctor, state.patient, state.symptom, state.doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
+        emit(AppState(
+            false,
+            state.user,
+            newDoctor,
+            state.patient,
+            state.symptom,
+            state.doctors,
+            state.posts,
+            state.appointments,
+            state.records,
+            state.history,
+            state.availableTime));
       } catch (e) {}
     });
 
@@ -275,19 +405,45 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       try {
         String? avatar;
         if (event.image != null) {
-          avatar = await storageProvider.uploadImage(event.image!, "cover/${state.patient!.id}.jpg");
+          avatar = await storageProvider.uploadImage(
+              event.image!, "cover/${state.patient!.id}.jpg");
         }
-        await patientProvider.update(id: state.patient!.id, name: event.name, gender: event.gender, birthdate: event.birthdate, phoneNumber: event.phoneNumber, image: avatar);
+        await patientProvider.update(
+            id: state.patient!.id,
+            name: event.name,
+            gender: event.gender,
+            birthdate: event.birthdate,
+            phoneNumber: event.phoneNumber,
+            image: avatar);
         final oldPatient = state.patient!;
-        final newPatient = PatientModel(oldPatient.id, event.name, event.phoneNumber, event.gender, event.birthdate, oldPatient.email, avatar ?? oldPatient.image);
+        final newPatient = PatientModel(
+            oldPatient.id,
+            event.name,
+            event.phoneNumber,
+            event.gender,
+            event.birthdate,
+            oldPatient.email,
+            avatar ?? oldPatient.image);
 
-        emit(AppState(false, state.user, state.doctor, newPatient, state.symptom, state.doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
+        emit(AppState(
+            false,
+            state.user,
+            state.doctor,
+            newPatient,
+            state.symptom,
+            state.doctors,
+            state.posts,
+            state.appointments,
+            state.records,
+            state.history,
+            state.availableTime));
       } catch (e) {}
     });
 
     on<AppEventUpdateHealthRecord>((event, emit) async {
       try {
-        await appointmentProvider.updateHeathRecord(event.appointmentId, event.healthRecord);
+        await appointmentProvider.updateHeathRecord(
+            event.appointmentId, event.healthRecord);
       } catch (e) {}
     });
 
@@ -335,9 +491,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventUpdateDoctorSchedule>((event, emit) async {
       try {
         if (event.weekday != null) {
-          await doctorProvider.updateAvailableTime(state.doctor!.id, event.times, event.weekday!);
+          await doctorProvider.updateAvailableTime(
+              state.doctor!.id, event.times, event.weekday!);
           final old = state.doctor!.toMap();
-          (old["available_time"] as Map).update("${event.weekday}", (value) => event.times);
+          (old["available_time"] as Map)
+              .update("${event.weekday}", (value) => event.times);
           emit(AppState(
             false,
             state.user,
@@ -353,13 +511,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           ));
         } else {
           await Future.wait([
-            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "mon"),
-            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "tue"),
-            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "wed"),
-            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "thu"),
-            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "fri"),
-            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "sat"),
-            doctorProvider.updateAvailableTime(state.doctor!.id, event.times, "sun"),
+            doctorProvider.updateAvailableTime(
+                state.doctor!.id, event.times, "mon"),
+            doctorProvider.updateAvailableTime(
+                state.doctor!.id, event.times, "tue"),
+            doctorProvider.updateAvailableTime(
+                state.doctor!.id, event.times, "wed"),
+            doctorProvider.updateAvailableTime(
+                state.doctor!.id, event.times, "thu"),
+            doctorProvider.updateAvailableTime(
+                state.doctor!.id, event.times, "fri"),
+            doctorProvider.updateAvailableTime(
+                state.doctor!.id, event.times, "sat"),
+            doctorProvider.updateAvailableTime(
+                state.doctor!.id, event.times, "sun"),
           ]);
           final old = state.doctor!.toMap();
           old["available_time"] = {
