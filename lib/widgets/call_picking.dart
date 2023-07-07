@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import './circle_button.dart';
 
 // services
-import '../services/navigation_service.dart';
 
 class CallPicking extends StatelessWidget {
   final String cover;
@@ -59,7 +58,7 @@ class CallPicking extends StatelessWidget {
                 children: <Widget>[
                   CircleButton(
                     onClick: () {
-                      NavigationService.navKey.currentState!.pop();
+                      // NavigationService.navKey.currentState!.pop();
                     },
                     backgroundColor: Colors.red,
                     child: const Icon(

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:health_care/services/navigation_service.dart';
 import 'package:health_care/widgets/schedule_screen/header.dart';
 
 class PatientSection extends StatefulWidget {
@@ -49,9 +48,9 @@ class _PatientSectionState extends State<PatientSection> {
                 itemCount: filterList.length,
                 itemBuilder: (ctx, index) {
                   return InkWell(
-                    onTap: () => NavigationService.navKey.currentState
-                        ?.pushNamed('/appointmentdetailforpatient',
-                            arguments: filterList[index]),
+                    // onTap: () => NavigationService.navKey.currentState
+                    //     ?.pushNamed('/appointmentdetailforpatient',
+                    //         arguments: filterList[index]),
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 8.0, top: 8.0),
                       decoration: const BoxDecoration(

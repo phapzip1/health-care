@@ -104,7 +104,7 @@ class AppointmentListPatient extends StatelessWidget {
                                           const SizedBox(
                                             width: 8,
                                           ),
-                                          Text(doctorList[index].data()['rating'] as String),
+                                          Text("${doctorList[index].data()['rating']}"),
                                         ],
                                       ),
                                     ],
@@ -125,7 +125,7 @@ class AppointmentListPatient extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 16, color: Color(0xFF828282)),
                             ),
-                            Text("${doctorList[index].data()['price']} vnd",
+                            Text("${(doctorList[index].data()['price'] as double).truncate()} vnd",
                                 style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600)),
                           ],

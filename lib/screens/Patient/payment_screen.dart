@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:health_care/bloc/app_bloc.dart";
 import "package:health_care/bloc/app_state.dart";
-import "package:health_care/services/navigation_service.dart";
 import "package:intl/intl.dart";
 
 class PaymentScreen extends StatelessWidget {
@@ -235,18 +234,18 @@ class PaymentScreen extends StatelessWidget {
                       right: 20,
                       child: ElevatedButton(
                         onPressed: () {
-                          NavigationService.navKey.currentState
-                              ?.pushNamed('/wallets', arguments: {
-                            'doctorId': doctorId,
-                            'doctorName': doctorName,
-                            'price': price,
-                            'doctorPhone': doctorPhone,
-                            'doctorImage': doctorImage,
-                            'doctorSpecialization': doctorSpecialization,
-                            'date': date,
-                            'hour': hour,
-                            'patient': patientUser
-                          });
+                          // NavigationService.navKey.currentState
+                          //     ?.pushNamed('/wallets', arguments: {
+                          //   'doctorId': doctorId,
+                          //   'doctorName': doctorName,
+                          //   'price': price,
+                          //   'doctorPhone': doctorPhone,
+                          //   'doctorImage': doctorImage,
+                          //   'doctorSpecialization': doctorSpecialization,
+                          //   'date': date,
+                          //   'hour': hour,
+                          //   'patient': patientUser
+                          // });
                         },
                         child: const Padding(
                           padding: EdgeInsetsDirectional.symmetric(vertical: 5),

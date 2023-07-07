@@ -11,7 +11,6 @@ import 'package:health_care/models/appointment_model.dart';
 
 import '../firebase_options.dart';
 
-import './navigation_service.dart';
 
 class NotificationService {
   static const int _call_id = 1;
@@ -63,13 +62,13 @@ class NotificationService {
     final payload = receivedAction.payload!;
     if (payload["action"] == "call") {
       if (receivedAction.actionType == ActionType.Default) {
-        NavigationService.navKey.currentState?.pushNamedAndRemoveUntil('/call', (route) => (route.settings.name != '/call') || route.isFirst, arguments: {
-          "token": payload["token"],
-          "channel_id": payload["channel_id"],
-          "remote_name": payload["name"],
-          "remote_cover": payload["cover"],
-          "caller": false,
-        });
+        // NavigationService.navKey.currentState?.pushNamedAndRemoveUntil('/call', (route) => (route.settings.name != '/call') || route.isFirst, arguments: {
+        //   "token": payload["token"],
+        //   "channel_id": payload["channel_id"],
+        //   "remote_name": payload["name"],
+        //   "remote_cover": payload["cover"],
+        //   "caller": false,
+        // });
       } else if (receivedAction.actionType == ActionType.SilentAction) {
       }
     }

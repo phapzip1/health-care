@@ -31,10 +31,6 @@ class _MyWidgetState extends State<BottomNavBar> {
             AssetImage("assets/images/user.png")),
           label: 'Info',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.notifications),
-          label: 'Noti',
-        ),
       ],
       showUnselectedLabels: false,
       elevation: 0,

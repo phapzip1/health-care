@@ -7,8 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/bloc/app_state.dart';
-import 'package:health_care/models/doctor_model.dart';
-import 'package:health_care/services/navigation_service.dart';
 import 'package:health_care/widgets/avatar_picker.dart';
 import 'package:health_care/widgets/date_picker_textfield.dart';
 import 'dart:io';
@@ -371,7 +369,7 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       ),
                       onPressed: () {
-                        NavigationService.navKey.currentState?.pushNamed('/schedule', arguments: state.doctor!.id);
+                        // NavigationService.navKey.currentState?.pushNamed('/schedule', arguments: state.doctor!.id);
                       },
                       child: const Text(
                         'Change your time for consultant',

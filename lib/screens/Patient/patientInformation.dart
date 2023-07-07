@@ -6,7 +6,7 @@ import 'package:health_care/bloc/app_state.dart';
 // import 'package:health_care/models/patient_model.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:health_care/services/navigation_service.dart';
+import 'package:health_care/screens/Patient/updatePatientInformation.dart';
 import 'package:intl/intl.dart';
 
 class PatientInformation extends StatefulWidget {
@@ -23,8 +23,7 @@ class _PatientInformationState extends State<PatientInformation> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFAEE6FF),
-      body:
-          SafeArea(child: BlocBuilder<AppBloc, AppState>(builder: (ctx, state) {
+      body: SafeArea(child: BlocBuilder<AppBloc, AppState>(builder: (ctx, state) {
         return Stack(
           children: [
             Center(
@@ -36,140 +35,125 @@ class _PatientInformationState extends State<PatientInformation> {
                   height: 410,
                   child: Card(
                     margin: const EdgeInsets.only(top: 48),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                          right: 16, left: 16, bottom: 16),
+                      padding: const EdgeInsets.only(right: 16, left: 16, bottom: 16),
                       child: Container(
                         margin: const EdgeInsets.only(top: 60),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    state.patient!.name,
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                              Text(
+                                state.patient!.name,
+                                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              TextButton(
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    minimumSize: const Size(30, 30),
                                   ),
-                                  TextButton(
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.zero,
-                                        minimumSize: const Size(30, 30),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => BlocProvider.value(
+                                          value: BlocProvider.of<AppBloc>(context),
+                                          child: UpdatePatientInfo(patient: state.patient!),
+                                        ),
                                       ),
-                                      onPressed: () {
-                                        NavigationService.navKey.currentState!
-                                            .pushNamed('/patientupdateinfo',
-                                                arguments: state.patient!);
-                                      },
-                                      child: const ImageIcon(
-                                        AssetImage("assets/images/edit.png"),
-                                        color: Color(0xFF3A86FF),
-                                      )),
-                                ],
-                              ),
+                                    );
+                                  },
+                                  child: const ImageIcon(
+                                    AssetImage("assets/images/edit.png"),
+                                    color: Color(0xFF3A86FF),
+                                  )),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          const Text(
+                            'Basic information',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.phone_rounded),
                               const SizedBox(
-                                height: 8,
+                                width: 8,
                               ),
-                              const Text(
-                                'Basic information',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
+                              const Text('Phone Number:', style: TextStyle(fontSize: 16)),
                               const SizedBox(
-                                height: 16,
+                                width: 4,
                               ),
-                              Row(
-                                children: [
-                                  const Icon(Icons.phone_rounded),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  const Text('Phone Number:',
-                                      style: TextStyle(fontSize: 16)),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(state.patient!.phoneNumber,
-                                      style: const TextStyle(fontSize: 16)),
-                                ],
-                              ),
+                              Text(state.patient!.phoneNumber, style: const TextStyle(fontSize: 16)),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Row(
+                            children: [
+                              const ImageIcon(AssetImage("assets/images/gender.png")),
                               const SizedBox(
-                                height: 16,
+                                width: 8,
                               ),
-                              Row(
-                                children: [
-                                  const ImageIcon(
-                                      AssetImage("assets/images/gender.png")),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  const Text('Gender:',
-                                      style: TextStyle(fontSize: 16)),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                      state.patient!.gender == 1
-                                          ? "Male"
-                                          : state.patient!.gender == 2
-                                              ? "Female"
-                                              : "Other",
-                                      style: const TextStyle(fontSize: 16)),
-                                ],
-                              ),
+                              const Text('Gender:', style: TextStyle(fontSize: 16)),
                               const SizedBox(
-                                height: 16,
+                                width: 4,
                               ),
-                              Row(
-                                children: [
-                                  const ImageIcon(
-                                      AssetImage("assets/images/birthday.png")),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  const Text('Birthday:',
-                                      style: TextStyle(fontSize: 16)),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                      DateFormat('dd/MM/y')
-                                          .format(state.patient!.birthdate),
-                                      style: const TextStyle(fontSize: 16)),
-                                ],
-                              ),
+                              Text(
+                                  state.patient!.gender == 1
+                                      ? "Male"
+                                      : state.patient!.gender == 2
+                                          ? "Female"
+                                          : "Other",
+                                  style: const TextStyle(fontSize: 16)),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Row(
+                            children: [
+                              const ImageIcon(AssetImage("assets/images/birthday.png")),
                               const SizedBox(
-                                height: 24,
+                                width: 8,
                               ),
-                              const Text(
-                                "Contact",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
+                              const Text('Birthday:', style: TextStyle(fontSize: 16)),
                               const SizedBox(
-                                height: 16,
+                                width: 4,
                               ),
-                              Row(
-                                children: [
-                                  const ImageIcon(
-                                      AssetImage("assets/images/email.png")),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  const Text('Email:',
-                                      style: TextStyle(fontSize: 16)),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(state.patient!.email,
-                                      style: const TextStyle(fontSize: 16)),
-                                ],
-                              )
-                            ]),
+                              Text(DateFormat('dd/MM/y').format(state.patient!.birthdate), style: const TextStyle(fontSize: 16)),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 24,
+                          ),
+                          const Text(
+                            "Contact",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Row(
+                            children: [
+                              const ImageIcon(AssetImage("assets/images/email.png")),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              const Text('Email:', style: TextStyle(fontSize: 16)),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text(state.patient!.email, style: const TextStyle(fontSize: 16)),
+                            ],
+                          )
+                        ]),
                       ),
                     ),
                   ),
@@ -184,8 +168,7 @@ class _PatientInformationState extends State<PatientInformation> {
                         backgroundColor: Colors.white,
                         child: CircleAvatar(
                           radius: 48.0,
-                          backgroundImage:
-                              NetworkImage(state.patient!.image),
+                          backgroundImage: NetworkImage(state.patient!.image),
                         ),
                       ),
                     )),

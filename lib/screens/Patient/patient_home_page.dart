@@ -12,8 +12,8 @@ import 'package:health_care/widgets/header_section.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class PatientHomePage extends StatelessWidget {
+  const PatientHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +36,13 @@ class HomePage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           HeaderSection(
-                              url: state.patient!.image,
-                              userName: state.patient!.name),
+                            url: state.patient!.image,
+                            userName: state.patient!.name,
+                          ),
                           FunctionCategory(user.uid, false),
                           const Text(
                             'My Appointment',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                height: 1.1),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
                           ),
                           const SizedBox(
                             height: 16,
@@ -59,10 +57,7 @@ class HomePage extends StatelessWidget {
                           ),
                           const Text(
                             'Typical Doctor',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                height: 1.1),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
                           ),
                           const SizedBox(
                             height: 16,

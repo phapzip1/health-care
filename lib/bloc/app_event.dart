@@ -52,7 +52,7 @@ class AppEventCreateDoctorAccount extends AppEvent {
 }
 
 class AppEventCreatePatientAccount extends AppEvent {
-  final File selectedImage;
+  final File image;
   final String email;
   final String password;
   final String username;
@@ -60,7 +60,7 @@ class AppEventCreatePatientAccount extends AppEvent {
   final int gender;
   final DateTime birthday;
 
-  const AppEventCreatePatientAccount(this.selectedImage, this.email,
+  const AppEventCreatePatientAccount(this.image, this.email,
       this.password, this.username, this.phone, this.gender, this.birthday);
 }
 

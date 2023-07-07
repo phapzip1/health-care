@@ -16,7 +16,7 @@ class PatientFirebaseRepo extends PatientRepo {
     required String image,
   }) async {
     try {
-      await _ref.add({
+      await _ref.doc(id).set({
         "name": name,
         "phone_number": phoneNumber,
         "gender": gender,

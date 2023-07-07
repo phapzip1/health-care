@@ -11,6 +11,9 @@ import 'package:health_care/repos/firebase/patient_firebase_repo.dart';
 import 'package:health_care/repos/firebase/post_firebase_repo.dart';
 import 'package:health_care/repos/json_symptom_repo.dart';
 import 'package:health_care/screens/Doctor/doctor_home_screen.dart';
+import 'package:health_care/screens/Doctor/main_page_doctor.dart';
+import 'package:health_care/screens/Patient/main_page_patient.dart';
+import 'package:health_care/screens/general/loading_screen.dart';
 import 'package:health_care/services/auth/firebase_auth_provider.dart';
 import 'package:health_care/services/storage/firebase_storage_provider.dart';
 import 'package:health_care/utils/app_theme.dart';
@@ -55,14 +58,18 @@ class HomePage extends StatelessWidget {
         return (previous.user == null && current.user != null) || (previous.user != null && current.user == null);
       },
       builder: (ctx, state) {
+        if (state.isLoading) {
+          return const LoadingScreen("Loading...");
+        }
+
         if (state.user == null) {
           return LoginScreen();
         }
         if (state.doctor != null) {
-          return const DoctorHomeScreen();
+          return const MainPageDoctor();
         }
 
-        return const HomePage();
+        return const MainPagePatient();
       },
     );
   }

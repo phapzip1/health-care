@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:health_care/services/navigation_service.dart';
 import 'package:animate_do/animate_do.dart';
 
 // ignore: must_be_immutable
@@ -21,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _navigateHome() async {
     await Future.delayed(const Duration(milliseconds: 3000), () {
-      NavigationService.navKey.currentState?.pushReplacementNamed('/');
+      // NavigationService.navKey.currentState?.pushReplacementNamed('/');
     });
   }
 

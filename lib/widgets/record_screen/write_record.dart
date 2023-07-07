@@ -5,7 +5,6 @@ import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/models/health_record_model.dart';
-import 'package:health_care/services/navigation_service.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -38,8 +37,8 @@ class _RecordDetailState extends State<WriteRecord> {
               prescriptionController.text, noteController.text),
           widget.record.id));
 
-      NavigationService.navKey.currentState!
-          .pushNamed('/record', arguments: true);
+      // NavigationService.navKey.currentState!
+      //     .pushNamed('/record', arguments: true);
     } else {
       Fluttertoast.showToast(
         msg: "You must fill diagnostic for patient",

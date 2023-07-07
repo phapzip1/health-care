@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:health_care/services/navigation_service.dart';
 
 // ignore: must_be_immutable
 class ReviewModal extends StatefulWidget {
@@ -69,7 +68,7 @@ class _ReviewModalState extends State<ReviewModal> {
       //   );
       // }
       _feedback.clear();
-      NavigationService.navKey.currentState!.pop();
+      // NavigationService.navKey.currentState!.pop();
     } catch (e) {
       print(e);
     }

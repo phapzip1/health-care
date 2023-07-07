@@ -4,7 +4,6 @@ import "package:health_care/bloc/app_bloc.dart";
 import "package:health_care/bloc/app_event.dart";
 import "package:health_care/models/patient_model.dart";
 import 'package:fluttertoast/fluttertoast.dart';
-import "package:health_care/services/navigation_service.dart";
 
 class CardsAndWalletsScreen extends StatelessWidget {
   final String doctorId;

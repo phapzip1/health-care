@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/models/appointment_model.dart';
 // import 'package:health_care/models/health_record_model.dart';
-import 'package:health_care/services/navigation_service.dart';
 import 'package:intl/intl.dart';
 
 class RecordTag extends StatelessWidget {
@@ -16,8 +15,8 @@ class RecordTag extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        NavigationService.navKey.currentState?.pushNamed('/record',
-            arguments: {"record": healthRecord, "isDoctor": isDoctor});
+        // NavigationService.navKey.currentState?.pushNamed('/record',
+        //     arguments: {"record": healthRecord, "isDoctor": isDoctor});
       },
       child: Container(
         margin: const EdgeInsets.only(top: 16),

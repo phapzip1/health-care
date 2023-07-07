@@ -22,8 +22,6 @@ class _MyWidgetState extends State<MainPageDoctor> {
         return DoctorSchedulePage();
       case 2:
         return DoctorInforPage(true);
-      case 3:
-        return NotificationPage();
       default:
         return DoctorHomeScreen();
     }

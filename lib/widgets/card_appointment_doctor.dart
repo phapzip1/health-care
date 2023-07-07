@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/appointment_model.dart';
-import 'package:health_care/services/navigation_service.dart';
 import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
@@ -52,12 +51,12 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
     final now = DateTime.now();
 
     return InkWell(
-      onTap: () => NavigationService.navKey.currentState
-          ?.pushNamed('/appointmentdetailfordoctor', arguments: {
-        "appointment": widget.schedule,
-        "updateStatus":
-            widget.updateStatus(widget.schedule.id, widget.schedule.status),
-      }),
+      // onTap: () => NavigationService.navKey.currentState
+      //     ?.pushNamed('/appointmentdetailfordoctor', arguments: {
+      //   "appointment": widget.schedule,
+      //   "updateStatus":
+      //       widget.updateStatus(widget.schedule.id, widget.schedule.status),
+      // }),
       child: Container(
         margin: const EdgeInsets.only(bottom: 8.0, top: 8.0),
         decoration: const BoxDecoration(
@@ -235,9 +234,9 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                                                         0.05,
                                                 vertical: 12)),
                                         onPressed: () {
-                                          NavigationService.navKey.currentState
-                                              ?.pushNamed('/chat',
-                                                  arguments: widget.schedule);
+                                          // NavigationService.navKey.currentState
+                                          //     ?.pushNamed('/chat',
+                                          //         arguments: widget.schedule);
                                         },
                                         child: const Text(
                                           'Send message',
@@ -302,9 +301,9 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8)),
                             onPressed: () {
-                              NavigationService.navKey.currentState?.pushNamed(
-                                  '/writerecord',
-                                  arguments: widget.schedule);
+                              // NavigationService.navKey.currentState?.pushNamed(
+                              //     '/writerecord',
+                              //     arguments: widget.schedule);
                             },
                             child: const Text(
                               'Write record',

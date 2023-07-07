@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/bloc/app_state.dart';
 import 'package:intl/intl.dart';
 
@@ -10,10 +11,15 @@ class PersonalAppointment extends StatelessWidget {
   const PersonalAppointment({super.key});
 
   Widget build(BuildContext context) {
+    context.read<AppBloc>().add(const AppEventLoadAppointments());
     return BlocBuilder<AppBloc, AppState>(
         // future: AppointmentModel.getAppointment(patientId: user!.uid),
         builder: (ctx, state) {
-      final appointmentDocs = state.appointments!;
+
+         final appointmentDocs = state.appointments;
+         if (appointmentDocs == null) {
+          return const CircularProgressIndicator();
+         }
 
       return ListView.builder(
           scrollDirection: Axis.horizontal,

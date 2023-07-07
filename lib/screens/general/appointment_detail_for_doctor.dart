@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/models/appointment_model.dart';
-import 'package:health_care/services/navigation_service.dart';
 import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
@@ -115,11 +114,11 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                             ElevatedButton(
                                 style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2F80ED), elevation: 0, padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12)),
                                 onPressed: () {
-                                  NavigationService.navKey.currentState!.pushNamed('/record', arguments: {
-                                    "record": widget.appointment.healthRecord,
-                                    "isDoctor": true,
-                                    "appointmentId": widget.appointment,
-                                  });
+                                  // NavigationService.navKey.currentState!.pushNamed('/record', arguments: {
+                                  //   "record": widget.appointment.healthRecord,
+                                  //   "isDoctor": true,
+                                  //   "appointmentId": widget.appointment,
+                                  // });
                                 },
                                 child: const Row(
                                   children: [
@@ -313,13 +312,13 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor: const Color(0xFF2F80ED), elevation: 0, padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.05, vertical: 12)),
                                       onPressed: () {
-                                        NavigationService.navKey.currentState?.pushNamed(
-                                          '/call',
-                                          arguments: {
-                                            "remotename": widget.appointment.patientName,
-                                            "remotecover": widget.appointment.patientImage,
-                                          },
-                                        );
+                                        // NavigationService.navKey.currentState?.pushNamed(
+                                        //   '/call',
+                                        //   arguments: {
+                                        //     "remotename": widget.appointment.patientName,
+                                        //     "remotecover": widget.appointment.patientImage,
+                                        //   },
+                                        // );
                                       },
                                       child: const Text(
                                         'Join the meeting room',

@@ -1,18 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:health_care/screens/general/notification_page.dart';
-import '../../screens/Patient/homePage.dart';
+import 'patient_home_page.dart';
 import './patientSchedulePage.dart';
 import '../../components/bottomNavigation.dart';
 import '../../screens/Patient/patientInformation.dart';
 
-class MainPagePtient extends StatefulWidget {
-  const MainPagePtient({super.key});
+class MainPagePatient extends StatefulWidget {
+  const MainPagePatient({super.key});
   @override
-  State<MainPagePtient> createState() => _MyWidgetState();
+  State<MainPagePatient> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<MainPagePtient> {
+class _MyWidgetState extends State<MainPagePatient> {
   int _selectedIndex = 0;
 
   final user = FirebaseAuth.instance.currentUser!.uid;
@@ -20,7 +20,7 @@ class _MyWidgetState extends State<MainPagePtient> {
   Widget currentPagePatient(int index) {
     switch (index) {
       case 0:
-        return HomePage();
+        return PatientHomePage();
       case 1:
         return PatientSchedulePage();
       case 2:
@@ -28,7 +28,7 @@ class _MyWidgetState extends State<MainPagePtient> {
       case 3:
         return NotificationPage();
       default:
-        return HomePage();
+        return PatientHomePage();
     }
   }
 

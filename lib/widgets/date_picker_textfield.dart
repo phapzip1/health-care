@@ -44,7 +44,9 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
         );
 
         if (pickedDate != null && pickedDate != _pickedDate) {
-          _pickedDate = pickedDate;
+          setState(() {
+            _pickedDate = pickedDate;
+          });
           widget.onChange(_pickedDate);
         }
       },
