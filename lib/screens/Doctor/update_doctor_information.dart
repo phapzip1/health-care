@@ -9,6 +9,7 @@ import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/doctor_model.dart';
 import 'package:health_care/screens/Doctor/doctorSchedulePage.dart';
+import 'package:health_care/screens/general/doctor_schedule_screen.dart';
 import 'package:health_care/widgets/avatar_picker.dart';
 import 'package:health_care/widgets/date_picker_textfield.dart';
 import 'dart:io';
@@ -18,8 +19,7 @@ class UpdateDoctorInformation extends StatefulWidget {
   UpdateDoctorInformation({super.key, required this.doctor});
 
   @override
-  State<UpdateDoctorInformation> createState() =>
-      _UpdateDoctorInformationState();
+  State<UpdateDoctorInformation> createState() => _UpdateDoctorInformationState();
 }
 
 class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
@@ -27,13 +27,25 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
   final _formKey = GlobalKey<FormState>();
 
   File? _avatar;
-  String _username = "";
-  String _phone = "";
-  int _gender = 0;
-  String _workplace = "";
-  int _experience = 0;
-  double _price = 0;
-  DateTime? _birthdate;
+  late String _username;
+  late String _phone;
+  late int _gender;
+  late String _workplace;
+  late int _experience;
+  late double _price;
+  late DateTime _birthdate;
+
+  @override
+  void initState() {
+    super.initState();
+    _username = widget.doctor.name;
+    _phone = widget.doctor.phoneNumber;
+    _gender = widget.doctor.gender;
+    _workplace = widget.doctor.workplace;
+    _price = widget.doctor.price;
+    _birthdate = widget.doctor.birthdate;
+    _experience = widget.doctor.experience;
+  }
 
   void _updateInfor(BuildContext context) async {
     final isValid = _formKey.currentState!.validate();
@@ -49,7 +61,7 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
               _workplace,
               _experience,
               _price,
-              _birthdate!,
+              _birthdate,
             ),
           );
     }
@@ -60,6 +72,16 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
+    var genderString = "Male";
+    switch (_gender) {
+      case 1:
+        genderString = "Female";
+        break;
+      case 2:
+        genderString = "Other";
+        break;
+      default:
+    }
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
@@ -94,9 +116,7 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
               )),
         ],
       ),
-      body: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
-        _birthdate = state.doctor!.birthdate;
-        return GestureDetector(
+      body: GestureDetector(
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
           },
@@ -109,54 +129,43 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                   onPicked: (value) {
                     _avatar = value;
                   },
-                  defaultImageUrl: state.doctor!.image,
+                  defaultImageUrl: widget.doctor.image,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('License ID',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const Text('License ID', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(
                       height: 8,
                     ),
                     TextFormField(
+                      initialValue: widget.doctor.licenseId,
                       style: const TextStyle(fontSize: 16),
                       decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                const BorderSide(color: Color(0xFF3A86FF))),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF3A86FF))),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 20),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                       ),
                       readOnly: true,
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text('Name',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const Text('Name', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(
                       height: 8,
                     ),
                     TextFormField(
-                      initialValue: state.doctor!.name,
+                      initialValue: _username,
                       style: const TextStyle(fontSize: 16),
                       decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                const BorderSide(color: Color(0xFF3A86FF))),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF3A86FF))),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 20),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -174,31 +183,26 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text('Phone number',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const Text('Phone number', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(
                       height: 8,
                     ),
                     TextFormField(
+                      initialValue: _phone,
                       keyboardType: TextInputType.phone,
                       style: const TextStyle(fontSize: 16),
                       decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                const BorderSide(color: Color(0xFF3A86FF))),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF3A86FF))),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 20),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Name cannot be empty";
                         }
-                        if (value.length >= 8) {
+                        if (value.length <= 7) {
                           return "Phone number must be greater than 8 chars";
                         }
                         return null;
@@ -210,13 +214,12 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text('Gender',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const Text('Gender', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(
                       height: 8,
                     ),
                     DropDownTextField(
+                      initialValue: genderString,
                       clearOption: false,
                       dropDownItemCount: 3,
                       dropDownList: const [
@@ -225,27 +228,20 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                         DropDownValueModel(name: 'Other', value: 2),
                       ],
                       textFieldDecoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                const BorderSide(color: Color(0xFF3A86FF))),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF3A86FF))),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 20),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                       ),
                       onChanged: (value) {
-                        _gender =
-                            int.parse((value as DropDownValueModel).value);
+                        _gender = int.parse((value as DropDownValueModel).value);
                       },
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text('Birthday',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const Text('Birthday', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(
                       height: 8,
                     ),
@@ -253,31 +249,26 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                       onChange: (value) {
                         _birthdate = value;
                       },
-                      initialDate: state.doctor!.birthdate,
+                      initialDate: _birthdate,
                       firstDate: DateTime(1970),
                       lastDate: now,
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text('Workplace',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const Text('Workplace', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(
                       height: 8,
                     ),
                     TextFormField(
+                      initialValue: _workplace,
                       style: const TextStyle(fontSize: 16),
                       decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                const BorderSide(color: Color(0xFF3A86FF))),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF3A86FF))),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 20),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -295,9 +286,7 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text('Expertise',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const Text('Expertise', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(
                       height: 8,
                     ),
@@ -321,42 +310,34 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                     //   },
                     // ),
                     TextFormField(
+                      initialValue: widget.doctor.specialization,
                       style: const TextStyle(fontSize: 16),
                       decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                const BorderSide(color: Color(0xFF3A86FF))),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF3A86FF))),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 20),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                       ),
                       readOnly: true,
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text('Experience',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const Text('Experience', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(
                       height: 8,
                     ),
                     TextFormField(
+                      initialValue: "$_experience",
                       keyboardType: TextInputType.number,
                       style: const TextStyle(fontSize: 16),
                       decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                const BorderSide(color: Color(0xFF3A86FF))),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF3A86FF))),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 20),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -375,25 +356,20 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text('Price for consulting',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    const Text('Price for consulting', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(
                       height: 8,
                     ),
                     TextFormField(
+                      initialValue: "${_price.truncate()}",
                       keyboardType: TextInputType.number,
                       style: const TextStyle(fontSize: 16),
                       decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                const BorderSide(color: Color(0xFF3A86FF))),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF3A86FF))),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 20),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -414,16 +390,14 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                     ),
                     const Text(
                       'Schedules',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 8,
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       ),
                       onPressed: () {
                         // NavigationService.navKey.currentState?.pushNamed('/schedule', arguments: state.doctor!.id);
@@ -431,15 +405,14 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                           MaterialPageRoute(
                             builder: (_) => BlocProvider.value(
                               value: BlocProvider.of<AppBloc>(context),
-                              child: const DoctorSchedulePage(),
+                              child: const DoctorScheduleScreen(),
                             ),
                           ),
                         );
                       },
                       child: const Text(
                         'Change your time for consultant',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),
                   ],
@@ -447,8 +420,7 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
               ]),
             ),
           ),
-        );
-      }),
+        ),
     );
   }
 }
