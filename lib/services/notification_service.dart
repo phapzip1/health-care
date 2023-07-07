@@ -69,6 +69,7 @@ class NotificationService {
         //   "remote_cover": payload["cover"],
         //   "caller": false,
         // });
+        
       } else if (receivedAction.actionType == ActionType.SilentAction) {
       }
     }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/models/appointment_model.dart';
+import 'package:health_care/widgets/record_screen/record_detail.dart';
 import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
@@ -13,10 +14,12 @@ class AppointmentDetailForDoctor extends StatefulWidget {
   AppointmentDetailForDoctor(this.appointment, this.updateStatus, {super.key});
 
   @override
-  State<AppointmentDetailForDoctor> createState() => _AppointmentDetailForDoctorState();
+  State<AppointmentDetailForDoctor> createState() =>
+      _AppointmentDetailForDoctorState();
 }
 
-class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor> {
+class _AppointmentDetailForDoctorState
+    extends State<AppointmentDetailForDoctor> {
   bool isConfirm = false;
 
   @override
@@ -90,16 +93,23 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                               children: [
                                 CircleAvatar(
                                   radius: 24,
-                                  backgroundImage: NetworkImage(widget.appointment.patientImage),
+                                  backgroundImage: NetworkImage(
+                                      widget.appointment.patientImage),
                                 ),
                                 const SizedBox(
                                   width: 8,
                                 ),
                                 Container(
-                                  constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.35),
+                                  constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.35),
                                   child: Text(
                                     widget.appointment.patientName,
-                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
                                     overflow: TextOverflow.clip,
                                     softWrap: true,
                                   ),
@@ -112,13 +122,29 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                               ],
                             ),
                             ElevatedButton(
-                                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2F80ED), elevation: 0, padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12)),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF2F80ED),
+                                    elevation: 0,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 12)),
                                 onPressed: () {
                                   // NavigationService.navKey.currentState!.pushNamed('/record', arguments: {
                                   //   "record": widget.appointment.healthRecord,
                                   //   "isDoctor": true,
                                   //   "appointmentId": widget.appointment,
                                   // });
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => BlocProvider.value(
+                                        value:
+                                            BlocProvider.of<AppBloc>(context),
+                                        child: RecordDetail(
+                                            widget.appointment.healthRecord,
+                                            true,
+                                            widget.appointment),
+                                      ),
+                                    ),
+                                  );
                                 },
                                 child: const Row(
                                   children: [
@@ -128,7 +154,9 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                                     ),
                                     Text(
                                       'Write record',
-                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ))
@@ -146,7 +174,9 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         ListTile(
-                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: listtileVerticalPadding,
+                              horizontal: 10),
                           leading: const Padding(
                             padding: EdgeInsets.only(top: 8),
                             child: Icon(
@@ -157,11 +187,17 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                           ),
                           title: const Text(
                             "Patient",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey),
                           ),
                           subtitle: Text(
                             widget.appointment.patientName,
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
                         ),
                         const Divider(
@@ -169,7 +205,9 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                           height: 1,
                         ),
                         ListTile(
-                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: listtileVerticalPadding,
+                              horizontal: 10),
                           leading: Padding(
                             padding: const EdgeInsets.only(top: 6),
                             child: Image.asset(
@@ -179,11 +217,17 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                           ),
                           title: const Text(
                             "Way to consult",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey),
                           ),
                           subtitle: const Text(
                             "Video call",
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
                         ),
                         const Divider(
@@ -191,7 +235,9 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                           height: 1,
                         ),
                         ListTile(
-                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: listtileVerticalPadding,
+                              horizontal: 10),
                           leading: Padding(
                             padding: const EdgeInsets.only(top: 6),
                             child: Image.asset(
@@ -201,11 +247,17 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                           ),
                           title: const Text(
                             "Cost",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey),
                           ),
                           subtitle: Text(
                             "${widget.appointment.price} vnd",
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
                         ),
                         const Divider(
@@ -213,7 +265,9 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                           height: 1,
                         ),
                         ListTile(
-                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: listtileVerticalPadding,
+                              horizontal: 10),
                           leading: Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: Image.asset(
@@ -223,11 +277,17 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                           ),
                           title: const Text(
                             "Time",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey),
                           ),
                           subtitle: Text(
                             "$_time    $_hour",
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
                         ),
                         const Divider(
@@ -235,7 +295,9 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                           height: 1,
                         ),
                         ListTile(
-                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: listtileVerticalPadding,
+                              horizontal: 10),
                           leading: const Padding(
                             padding: EdgeInsets.only(top: 6),
                             child: Icon(
@@ -246,11 +308,17 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                           ),
                           title: const Text(
                             "Issue",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey),
                           ),
                           subtitle: Text(
                             widget.appointment.specialization,
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
                         ),
                         const Divider(
@@ -258,7 +326,9 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                           height: 1,
                         ),
                         ListTile(
-                          contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: listtileVerticalPadding,
+                              horizontal: 10),
                           leading: const Padding(
                             padding: EdgeInsets.only(top: 6),
                             child: Icon(
@@ -269,7 +339,10 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                           ),
                           title: const Text(
                             "Status",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey),
                           ),
                           subtitle: Text(
                             widget.appointment.status == 0
@@ -277,7 +350,10 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                                 : widget.appointment.status == 1
                                     ? "Confirmed"
                                     : "Rejected",
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
                         ),
                       ],
@@ -290,27 +366,48 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                           ? Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                if (now.isBefore(meeting.subtract(const Duration(minutes: 30))))
+                                if (now.isBefore(meeting
+                                    .subtract(const Duration(minutes: 30))))
                                   SizedBox(
                                     width: mediaQuery.width * 0.5,
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                            backgroundColor: const Color(0xFFFFBE0B), elevation: 0, padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.05, vertical: 12)),
+                                            backgroundColor:
+                                                const Color(0xFFFFBE0B),
+                                            elevation: 0,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal:
+                                                    mediaQuery.width * 0.05,
+                                                vertical: 12)),
                                         onPressed: () {
                                           // widget.appointment.cancel();
-                                          context.read<AppBloc>().appointmentProvider.cancelAppointment(widget.appointment.id);
+                                          context
+                                              .read<AppBloc>()
+                                              .appointmentProvider
+                                              .cancelAppointment(
+                                                  widget.appointment.id);
                                         },
                                         child: const Text(
                                           'Cancel',
-                                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                              fontSize: 16),
                                         )),
                                   ),
-                                if (now.isBefore(meeting.subtract(const Duration(minutes: 5))))
+                                if (now.isBefore(meeting
+                                    .subtract(const Duration(minutes: 5))))
                                   SizedBox(
                                     width: mediaQuery.width * 0.5,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(0xFF2F80ED), elevation: 0, padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.05, vertical: 12)),
+                                          backgroundColor:
+                                              const Color(0xFF2F80ED),
+                                          elevation: 0,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  mediaQuery.width * 0.05,
+                                              vertical: 12)),
                                       onPressed: () {
                                         // NavigationService.navKey.currentState?.pushNamed(
                                         //   '/call',
@@ -322,7 +419,10 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                                       },
                                       child: const Text(
                                         'Join the meeting room',
-                                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            fontSize: 16),
                                       ),
                                     ),
                                   ),
@@ -334,22 +434,40 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                                 SizedBox(
                                   width: mediaQuery.width * 0.5,
                                   child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE0E0E0), elevation: 0, padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1)),
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xFFE0E0E0),
+                                        elevation: 0,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                mediaQuery.width * 0.1)),
                                     onPressed: () => _updateState(2),
                                     child: const Text(
                                       'Reject',
-                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                          fontSize: 16),
                                     ),
                                   ),
                                 ),
                                 SizedBox(
                                   width: mediaQuery.width * 0.5,
                                   child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF3A86FF), elevation: 0, padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.1)),
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xFF3A86FF),
+                                        elevation: 0,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                mediaQuery.width * 0.1)),
                                     onPressed: () => _updateState(1),
                                     child: const Text(
                                       'Confirm',
-                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: 16),
                                     ),
                                   ),
                                 )

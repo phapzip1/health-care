@@ -46,8 +46,6 @@ class _RecordDetailState extends State<RecordDetail> {
       if (diagnosticController.text != "") {
         context.read<AppBloc>().add(AppEventUpdateHealthRecord(widget.record, widget.appointment.id));
 
-        // NavigationService.navKey.currentState!
-        //     .pushNamed('/record', arguments: true);
         Fluttertoast.showToast(
           msg: "Update successfully",
           toastLength: Toast.LENGTH_SHORT,

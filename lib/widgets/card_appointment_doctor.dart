@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/appointment_model.dart';
+import 'package:health_care/screens/general/appointment_detail_for_doctor.dart';
+import 'package:health_care/widgets/record_screen/write_record.dart';
 import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
@@ -57,6 +59,17 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
       //   "updateStatus":
       //       widget.updateStatus(widget.schedule.id, widget.schedule.status),
       // }),
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: BlocProvider.of<AppBloc>(context),
+            child: AppointmentDetailForDoctor(
+                widget.schedule,
+                widget.updateStatus(
+                    widget.schedule.id, widget.schedule.status)),
+          ),
+        ),
+      ),
       child: Container(
         margin: const EdgeInsets.only(bottom: 8.0, top: 8.0),
         decoration: const BoxDecoration(
@@ -237,6 +250,7 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                                           // NavigationService.navKey.currentState
                                           //     ?.pushNamed('/chat',
                                           //         arguments: widget.schedule);
+                                          
                                         },
                                         child: const Text(
                                           'Send message',
@@ -304,6 +318,12 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                               // NavigationService.navKey.currentState?.pushNamed(
                               //     '/writerecord',
                               //     arguments: widget.schedule);
+                              MaterialPageRoute(
+                                builder: (_) => BlocProvider.value(
+                                  value: BlocProvider.of<AppBloc>(context),
+                                  child: WriteRecord(widget.schedule),
+                                ),
+                              );
                             },
                             child: const Text(
                               'Write record',

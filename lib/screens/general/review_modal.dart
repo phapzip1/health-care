@@ -24,7 +24,6 @@ class _ReviewModalState extends State<ReviewModal> {
 
   void _submitFeedback() async {
     try {
-      
       // final review = await ReviewModel.getByDoctorIdAndPatientId(
       //   widget.doctorId,
       //   widget.patientId,
@@ -69,6 +68,7 @@ class _ReviewModalState extends State<ReviewModal> {
       // }
       _feedback.clear();
       // NavigationService.navKey.currentState!.pop();
+      Navigator.of(context).pop();
     } catch (e) {
       print(e);
     }

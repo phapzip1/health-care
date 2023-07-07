@@ -9,6 +9,7 @@ import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/models/doctor_model.dart';
+import 'package:health_care/screens/Doctor/update_doctor_information.dart';
 import 'package:health_care/screens/general/review_section.dart';
 import 'package:health_care/widgets/infomation_page/time_choosing.dart';
 import 'package:intl/intl.dart';
@@ -214,6 +215,12 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                     onPressed: () {
                       // NavigationService.navKey.currentState!
                       //     .pushNamed('/doctorupdateinfo', arguments: userDocs);
+                      Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => BlocProvider.value(
+                                          value: BlocProvider.of<AppBloc>(context),
+                                          child: UpdateDoctorInformation(doctor: state.doctor!),
+                                        ),),);
                     },
                     icon: const Icon(
                       Icons.edit,

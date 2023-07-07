@@ -59,6 +59,7 @@ class CallPicking extends StatelessWidget {
                   CircleButton(
                     onClick: () {
                       // NavigationService.navKey.currentState!.pop();
+                      Navigator.of(context).pop();
                     },
                     backgroundColor: Colors.red,
                     child: const Icon(

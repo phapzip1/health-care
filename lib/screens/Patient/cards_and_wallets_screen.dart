@@ -4,6 +4,7 @@ import "package:health_care/bloc/app_bloc.dart";
 import "package:health_care/bloc/app_event.dart";
 import "package:health_care/models/patient_model.dart";
 import 'package:fluttertoast/fluttertoast.dart';
+import "package:health_care/screens/Patient/patient_home_page.dart";
 
 class CardsAndWalletsScreen extends StatelessWidget {
   final String doctorId;
@@ -43,7 +44,15 @@ class CardsAndWalletsScreen extends StatelessWidget {
         ));
 
     //   NavigationService.navKey.currentState?.pushNamed('/');
-    
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: BlocProvider.of<AppBloc>(context),
+          child: const PatientHomePage(),
+        ),
+      ),
+    );
+
     // await currentAppointment.save().then((value) {
     //   Fluttertoast.showToast(
     //     msg: "Make appointment successfully",

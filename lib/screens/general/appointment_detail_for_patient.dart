@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/models/appointment_model.dart';
+import 'package:health_care/screens/general/call_screen.dart';
 import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
@@ -367,6 +368,16 @@ class AppointmentDetailForPatient extends StatelessWidget {
                                 //             "remotecover": appointment.doctorImage,
                                 //           },
                                 //         );
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                      value: BlocProvider.of<AppBloc>(context),
+                                      child: CallScreen(
+                                          remotename: appointment.doctorName,
+                                          remotecover: appointment.doctorImage),
+                                    ),
+                                  ),
+                                );
                               },
                               child: const Text(
                                 'Join the meeting room',
