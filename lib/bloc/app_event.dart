@@ -106,9 +106,9 @@ class AppEventLoadHistory extends AppEvent {
 }
 
 class AppEventLoadAvailableTime extends AppEvent {
-  final String doctorId;
+
   final DateTime date;
-  const AppEventLoadAvailableTime(this.doctorId, this.date);
+  const AppEventLoadAvailableTime(this.date);
 }
 
 // update data
