@@ -6,7 +6,7 @@ import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/screens/Doctor/doctor_infor_page.dart';
 
 class AppointmentListPatient extends StatelessWidget {
-  AppointmentListPatient({required this.spec});
+  AppointmentListPatient({super.key, required this.spec});
 
   final String spec;
   final _ref = FirebaseFirestore.instance.collection('doctor');
@@ -14,9 +14,7 @@ class AppointmentListPatient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: spec != "All"
-            ? _ref.where("specialization", isEqualTo: spec).get()
-            : _ref.get(),
+        future: spec != "All" ? _ref.where("specialization", isEqualTo: spec).get() : _ref.get(),
         builder: (ctx, futureSnapShot) {
           if (futureSnapShot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -48,10 +46,11 @@ class AppointmentListPatient extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => BlocProvider.value(
-                                  value: BlocProvider.of<AppBloc>(context),
-                                  child: const DoctorInforPage(false),
-                                )),
+                          builder: (_) => BlocProvider.value(
+                            value: BlocProvider.of<AppBloc>(context),
+                            child: const DoctorInforPage(false),
+                          ),
+                        ),
                       )
                     },
                     child: Padding(
@@ -63,8 +62,7 @@ class AppointmentListPatient extends StatelessWidget {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10.0),
                               child: Image(
-                                image: NetworkImage(
-                                    doctorList[index].data()['image']),
+                                image: NetworkImage(doctorList[index].data()['image']),
                                 height: 80,
                                 width: 64,
                                 fit: BoxFit.cover,
@@ -89,15 +87,13 @@ class AppointmentListPatient extends StatelessWidget {
                                   ),
                                   Text(
                                     doctorList[index].data()['specialization'],
-                                    style: const TextStyle(
-                                        fontSize: 16, color: Color(0xFF828282)),
+                                    style: const TextStyle(fontSize: 16, color: Color(0xFF828282)),
                                   ),
                                   const SizedBox(
                                     height: 6,
                                   ),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         children: [
@@ -109,8 +105,7 @@ class AppointmentListPatient extends StatelessWidget {
                                           const SizedBox(
                                             width: 8,
                                           ),
-                                          Text(
-                                              "${doctorList[index].data()['rating']}"),
+                                          Text("${doctorList[index].data()['rating']}"),
                                         ],
                                       ),
                                     ],
@@ -128,13 +123,9 @@ class AppointmentListPatient extends StatelessWidget {
                           children: [
                             const Text(
                               'Consultation price:',
-                              style: TextStyle(
-                                  fontSize: 16, color: Color(0xFF828282)),
+                              style: TextStyle(fontSize: 16, color: Color(0xFF828282)),
                             ),
-                            Text(
-                                "${(doctorList[index].data()['price'] as double).truncate()} vnd",
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600)),
+                            Text("${(doctorList[index].data()['price'] as double).truncate()} vnd", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                           ],
                         ),
                       ]),
