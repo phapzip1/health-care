@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, unused_element
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
@@ -14,11 +15,6 @@ class DoctorInforPage extends StatefulWidget {
   State<DoctorInforPage> createState() => _DoctorInforPageState();
 }
 
-final _nameController = TextEditingController();
-final _workplaceController = TextEditingController();
-final _specializationController = TextEditingController();
-final _priceController = TextEditingController();
-final _experienceController = TextEditingController();
 
 class _DoctorInforPageState extends State<DoctorInforPage> {
   @override

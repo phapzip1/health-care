@@ -16,7 +16,6 @@ import 'package:health_care/screens/Doctor/doctor_home_screen.dart';
 import 'package:health_care/screens/Doctor/main_page_doctor.dart';
 import 'package:health_care/screens/Patient/main_page_patient.dart';
 import 'package:health_care/screens/Patient/patient_home_page.dart';
-import 'package:health_care/screens/general/loading_screen.dart';
 import 'package:health_care/screens/general/splash.dart';
 import 'package:health_care/services/auth/firebase_auth_provider.dart';
 import 'package:health_care/services/storage/firebase_storage_provider.dart';
@@ -59,21 +58,23 @@ class HomePage extends StatelessWidget {
     context.read<AppBloc>().add(const AppEventInitialize());
     return BlocBuilder<AppBloc, AppState>(
       buildWhen: (previous, current) {
-        return (previous.user == null && current.user != null) ||
-            (previous.user != null && current.user == null);
+        return (previous.user == null && current.user != null) || (previous.user != null && current.user == null || (previous.user == null && current.user == null));
       },
       builder: (ctx, state) {
         if (state.isLoading) {
-          return const LoadingScreen("Loading...");
+          return const SplashScreen();
         }
 
         if (state.user == null) {
           return LoginScreen();
         }
+
         if (state.doctor != null) {
+          // return SplashScreen("doctor");
           return const MainPageDoctor();
         }
 
+        // return SplashScreen("patient");
         return const MainPagePatient();
       },
     );
