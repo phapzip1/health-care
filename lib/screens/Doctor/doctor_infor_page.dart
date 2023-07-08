@@ -11,6 +11,7 @@ import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/screens/Doctor/update_doctor_information.dart';
 import 'package:health_care/screens/Patient/payment_screen.dart';
 import 'package:health_care/screens/general/review_section.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 class DoctorInforPage extends StatefulWidget {
@@ -69,7 +70,8 @@ Widget upperPart(doctor, isDoctor) => Card(
                     // ignore: prefer_const_constructors
                     Text(
                       '${doctor.rating}',
-                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w600, fontSize: 15),
                     )
                   ],
                 ),
@@ -87,14 +89,19 @@ Widget upperPart(doctor, isDoctor) => Card(
                       width: 8,
                     ),
                     FutureBuilder(
-                        future: FirebaseFirestore.instance.collection("review").where("doctor_id", isEqualTo: doctor.id).get(),
+                        future: FirebaseFirestore.instance
+                            .collection("review")
+                            .where("doctor_id", isEqualTo: doctor.id)
+                            .get(),
                         builder: (ctx, review) {
-                          if (review.connectionState == ConnectionState.waiting) {
+                          if (review.connectionState ==
+                              ConnectionState.waiting) {
                             return const CircularProgressIndicator();
                           }
                           return Text(
                             '${review.hasData ? review.data!.size : 0}',
-                            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 15),
                           );
                         }),
                   ],
@@ -106,20 +113,23 @@ Widget upperPart(doctor, isDoctor) => Card(
             ),
             Text(
               doctor.workplace,
-              style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF828282)),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Color(0xFF828282)),
             ),
             const SizedBox(
               height: 8,
             ),
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(60),
                 color: const Color(0xFFAEE6FF).withOpacity(0.5),
               ),
               child: Text(
                 doctor.specialization,
-                style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF3A86FF)),
+                style: const TextStyle(
+                    fontWeight: FontWeight.w600, color: Color(0xFF3A86FF)),
               ),
             ),
             const SizedBox(
@@ -136,7 +146,8 @@ Widget upperPart(doctor, isDoctor) => Card(
                 ),
                 Text(
                   "${(doctor.price as double).truncate()} vnd",
-                  style: const TextStyle(color: Color(0xFF3A86FF), fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      color: Color(0xFF3A86FF), fontWeight: FontWeight.bold),
                 )
               ],
             ),
@@ -170,6 +181,12 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
     super.initState();
     _selectedDate = DateTime.now();
     context.read<AppBloc>().add(AppEventLoadAvailableTime(_selectedDate));
+  }
+
+  int _choosingTime = -1;
+
+  void _onChange(index) {
+    _choosingTime = index;
   }
 
   @override
@@ -207,7 +224,8 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                         MaterialPageRoute(
                           builder: (_) => BlocProvider.value(
                             value: BlocProvider.of<AppBloc>(context),
-                            child: UpdateDoctorInformation(doctor: state.doctor!),
+                            child:
+                                UpdateDoctorInformation(doctor: state.doctor!),
                           ),
                         ),
                       );
@@ -255,7 +273,8 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                               ),
                               Text(
                                 '${userDocs.experience} years',
-                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               )
                             ],
                           ),
@@ -302,18 +321,24 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                             style: OutlinedButton.styleFrom(
                               primary: Colors.black,
                               textStyle: const TextStyle(fontSize: 16),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
                               shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(50)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50)),
                               ),
                             ),
-                            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                              Text(DateFormat('dd/MM/y').format(_selectedDate)),
-                              const Icon(
-                                FontAwesomeIcons.calendar,
-                                color: Colors.black,
-                              ),
-                            ]),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(DateFormat('dd/MM/y')
+                                      .format(_selectedDate)),
+                                  const Icon(
+                                    FontAwesomeIcons.calendar,
+                                    color: Colors.black,
+                                  ),
+                                ]),
                           ),
                           const SizedBox(
                             height: 16,
@@ -392,7 +417,8 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                     !widget.isDoctor
                         ? ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
                             ),
                             onPressed: () {
                               //payment screen
@@ -425,7 +451,8 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                             },
                             child: const Text(
                               'Make appointment',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
                             ))
                         : Container(),
                     const SizedBox(
