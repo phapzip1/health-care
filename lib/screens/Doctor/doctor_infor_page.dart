@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,12 +21,6 @@ class DoctorInforPage extends StatefulWidget {
   State<DoctorInforPage> createState() => _DoctorInforPageState();
 }
 
-final user = FirebaseAuth.instance.currentUser;
-final _nameController = TextEditingController();
-final _workplaceController = TextEditingController();
-final _specializationController = TextEditingController();
-final _priceController = TextEditingController();
-final _experienceController = TextEditingController();
 
 Widget upperPart(doctor, isDoctor) => Card(
       child: Container(
