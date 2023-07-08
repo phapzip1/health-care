@@ -17,13 +17,13 @@ class _MyWidgetState extends State<MainPageDoctor> {
   Widget currentPageDoctor(int index) {
     switch (index) {
       case 0:
-        return DoctorHomeScreen();
+        return const DoctorHomeScreen();
       case 1:
-        return DoctorSchedulePage();
+        return const DoctorSchedulePage();
       case 2:
-        return DoctorInforPage(true);
+        return const DoctorInforPage();
       default:
-        return DoctorHomeScreen();
+        return const DoctorHomeScreen();
     }
   }
 

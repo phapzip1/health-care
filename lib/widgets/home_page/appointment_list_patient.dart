@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:health_care/bloc/app_bloc.dart';
-import 'package:health_care/screens/Doctor/doctor_infor_page.dart';
+import 'package:health_care/screens/Patient/view_doctor_information.dart';
 
 class AppointmentListPatient extends StatelessWidget {
   AppointmentListPatient({super.key, required this.spec});
@@ -46,11 +46,10 @@ class AppointmentListPatient extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                            value: BlocProvider.of<AppBloc>(context),
-                            child: const DoctorInforPage(false),
-                          ),
-                        ),
+                            builder: (context) => BlocProvider.value(
+                                  value: BlocProvider.of<AppBloc>(context),
+                                  child: ViewDoctorInformation(doctorList[index].data()),
+                                )),
                       )
                     },
                     child: Padding(
