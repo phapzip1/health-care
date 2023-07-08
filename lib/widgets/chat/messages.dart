@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
-import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/models/post_model.dart';
 
 import 'message_bubble.dart';
@@ -23,7 +21,9 @@ class Messages extends StatelessWidget {
         }
 
         ///here
-        if (!chatSnapShot.hasData || chatSnapShot.data == null || chatSnapShot.data!.docs.isEmpty) {
+        if (!chatSnapShot.hasData ||
+            chatSnapShot.data == null ||
+            chatSnapShot.data!.docs.isEmpty) {
           return Container();
         }
 
@@ -32,7 +32,8 @@ class Messages extends StatelessWidget {
         return ListView.builder(
           reverse: true,
           itemCount: chatDocs.length,
-          itemBuilder: (ctx, index) => MessageBubble(chatDocs[index]['message'], chatDocs[index]['sender_id'] == id, ValueKey(chatDocs[index].id)),
+          itemBuilder: (ctx, index) => MessageBubble(chatDocs[index]['message'],
+              chatDocs[index]['sender_id'] == id, ValueKey(chatDocs[index].id)),
         );
       },
     );

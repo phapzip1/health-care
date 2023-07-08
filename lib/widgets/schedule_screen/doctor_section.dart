@@ -51,16 +51,20 @@ class _DoctorSectionState extends State<DoctorSection> {
       children: [
         Header(_click, _changedPage),
         Expanded(
-          child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: filterList.length,
-              itemBuilder: (ctx, index) {
-                String time = filterList[index].datetime.hour % 10 == 3
-                    ? '${filterList[index].datetime.hour ~/ 10}:30'
-                    : '${filterList[index].datetime.hour ~/ 10}:00';
-                return CardAppointmentDoctor(_changedPage, mediaQuery,
-                    filterList[index], time, _updateStatus);
-              }),
+          child: filterList.isEmpty
+              ? const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Image(image: AssetImage('assets/images/waiting.png')))
+              : ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: filterList.length,
+                  itemBuilder: (ctx, index) {
+                    String time = filterList[index].datetime.hour % 10 == 3
+                        ? '${filterList[index].datetime.hour ~/ 10}:30'
+                        : '${filterList[index].datetime.hour ~/ 10}:00';
+                    return CardAppointmentDoctor(_changedPage, mediaQuery,
+                        filterList[index], time, _updateStatus);
+                  }),
         ),
       ],
     );

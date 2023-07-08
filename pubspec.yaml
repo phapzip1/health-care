@@ -114,6 +114,8 @@ flutter:
     - assets/images/insurance.png
     - assets/images/fallback.jpg
     - assets/symptoms.json
+    - assets/images/waiting.png
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

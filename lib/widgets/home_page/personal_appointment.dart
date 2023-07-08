@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -15,13 +14,22 @@ class PersonalAppointment extends StatelessWidget {
     return BlocBuilder<AppBloc, AppState>(
         // future: AppointmentModel.getAppointment(patientId: user!.uid),
         builder: (ctx, state) {
+      final appointmentDocs = state.appointments;
+      if (appointmentDocs == null) {
+        return const Center(child: CircularProgressIndicator());
+      }
 
-         final appointmentDocs = state.appointments;
-         if (appointmentDocs == null) {
-          return const CircularProgressIndicator();
-         }
-
-      return ListView.builder(
+      return appointmentDocs.isEmpty ? const Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('There are no appointments', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black54 ),),
+            SizedBox(width: 4,),
+            Icon(Icons.not_accessible_outlined),
+          ],
+        ),
+      ):
+      ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: appointmentDocs.length,
           itemBuilder: (ctx, index) {
@@ -37,7 +45,6 @@ class PersonalAppointment extends StatelessWidget {
                 color: Color(0xFFAEE6FF),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
-              // ignore: sort_child_properties_last
               child: IntrinsicWidth(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

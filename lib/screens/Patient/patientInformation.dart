@@ -5,19 +5,11 @@ import 'package:health_care/bloc/app_state.dart';
 
 // import 'package:health_care/models/patient_model.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_care/screens/Patient/updatePatientInformation.dart';
 import 'package:intl/intl.dart';
 
-class PatientInformation extends StatefulWidget {
+class PatientInformation extends StatelessWidget {
   const PatientInformation({super.key});
-
-  @override
-  State<PatientInformation> createState() => _PatientInformationState();
-}
-
-class _PatientInformationState extends State<PatientInformation> {
-  final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {

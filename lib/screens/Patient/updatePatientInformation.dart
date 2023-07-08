@@ -108,7 +108,6 @@ class _UpdatePatientInfoState extends State<UpdatePatientInfo> {
   }
 
   bool _checkChanged() {
-
     return _enteredUsername.text != widget.patient.name ||
         _enteredPhone.text != widget.patient.phoneNumber ||
         _enteredGender != widget.patient.gender ||

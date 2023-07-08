@@ -191,9 +191,7 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppBloc, AppState>(
-        // future: DoctorModel.getById(widget.doctorId),
-        builder: (ctx, state) {
+    return BlocBuilder<AppBloc, AppState>(builder: (ctx, state) {
       final userDocs = state.doctor!;
 
       return Scaffold(
@@ -208,7 +206,7 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
             ),
           ),
           centerTitle: true,
-          elevation: 0,
+          elevation: 1,
           backgroundColor: Colors.white,
           automaticallyImplyLeading: widget.isDoctor ? false : true,
           iconTheme: IconThemeData(
@@ -218,8 +216,6 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
             widget.isDoctor
                 ? IconButton(
                     onPressed: () {
-                      // NavigationService.navKey.currentState!
-                      //     .pushNamed('/doctorupdateinfo', arguments: userDocs);
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => BlocProvider.value(
@@ -238,9 +234,7 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
           ],
         ),
         body: SafeArea(
-            child: Expanded(
-          child: SingleChildScrollView(
-            child: Column(
+            child: ListView(
               children: [
                 upperPart(userDocs, widget.isDoctor),
                 const SizedBox(
@@ -289,16 +283,23 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                                 'Patients checked',
                                 style: TextStyle(),
                               ),
-                              // FutureBuilder(
-                              //   future: AppointmentModel
-                              //       .countTotalAppointmentHistory(
-                              //           doctorId: userDocs.id),
-                              //   builder: (ctx, total) => Text(
-                              //     total.data.toString(),
-                              //     style: const TextStyle(
-                              //         fontWeight: FontWeight.bold),
-                              //   ),
-                              // )
+                              FutureBuilder(
+                                  future: context
+                                      .read<AppBloc>()
+                                      .appointmentProvider
+                                      .getCompletedAppointmentCount(
+                                          userDocs.id),
+                                  builder: (ctx, total) {
+                                    if (total.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator();
+                                    }
+                                    return Text(
+                                      total.data.toString(),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  })
                             ],
                           ),
                           const SizedBox(
@@ -484,9 +485,7 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                   ]),
                 ),
               ],
-            ),
-          ),
-        )),
+            )),
       );
     });
   }

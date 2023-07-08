@@ -67,7 +67,8 @@ class _CommunityQAState extends State<CommunityQA> {
       appBar: AppBar(
         title: const Text(
           'Q&A community',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -83,7 +84,8 @@ class _CommunityQAState extends State<CommunityQA> {
       ),
       body: Column(
         children: [
-          HeaderNavigateSection(_click, _changedPage, mediaQuery, context, _searchController, _openFilterSymptom),
+          HeaderNavigateSection(_click, _changedPage, mediaQuery, context,
+              _searchController, _openFilterSymptom),
           BlocBuilder<AppBloc, AppState>(builder: (context, state) {
             if (state.posts == null) {
               return Container();
@@ -96,10 +98,13 @@ class _CommunityQAState extends State<CommunityQA> {
         backgroundColor: const Color(0xFF3A86FF),
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const InputQuestionModal(),
-              ));
+            context,
+            MaterialPageRoute(
+                builder: (context) => BlocProvider.value(
+                      value: BlocProvider.of<AppBloc>(context),
+                      child: const InputQuestionModal(),
+                    )),
+          );
         },
         child: const Icon(Icons.add),
       ),

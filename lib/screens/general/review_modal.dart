@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 // ignore: must_be_immutable
 class ReviewModal extends StatefulWidget {
@@ -67,7 +66,6 @@ class _ReviewModalState extends State<ReviewModal> {
       //   );
       // }
       _feedback.clear();
-      // NavigationService.navKey.currentState!.pop();
       Navigator.of(context).pop();
     } catch (e) {
       print(e);

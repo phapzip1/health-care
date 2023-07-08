@@ -6,9 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
-import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/doctor_model.dart';
-import 'package:health_care/screens/Doctor/doctorSchedulePage.dart';
 import 'package:health_care/screens/general/doctor_schedule_screen.dart';
 import 'package:health_care/widgets/avatar_picker.dart';
 import 'package:health_care/widgets/date_picker_textfield.dart';
@@ -290,25 +288,6 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                     const SizedBox(
                       height: 8,
                     ),
-                    // DropDownTextField(
-                    //   clearOption: false,
-                    //   dropDownItemCount: 6,
-                    //   dropDownList: state.symptom!
-                    //       .map(
-                    //         (e) => DropDownValueModel(name: e.name, value: e.name),
-                    //       )
-                    //       .toList(),
-                    //   textFieldDecoration: InputDecoration(
-                    //     focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFF3A86FF))),
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(10),
-                    //     ),
-                    //     contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    //   ),
-                    //   onChanged: (value) {
-                    //     _expertise = (value as DropDownValueModel).value;
-                    //   },
-                    // ),
                     TextFormField(
                       initialValue: widget.doctor.specialization,
                       style: const TextStyle(fontSize: 16),

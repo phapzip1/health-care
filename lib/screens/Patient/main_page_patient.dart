@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:health_care/screens/general/notification_page.dart';
 import 'patient_home_page.dart';
 import './patientSchedulePage.dart';
 import '../../components/bottomNavigation.dart';
@@ -25,8 +24,6 @@ class _MyWidgetState extends State<MainPagePatient> {
         return PatientSchedulePage();
       case 2:
         return PatientInformation();
-      case 3:
-        return NotificationPage();
       default:
         return PatientHomePage();
     }

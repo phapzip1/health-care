@@ -11,8 +11,6 @@ import '../../utils/formstage.dart';
 
 import 'package:flutter/services.dart';
 
-import 'package:fluttertoast/fluttertoast.dart';
-
 class RegisterForm extends StatefulWidget {
   final GlobalKey<FormState> formkey;
   final Function setFormStage;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/screens/Doctor/doctor_infor_page.dart';
 
 class AppointmentListPatient extends StatelessWidget {
@@ -44,10 +46,13 @@ class AppointmentListPatient extends StatelessWidget {
                   child: InkWell(
                     onTap: () => {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const DoctorInforPage(false)))
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BlocProvider.value(
+                                  value: BlocProvider.of<AppBloc>(context),
+                                  child: const DoctorInforPage(false),
+                                )),
+                      )
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -104,7 +109,8 @@ class AppointmentListPatient extends StatelessWidget {
                                           const SizedBox(
                                             width: 8,
                                           ),
-                                          Text("${doctorList[index].data()['rating']}"),
+                                          Text(
+                                              "${doctorList[index].data()['rating']}"),
                                         ],
                                       ),
                                     ],
@@ -125,7 +131,8 @@ class AppointmentListPatient extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 16, color: Color(0xFF828282)),
                             ),
-                            Text("${(doctorList[index].data()['price'] as double).truncate()} vnd",
+                            Text(
+                                "${(doctorList[index].data()['price'] as double).truncate()} vnd",
                                 style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600)),
                           ],

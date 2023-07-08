@@ -234,36 +234,23 @@ class PaymentScreen extends StatelessWidget {
                   right: 20,
                   child: ElevatedButton(
                     onPressed: () {
-                      // NavigationService.navKey.currentState
-                      //     ?.pushNamed('/wallets', arguments: {
-                      //   'doctorId': doctorId,
-                      //   'doctorName': doctorName,
-                      //   'price': price,
-                      //   'doctorPhone': doctorPhone,
-                      //   'doctorImage': doctorImage,
-                      //   'doctorSpecialization': doctorSpecialization,
-                      //   'date': date,
-                      //   'hour': hour,
-                      //   'patient': patientUser
-                      // });
-                      
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (_) => BlocProvider.value(
-                      //       value: BlocProvider.of<AppBloc>(context),
-                      //       child: CardsAndWalletsScreen(
-                      //           doctorId,
-                      //           doctorName,
-                      //           price,
-                      //           doctorPhone,
-                      //           doctorImage,
-                      //           doctorSpecialization,
-                      //           date,
-                      //           hour,
-                      //           patientUser),
-                      //     ),
-                      //   ),
-                      // );
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider.value(
+                            value: BlocProvider.of<AppBloc>(context),
+                            child: CardsAndWalletsScreen(
+                                doctorId,
+                                doctorName,
+                                price,
+                                doctorPhone,
+                                doctorImage,
+                                doctorSpecialization,
+                                date,
+                                hour,
+                                patientUser),
+                          ),
+                        ),
+                      );
                     },
                     child: const Padding(
                       padding: EdgeInsetsDirectional.symmetric(vertical: 5),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/screens/Patient/new_appointment.dart';
 import 'package:health_care/screens/Patient/patientRecord.dart';
 import 'package:health_care/screens/general/communityQA.dart';
@@ -27,7 +29,10 @@ class FunctionCategory extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => NewAppointment(id)),
+                              builder: (context) => BlocProvider.value(
+                                    value: BlocProvider.of<AppBloc>(context),
+                                    child: NewAppointment(id),
+                                  )),
                         );
                       },
                       child: Column(
@@ -68,7 +73,11 @@ class FunctionCategory extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CommunityQA()),
+                    MaterialPageRoute(
+                        builder: (context) => BlocProvider.value(
+                              value: BlocProvider.of<AppBloc>(context),
+                              child: const CommunityQA(),
+                            )),
                   );
                 },
                 child: Column(
@@ -109,7 +118,10 @@ class FunctionCategory extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => PatientRecords(isDoctor)),
+                        builder: (context) => BlocProvider.value(
+                              value: BlocProvider.of<AppBloc>(context),
+                              child: PatientRecords(isDoctor),
+                            )),
                   );
                 },
                 child: Column(

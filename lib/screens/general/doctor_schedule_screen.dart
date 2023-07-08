@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
-import 'package:health_care/bloc/app_state.dart';
 
 const week = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 List<int> _time = [70, 73, 80, 83, 90, 93, 100, 103, 110, 113, 120, 123, 130, 133, 140, 143, 150, 153, 160, 163, 170, 173, 180, 183, 190, 193, 200, 203, 210, 213, 220, 223];

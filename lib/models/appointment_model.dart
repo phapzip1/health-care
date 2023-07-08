@@ -21,6 +21,23 @@ class AppointmentModel {
   // 4: completed
   final int status;
 
+  AppointmentModel(
+    this.id,
+    this.doctorId,
+    this.doctorName,
+    this.doctorPhone,
+    this.doctorImage,
+    this.patientId,
+    this.patientName,
+    this.patientImage,
+    this.patientPhone,
+    this.specialization,
+    this.price,
+    this.datetime,
+    this.healthRecord,
+    this.status,
+  );
+
   AppointmentModel.fromMap(Map<String, dynamic> map)
       : id = map["id"],
         doctorId = map["doctor_id"],

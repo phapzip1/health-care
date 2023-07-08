@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
@@ -50,16 +49,14 @@ class HeaderSection extends StatelessWidget {
               icon: const Icon(
                 Icons.more_vert,
               ),
-              items: [
+              items: const [
                 DropdownMenuItem(
                   value: 'logout',
-                  child: Container(
-                    child: const Row(
-                      children: [
-                        Icon(Icons.exit_to_app),
-                        Text('Logout'),
-                      ],
-                    ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.exit_to_app),
+                      Text('Logout'),
+                    ],
                   ),
                 )
               ],

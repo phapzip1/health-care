@@ -7,7 +7,6 @@ import 'package:health_care/widgets/header_section.dart';
 import 'package:health_care/widgets/home_page/appointment_list_doctor.dart';
 import 'package:intl/intl.dart';
 
-
 class DoctorHomeScreen extends StatefulWidget {
   const DoctorHomeScreen({super.key});
 
@@ -21,15 +20,12 @@ class _DoctorHomeScreen extends State<DoctorHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         body: SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(top: 24),
         child: SingleChildScrollView(
-          child: BlocBuilder<AppBloc, AppState>(
-              // future: DoctorModel.getById(user!.uid),
-              builder: (ctx, state) {
+          child: BlocBuilder<AppBloc, AppState>(builder: (ctx, state) {
             final userDocs = state.doctor!;
 
             return Column(
@@ -55,7 +51,7 @@ class _DoctorHomeScreen extends State<DoctorHomeScreen> {
                     ],
                   ),
                 ),
-                AppointmentListDoctor(),
+                const AppointmentListDoctor(),
               ],
             );
           }),

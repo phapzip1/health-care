@@ -1,4 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/models/post_model.dart';
 import 'package:health_care/widgets/QA_community/particular_question.dart';
 import 'package:intl/intl.dart';
@@ -119,23 +124,23 @@ class QuestionCard extends StatelessWidget {
                       color: Color(0xFFFFBE0B), fontWeight: FontWeight.w600),
                 ),
               ),
-              // Row(
-              //   children: [
-              //     const Icon(FontAwesomeIcons.comment),
-              //     const SizedBox(
-              //       width: 4,
-              //     ),
-              //     FutureBuilder(
-              //       future: PostModel.getTotalChat(question.id!),
-              //       builder: (ctx, comment) {
-              //         if (comment.connectionState == ConnectionState.waiting) {
-              //           return const CircularProgressIndicator();
-              //         }
-              //         return Text(comment.data.toString());
-              //       },
-              //     )
-              //   ],
-              // ),
+              Row(
+                children: [
+                  const Icon(FontAwesomeIcons.comment),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  StreamBuilder(
+                    stream: context
+                        .read<AppBloc>()
+                        .postProvider
+                        .getStreamChat(question.id),
+                    builder: (ctx, state) {
+                      return Text(state.data.toString());
+                    },
+                  )
+                ],
+              ),
             ],
           ),
         ]),

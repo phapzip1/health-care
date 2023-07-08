@@ -17,7 +17,7 @@ class PatientHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final mediaQuery = MediaQuery.of(context).size;
+
     final user = FirebaseAuth.instance.currentUser!;
     return Scaffold(
       body: SafeArea(
@@ -25,7 +25,6 @@ class PatientHomePage extends StatelessWidget {
           padding: const EdgeInsets.only(top: 16),
           child: SingleChildScrollView(
             child: BlocBuilder<AppBloc, AppState>(
-              // future: PatientModel.getById(user!.uid),
               builder: (ctx, state) {
                 final symptoms = state.symptom!;
                 return Column(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:health_care/screens/Doctor/doctorSchedulePage.dart';
 import 'package:health_care/screens/Doctor/doctor_home_screen.dart';
 import 'package:health_care/screens/Doctor/doctor_infor_page.dart';
-import 'package:health_care/screens/general/notification_page.dart';
+// import 'package:health_care/screens/general/notification_page.dart';
 import '../../components/bottomNavigation.dart';
 
 class MainPageDoctor extends StatefulWidget {

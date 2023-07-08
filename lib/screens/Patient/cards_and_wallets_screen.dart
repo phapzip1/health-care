@@ -2,35 +2,46 @@ import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:health_care/bloc/app_bloc.dart";
 import "package:health_care/bloc/app_event.dart";
-import "package:health_care/models/appointment_model.dart";
 import "package:health_care/models/patient_model.dart";
 // import 'package:fluttertoast/fluttertoast.dart';
 import "package:health_care/screens/Patient/patient_home_page.dart";
 
 class CardsAndWalletsScreen extends StatelessWidget {
-  final AppointmentModel appointmentModel;
+  final String doctorId;
+  final String doctorName;
+  final int price;
+  final String doctorPhone;
+  final String doctorImage;
+  final String specialization;
+  final DateTime datetime;
+  final int hour;
   final PatientModel patient;
 
   const CardsAndWalletsScreen(
-      this.appointmentModel,
+      this.doctorId,
+      this.doctorName,
+      this.price,
+      this.doctorPhone,
+      this.doctorImage,
+      this.specialization,
+      this.datetime,
+      this.hour,
       this.patient,
       {super.key});
 
   void _makeAppointment(BuildContext context) async {
     context.read<AppBloc>().add(AppEventMakeAppointment(
-          appointmentModel.doctorId,
-          appointmentModel.doctorName,
-          appointmentModel.doctorPhone,
-          appointmentModel.doctorImage,
+          doctorId,
+          doctorName,
+          doctorPhone,
+          doctorImage,
           patient.id.toString(),
           patient.name,
           patient.image,
           patient.phoneNumber,
-          appointmentModel.specialization,
-          appointmentModel.datetime,
+          specialization,
+          datetime,
         ));
-
-    //   NavigationService.navKey.currentState?.pushNamed('/');
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => BlocProvider.value(
@@ -39,25 +50,6 @@ class CardsAndWalletsScreen extends StatelessWidget {
         ),
       ),
     );
-
-    // await currentAppointment.save().then((value) {
-    //   Fluttertoast.showToast(
-    //     msg: "Make appointment successfully",
-    //     toastLength: Toast.LENGTH_LONG,
-    //     timeInSecForIosWeb: 1,
-    //     backgroundColor: Colors.greenAccent,
-    //     textColor: Colors.black,
-    //   );
-
-    // }).catchError((error) {
-    //   Fluttertoast.showToast(
-    //     msg: "Failed to make appointment",
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     timeInSecForIosWeb: 1,
-    //     backgroundColor: Colors.red,
-    //     textColor: Colors.white,
-    //   );
-    // });
   }
 
   @override
@@ -112,7 +104,7 @@ class CardsAndWalletsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "${appointmentModel.price} vnd",
+                        "${price} vnd",
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,

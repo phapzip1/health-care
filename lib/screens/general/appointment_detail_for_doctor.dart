@@ -128,11 +128,6 @@ class _AppointmentDetailForDoctorState
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 12)),
                                 onPressed: () {
-                                  // NavigationService.navKey.currentState!.pushNamed('/record', arguments: {
-                                  //   "record": widget.appointment.healthRecord,
-                                  //   "isDoctor": true,
-                                  //   "appointmentId": widget.appointment,
-                                  // });
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (_) => BlocProvider.value(

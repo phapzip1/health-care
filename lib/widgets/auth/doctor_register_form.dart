@@ -10,12 +10,10 @@ import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_care/bloc/app_state.dart';
-import 'package:health_care/models/symptom_model.dart';
 import 'package:health_care/widgets/user_image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../utils/formstage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class DoctorRegisterForm extends StatefulWidget {
   final GlobalKey<FormState> formkey;
