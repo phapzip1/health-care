@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,7 +59,8 @@ class HomePage extends StatelessWidget {
     context.read<AppBloc>().add(const AppEventInitialize());
     return BlocBuilder<AppBloc, AppState>(
       buildWhen: (previous, current) {
-        return (previous.user == null && current.user != null) || (previous.user != null && current.user == null);
+        return (previous.user == null && current.user != null) ||
+            (previous.user != null && current.user == null);
       },
       builder: (ctx, state) {
         if (state.isLoading) {
@@ -65,16 +68,13 @@ class HomePage extends StatelessWidget {
         }
 
         if (state.user == null) {
-          return SplashScreen("login");
-          // return LoginScreen();
+          return LoginScreen();
         }
         if (state.doctor != null) {
-          // return SplashScreen("doctor");
-          return const DoctorHomeScreen();
+          return const MainPageDoctor();
         }
 
-        // return SplashScreen("patient");
-        return const PatientHomePage();
+        return const MainPagePatient();
       },
     );
   }

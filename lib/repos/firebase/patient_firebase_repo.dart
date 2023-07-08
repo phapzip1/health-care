@@ -85,6 +85,7 @@ class PatientFirebaseRepo extends PatientRepo {
     try {
       final snapshot = await _ref.doc(id).get();
       if (snapshot.exists) {
+        // ToastNotification().showToast("Login successfully", true);
         return PatientModel.fromMap({
           "id": snapshot.id,
           "name": snapshot.get("name"),
@@ -94,8 +95,10 @@ class PatientFirebaseRepo extends PatientRepo {
           "email": snapshot.get("email"),
           "image": snapshot.get("image"),
         });
+      } else {
+        // ToastNotification().showToast("Login unsuccessfully", false);
+        return null;
       }
-      return null;
     } catch (e) {
       throw GenericDBException();
     }

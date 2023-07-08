@@ -1,16 +1,18 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:health_care/bloc/app_bloc.dart';
-import 'package:health_care/screens/Doctor/main_page_doctor.dart';
-import 'package:health_care/screens/Patient/main_page_patient.dart';
-import 'package:health_care/screens/general/login_screen.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:health_care/bloc/app_bloc.dart';
+// import 'package:health_care/screens/Doctor/main_page_doctor.dart';
+// import 'package:health_care/screens/Patient/main_page_patient.dart';
+// import 'package:health_care/screens/general/login_screen.dart';
 
 // ignore: must_be_immutable
 class SplashScreen extends StatefulWidget {
-  final String screenName;
-  SplashScreen(this.screenName, {super.key});
+  // final String screenName;
+  SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -24,21 +26,24 @@ class _SplashScreenState extends State<SplashScreen>
     _navigateHome();
   }
 
+  bool checked = false;
+
   void _navigateHome() async {
-    await Future.delayed(const Duration(milliseconds: 3000), () {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: BlocProvider.of<AppBloc>(context),
-            child: widget.screenName == "login"
-                ? LoginScreen()
-                : widget.screenName == "doctor"
-                    ? const MainPageDoctor()
-                    : const MainPagePatient(),
-          ),
-        ),
-      );
-    });
+    // await Future.delayed(const Duration(milliseconds: 3000), () {
+    //   Navigator.of(context).push(
+    //     MaterialPageRoute(
+    //       builder: (_) => BlocProvider.value(
+    //         value: BlocProvider.of<AppBloc>(context),
+    //         child: widget.screenName == "login"
+    //             ? LoginScreen()
+    //             : widget.screenName == "doctor"
+    //                 ? const MainPageDoctor()
+    //                 : const MainPagePatient(),
+    //       ),
+    //     ),
+    //   );
+    // });
+    await Future.delayed(const Duration(milliseconds: 3000));
   }
 
   @override
