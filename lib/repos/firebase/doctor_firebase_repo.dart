@@ -175,6 +175,7 @@ class DoctorFirebaseRepo extends DoctorRepo {
     try {
       final snapshot = await _ref.doc(id).get();
       if (snapshot.exists) {
+        // ToastNotification().showToast("Login successfully", true);
         return DoctorModel.fromMap({
           "id": snapshot.id,
           "name": snapshot.get("name"),
@@ -192,8 +193,10 @@ class DoctorFirebaseRepo extends DoctorRepo {
           "rating": snapshot.get("rating"),
           "available_time": snapshot.get("available_time"),
         });
+      } else {
+        // ToastNotification().showToast("Login unsuccessfully", false);
+        return null;
       }
-      return null;
     } catch (e) {
       throw GenericDBException();
     }
@@ -265,12 +268,16 @@ class DoctorFirebaseRepo extends DoctorRepo {
   Future<void> updateAvailableTime(
       String doctorid, List<int> time, String weekday) async {
     try {
-      await _ref.doc(doctorid).update({
-        "available_time.$weekday": time,
-      }).then((value) =>
-                ToastNotification().showToast("Update successfully", true))
-            .onError((error, stackTrace) =>
-                ToastNotification().showToast("Update unsuccessfully", false));;
+      await _ref
+          .doc(doctorid)
+          .update({
+            "available_time.$weekday": time,
+          })
+          .then((value) =>
+              ToastNotification().showToast("Update successfully", true))
+          .onError((error, stackTrace) =>
+              ToastNotification().showToast("Update unsuccessfully", false));
+      ;
     } catch (e) {
       throw GenericDBException();
     }
