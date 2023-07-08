@@ -5,14 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/screens/Doctor/update_doctor_information.dart';
-import 'package:health_care/screens/Patient/view_doctor_information.dart';
 import 'package:health_care/screens/general/review_section.dart';
 import 'package:health_care/widgets/infomation_page/upper_part.dart';
 
 class DoctorInforPage extends StatefulWidget {
-  const DoctorInforPage(this.isDoctor, {super.key});
-  final bool isDoctor;
-
+  const DoctorInforPage({super.key});
   @override
   State<DoctorInforPage> createState() => _DoctorInforPageState();
 }
@@ -43,29 +40,26 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
           centerTitle: true,
           elevation: 1,
           backgroundColor: Colors.white,
-          automaticallyImplyLeading: widget.isDoctor ? false : true,
-          iconTheme: IconThemeData(
-            color: widget.isDoctor ? Colors.white : Colors.black,
+          automaticallyImplyLeading: false,
+          iconTheme: const IconThemeData(
+            color: Colors.white,
           ),
           actions: [
-            widget.isDoctor
-                ? IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                            value: BlocProvider.of<AppBloc>(context),
-                            child:
-                                UpdateDoctorInformation(doctor: state.doctor!),
-                          ),
-                        ),
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.edit,
-                      color: Color(0xFF3A86FF),
-                    ))
-                : Container()
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: BlocProvider.of<AppBloc>(context),
+                        child: UpdateDoctorInformation(doctor: state.doctor!),
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  Icons.edit,
+                  color: Color(0xFF3A86FF),
+                ))
           ],
         ),
         body: SafeArea(
@@ -138,7 +132,6 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                     ],
                   ),
                 ),
-                widget.isDoctor ? Container() : ViewDoctorInformation(userDocs),
                 const SizedBox(
                   height: 16,
                 ),
