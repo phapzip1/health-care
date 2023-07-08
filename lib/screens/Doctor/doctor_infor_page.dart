@@ -10,6 +10,7 @@ import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/models/doctor_model.dart';
 import 'package:health_care/screens/Doctor/update_doctor_information.dart';
+import 'package:health_care/screens/Patient/payment_screen.dart';
 import 'package:health_care/screens/general/review_section.dart';
 import 'package:health_care/widgets/infomation_page/time_choosing.dart';
 import 'package:intl/intl.dart';
@@ -216,11 +217,14 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                       // NavigationService.navKey.currentState!
                       //     .pushNamed('/doctorupdateinfo', arguments: userDocs);
                       Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (_) => BlocProvider.value(
-                                          value: BlocProvider.of<AppBloc>(context),
-                                          child: UpdateDoctorInformation(doctor: state.doctor!),
-                                        ),),);
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider.value(
+                            value: BlocProvider.of<AppBloc>(context),
+                            child:
+                                UpdateDoctorInformation(doctor: state.doctor!),
+                          ),
+                        ),
+                      );
                     },
                     icon: const Icon(
                       Icons.edit,
@@ -415,27 +419,32 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                             ),
                             onPressed: () {
                               //payment screen
-                              // _choosingTime == -1
-                              //     ? Fluttertoast.showToast(
-                              //         msg: "You must choose time",
-                              //         toastLength: Toast.LENGTH_SHORT,
-                              //         timeInSecForIosWeb: 1,
-                              //         backgroundColor: Colors.red,
-                              //         textColor: Colors.white,
-                              //         fontSize: 16.0,
-                              //       )
-                              //     : NavigationService.navKey.currentState
-                              //         ?.pushNamed('/payment', arguments: {
-                              //         'doctorId': userDocs.id,
-                              //         'doctorName': userDocs.name,
-                              //         'price': userDocs.price,
-                              //         'doctorPhone': userDocs.phoneNumber,
-                              //         'doctorImage': userDocs.image,
-                              //         'doctorSpecialization':
-                              //             userDocs.specialization,
-                              //         'date': _selectedDate,
-                              //         'hour': _choosingTime
-                              //       });
+                              _choosingTime == -1
+                                  ? Fluttertoast.showToast(
+                                      msg: "You must choose time",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0,
+                                    )
+                                  : Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => BlocProvider.value(
+                                          value:
+                                              BlocProvider.of<AppBloc>(context),
+                                          child: PaymentScreen(
+                                              userDocs.id,
+                                              userDocs.name,
+                                              userDocs.price.truncate(),
+                                              userDocs.phoneNumber,
+                                              userDocs.image,
+                                              userDocs.specialization,
+                                              _selectedDate,
+                                              _choosingTime),
+                                        ),
+                                      ),
+                                    );
                             },
                             child: const Text(
                               'Make appointment',

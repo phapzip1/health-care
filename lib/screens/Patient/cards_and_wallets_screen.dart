@@ -2,45 +2,32 @@ import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:health_care/bloc/app_bloc.dart";
 import "package:health_care/bloc/app_event.dart";
+import "package:health_care/models/appointment_model.dart";
 import "package:health_care/models/patient_model.dart";
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import "package:health_care/screens/Patient/patient_home_page.dart";
 
 class CardsAndWalletsScreen extends StatelessWidget {
-  final String doctorId;
-  final String doctorName;
-  final int price;
-  final String doctorPhone;
-  final String doctorImage;
-  final String doctorSpecialization;
-  final DateTime date;
-  final int hour;
+  final AppointmentModel appointmentModel;
   final PatientModel patient;
 
   const CardsAndWalletsScreen(
-      this.doctorId,
-      this.doctorName,
-      this.price,
-      this.doctorPhone,
-      this.doctorImage,
-      this.doctorSpecialization,
-      this.date,
-      this.hour,
+      this.appointmentModel,
       this.patient,
       {super.key});
 
   void _makeAppointment(BuildContext context) async {
     context.read<AppBloc>().add(AppEventMakeAppointment(
-          doctorId,
-          doctorName,
-          doctorPhone,
-          doctorImage,
+          appointmentModel.doctorId,
+          appointmentModel.doctorName,
+          appointmentModel.doctorPhone,
+          appointmentModel.doctorImage,
           patient.id.toString(),
           patient.name,
           patient.image,
           patient.phoneNumber,
-          doctorSpecialization,
-          date,
+          appointmentModel.specialization,
+          appointmentModel.datetime,
         ));
 
     //   NavigationService.navKey.currentState?.pushNamed('/');
@@ -125,7 +112,7 @@ class CardsAndWalletsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "$price vnd",
+                        "${appointmentModel.price} vnd",
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
