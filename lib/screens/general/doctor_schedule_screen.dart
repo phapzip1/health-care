@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/bloc/app_state.dart';
-import 'package:health_care/widgets/check_list.dart';
 
 const week = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+List<int> _time = [70, 73, 80, 83, 90, 93, 100, 103, 110, 113, 120, 123, 130, 133, 140, 143, 150, 153, 160, 163, 170, 173, 180, 183, 190, 193, 200, 203, 210, 213, 220, 223];
 
 class DoctorScheduleScreen extends StatefulWidget {
   const DoctorScheduleScreen({super.key});
@@ -16,6 +16,7 @@ class DoctorScheduleScreen extends StatefulWidget {
 
 class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
   int _weekday = 0;
+  List<int> _checkedTime = [];
 
   void _save(BuildContext context) {
     if (_checkedTime.isNotEmpty) {
@@ -29,13 +30,23 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
     }
   }
 
+  void _loadTimes() {
+    setState(() {
+      _checkedTime = (context.read<AppBloc>().state.doctor!.availableTime[week[_weekday]] as List).map((e) => e as int).toList();
+    });
+  }
+
   void _discard() {
     setState(() {
       _checkedTime = [];
     });
   }
 
-  List<int> _checkedTime = [];
+  @override
+  void initState() {
+    super.initState();
+    _loadTimes();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +68,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                           setState(() {
                             _weekday = i;
                           });
+                          _loadTimes();
                         }
                       },
                       child: Card(
@@ -94,14 +106,29 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                     horizontal: 5,
                     vertical: 10,
                   ),
-                  child: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
-                    return CheckList(
-                      onChange: (list) {
-                        _checkedTime = list;
-                      },
-                      initial: (state.doctor!.availableTime["$_weekday"] as List<int>),
-                    );
-                  }),
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      final checked = _checkedTime.contains(_time[index]);
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: checked ? Colors.red : const Color(0xFF3A86FF)),
+                        onPressed: () {
+                          if (!checked) {
+                            setState(() {
+                              _checkedTime.add(_time[index]);
+                            });
+                          } else {
+                            setState(() {
+                              _checkedTime.remove(_time[index]);
+                            });
+                          }
+                        },
+                        child: Text(
+                          '${(_time[index] / 10).truncate()}:${(_time[index] % 10) * 10}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
 

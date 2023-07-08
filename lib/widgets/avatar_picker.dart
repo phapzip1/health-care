@@ -36,34 +36,35 @@ class _AvatarPickerState extends State<AvatarPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        child: CircleAvatar(
+    ImageProvider image = NetworkImage(widget.defaultImageUrl);
+    if (_selectedImage != null) {
+      image = FileImage(_selectedImage);
+    }
+    return Stack(
+      children: <Widget>[
+        CircleAvatar(
           radius: 56.0,
           backgroundColor: Colors.white,
+          backgroundImage: image,
+        ),
+        Positioned(
+          bottom: 5,
+          right: 5,
           child: CircleAvatar(
-            radius: 48.0,
-            foregroundImage: _selectedImage != null ? FileImage(_selectedImage!) : null,
-            backgroundImage: NetworkImage(widget.defaultImageUrl),
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 16.0,
-                child: IconButton(
-                  onPressed: _pickImage,
-                  icon: const Icon(
-                    Icons.camera_alt,
-                    size: 20.0,
-                    color: Color(0xFF404040),
-                  ),
-                ),
+            
+            backgroundColor: Colors.grey[200],
+            radius: 16.0,
+            child: IconButton(
+              onPressed: _pickImage,
+              icon: const Icon(
+                Icons.camera_alt,
+                size: 16.0,
+                color: Color(0xFF404040),
               ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

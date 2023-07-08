@@ -240,7 +240,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     on<AppEventLoadAvailableTime>((event, emit) async {
       try {
-        final available = await appointmentProvider.getAvailableTime(event.date, event.doctorId);
+        final available = await appointmentProvider.getAvailableTime(event.date, authProvider.currentUser!.uid);
         emit(AppState(
           false,
           state.user,
@@ -293,7 +293,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           oldDoctor.availableTime,
         );
         emit(AppState(false, state.user, newDoctor, state.patient, state.symptom, state.doctors, state.posts, state.appointments, state.records, state.history, state.availableTime));
-      } catch (e) {}
+      } catch (e) {
+      }
     });
 
     on<AppEventUpdatePatientInfomation>((event, emit) async {
