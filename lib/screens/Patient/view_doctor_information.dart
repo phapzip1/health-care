@@ -24,7 +24,7 @@ class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
   late DateTime _selectedDate;
   late DateTime? _meetingTime;
 
-  _selectDate(BuildContext context) async {
+  void _selectDate(BuildContext context) async {
     final now = DateTime.now();
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -39,6 +39,7 @@ class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
       setState(() {
         _selectedDate = picked;
       });
+      context.read<AppBloc>().add(AppEventLoadAvailableTime(_selectedDate, widget.userDocs.id));
     }
   }
 
@@ -147,7 +148,7 @@ class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
                         height: 16,
                       ),
                       OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () => _selectDate(context),
                         style: OutlinedButton.styleFrom(
                           primary: Colors.black,
                           textStyle: const TextStyle(fontSize: 16),
