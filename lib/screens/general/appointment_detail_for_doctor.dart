@@ -6,6 +6,7 @@ import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/screens/general/call_screen.dart';
 import 'package:health_care/widgets/record_screen/record_detail.dart';
+import 'package:health_care/widgets/record_screen/write_record.dart';
 import 'package:intl/intl.dart';
 
 class AppointmentDetailForDoctor extends StatefulWidget {
@@ -113,7 +114,7 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                                       MaterialPageRoute(
                                         builder: (_) => BlocProvider.value(
                                           value: BlocProvider.of<AppBloc>(context),
-                                          child: RecordDetail(widget.appointment.healthRecord, true, widget.appointment),
+                                          child: WriteRecord(widget.appointment),
                                         ),
                                       ),
                                     );
@@ -302,7 +303,7 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                                             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16),
                                           )),
                                     ),
-                                  if (callCondition)
+                                  if (true)
                                     SizedBox(
                                       width: mediaQuery.width * 0.5,
                                       child: ElevatedButton(
