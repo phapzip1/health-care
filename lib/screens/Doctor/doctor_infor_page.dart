@@ -125,7 +125,6 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  // ignore: prefer_const_constructors
                   child: Column(children: [
                     const Align(
                       alignment: Alignment.centerLeft,

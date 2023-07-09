@@ -4,7 +4,40 @@ import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
 
 const week = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
-List<int> _time = [70, 73, 80, 83, 90, 93, 100, 103, 110, 113, 120, 123, 130, 133, 140, 143, 150, 153, 160, 163, 170, 173, 180, 183, 190, 193, 200, 203, 210, 213, 220, 223];
+List<int> _time = [
+  70,
+  73,
+  80,
+  83,
+  90,
+  93,
+  100,
+  103,
+  110,
+  113,
+  120,
+  123,
+  130,
+  133,
+  140,
+  143,
+  150,
+  153,
+  160,
+  163,
+  170,
+  173,
+  180,
+  183,
+  190,
+  193,
+  200,
+  203,
+  210,
+  213,
+  220,
+  223
+];
 
 class DoctorScheduleScreen extends StatefulWidget {
   const DoctorScheduleScreen({super.key});
@@ -19,19 +52,28 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
 
   void _save(BuildContext context) {
     if (_checkedTime.isNotEmpty) {
-      context.read<AppBloc>().add(AppEventUpdateDoctorSchedule(times: _checkedTime, weekday: week[_weekday]));
+      context.read<AppBloc>().add(AppEventUpdateDoctorSchedule(
+          times: _checkedTime, weekday: week[_weekday]));
     }
   }
 
   void _saveForAll(BuildContext context) {
     if (_checkedTime.isNotEmpty) {
-      context.read<AppBloc>().add(AppEventUpdateDoctorSchedule(times: _checkedTime));
+      context
+          .read<AppBloc>()
+          .add(AppEventUpdateDoctorSchedule(times: _checkedTime));
     }
   }
 
   void _loadTimes() {
     setState(() {
-      _checkedTime = (context.read<AppBloc>().state.doctor!.availableTime[week[_weekday]] as List).map((e) => e as int).toList();
+      _checkedTime = (context
+              .read<AppBloc>()
+              .state
+              .doctor!
+              .availableTime[week[_weekday]] as List)
+          .map((e) => e as int)
+          .toList();
     });
   }
 
@@ -51,6 +93,23 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Doctor working time',
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -71,13 +130,16 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                         }
                       },
                       child: Card(
-                        color: i == _weekday ? const Color(0xFF3A86FF) : Colors.white,
+                        color: i == _weekday
+                            ? const Color(0xFF3A86FF)
+                            : Colors.white,
                         child: SizedBox(
                           width: size.width / 5,
                           child: Center(
                             child: Text(
                               week[i],
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -110,7 +172,9 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                     itemBuilder: (context, index) {
                       final checked = _checkedTime.contains(_time[index]);
                       return ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: checked ? Colors.red : const Color(0xFF3A86FF)),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                checked ? Colors.red : const Color(0xFF3A86FF)),
                         onPressed: () {
                           if (!checked) {
                             setState(() {
@@ -146,7 +210,8 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: Text(
                           "Undo",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ),
                     ),
@@ -161,7 +226,8 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: Text(
                           "Save",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ),
                     ),
@@ -176,7 +242,8 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: Text(
                           "Apply to all",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ),
                     ),

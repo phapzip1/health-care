@@ -29,46 +29,52 @@ class _TimeChoosingState extends State<TimeChoosing> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       width: double.infinity,
-      height: widget.mediaQuery.width * 0.12,
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: widget.time.length,
-          itemBuilder: (ctx, index) {
-            final datetime = widget.time[index];
-            return Container(
-              margin: const EdgeInsets.only(right: 8),
-              padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 16),
-              decoration: BoxDecoration(
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0xFFC9C9C9),
-                    blurRadius: 0.5,
-                    spreadRadius: 0.5,
-                  ),
-                ],
-                color: index == _selectedIndex ? const Color(0xFFC4FAFF) : Colors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-              ),
-              child: InkWell(
-                onTap: () {
-                  if (index != _selectedIndex) {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
-                    widget.onChange(widget.time[index]);
-                  } else {
-                    setState(() {
-                      _selectedIndex = -1;
-                    });
-                    widget.onChange(null);
-                  }
-                },
-                child: Center(child: Text(DateFormat.Hm().format(datetime))),
-              ),
-            );
-          }),
+      height: 44,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: widget.time.length,
+        itemBuilder: (ctx, index) {
+          final datetime = widget.time[index];
+          return Container(
+            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 16),
+            decoration: BoxDecoration(
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0xFFC9C9C9),
+                  blurRadius: 0.5,
+                  spreadRadius: 0.5,
+                ),
+              ],
+              color: index == _selectedIndex
+                  ? const Color(0xFFC4FAFF)
+                  : Colors.white,
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+            ),
+            child: InkWell(
+              onTap: () {
+                if (index != _selectedIndex) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                  widget.onChange(widget.time[index]);
+                } else {
+                  setState(() {
+                    _selectedIndex = -1;
+                  });
+                  widget.onChange(null);
+                }
+              },
+              child: Center(child: Text(DateFormat.Hm().format(datetime))),
+            ),
+          );
+        },
+        separatorBuilder: (context, index) => const SizedBox(
+          width: 8,
+        ),
+      ),
     );
   }
 }
