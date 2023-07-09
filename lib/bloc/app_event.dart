@@ -59,8 +59,7 @@ class AppEventCreatePatientAccount extends AppEvent {
   final int gender;
   final DateTime birthday;
 
-  const AppEventCreatePatientAccount(this.image, this.email,
-      this.password, this.username, this.phone, this.gender, this.birthday);
+  const AppEventCreatePatientAccount(this.image, this.email, this.password, this.username, this.phone, this.gender, this.birthday);
 }
 
 class AppEventLogout extends AppEvent {
@@ -105,7 +104,6 @@ class AppEventLoadHistory extends AppEvent {
 }
 
 class AppEventLoadAvailableTime extends AppEvent {
-
   final DateTime date;
   final String doctorId;
   const AppEventLoadAvailableTime(this.date, this.doctorId);
@@ -122,8 +120,7 @@ class AppEventUpdateDoctorInfomation extends AppEvent {
   final double price;
   final DateTime birthdate;
 
-  const AppEventUpdateDoctorInfomation(this.avatar, this.username, this.phone,
-      this.gender, this.workplace, this.exp, this.price, this.birthdate);
+  const AppEventUpdateDoctorInfomation(this.avatar, this.username, this.phone, this.gender, this.workplace, this.exp, this.price, this.birthdate);
 }
 
 class AppEventUpdatePatientInfomation extends AppEvent {
@@ -133,8 +130,7 @@ class AppEventUpdatePatientInfomation extends AppEvent {
   final DateTime birthdate;
   final File? image;
 
-  const AppEventUpdatePatientInfomation(
-      this.name, this.phoneNumber, this.gender, this.birthdate, this.image);
+  const AppEventUpdatePatientInfomation(this.name, this.phoneNumber, this.gender, this.birthdate, this.image);
 }
 
 // silent actions
@@ -205,7 +201,24 @@ class AppEventUpdateHealthRecord extends AppEvent {
 }
 
 class AppEventAcceptAppointment extends AppEvent {
-
   final String appointmentId;
   const AppEventAcceptAppointment(this.appointmentId);
+}
+
+class AppEventCreatePost extends AppEvent {
+  final List<File> image;
+  final String patientId;
+  final String specialization;
+  final int age;
+  final int gender;
+  final String content;
+  final bool private;
+
+  const AppEventCreatePost(this.image, this.patientId, this.specialization, this.age, this.gender, this.content, this.private);
+}
+
+class AppEventReplyPost extends AppEvent {
+  final String message;
+
+  const AppEventReplyPost(this.message);
 }

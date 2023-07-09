@@ -2,14 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:health_care/models/post_model.dart';
 import 'package:health_care/repos/post_repo.dart';
 import 'package:health_care/repos/repo_exception.dart';
-import 'package:health_care/screens/general/toast_notification.dart';
 
 class PostFirebaseRepo extends PostRepo {
   final CollectionReference _ref =
       FirebaseFirestore.instance.collection("post");
 
   @override
-  Future<void> create({
+  Future<String> create({
     required String patientId,
     required int age,
     required String specialization,
@@ -19,7 +18,7 @@ class PostFirebaseRepo extends PostRepo {
     required List<String> images,
   }) async {
     try {
-      await _ref
+      final docRef = await _ref
           .add({
             "patient_id": patientId,
             "age": age,
@@ -32,12 +31,8 @@ class PostFirebaseRepo extends PostRepo {
             "time": Timestamp.now(),
             "images": images,
             "count": 0,
-          })
-          .then((value) =>
-              ToastNotification().showToast("Post successfully", true))
-          .onError((error, stackTrace) =>
-              ToastNotification().showToast("Post unsuccessfully", false));
-      ;
+          });
+      return docRef.id;
     } catch (e) {
       throw GenericDBException();
     }

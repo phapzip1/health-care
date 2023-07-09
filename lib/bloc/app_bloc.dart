@@ -3,6 +3,7 @@ import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/doctor_model.dart';
 import 'package:health_care/models/patient_model.dart';
+import 'package:health_care/models/post_model.dart';
 import 'package:health_care/repos/appointment_repo.dart';
 import 'package:health_care/repos/doctor_repo.dart';
 import 'package:health_care/repos/patient_repo.dart';
@@ -10,6 +11,7 @@ import 'package:health_care/repos/post_repo.dart';
 import 'package:health_care/repos/symptom_repo.dart';
 import 'package:health_care/services/auth/auth_provider.dart';
 import 'package:health_care/services/storage/storage_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AppointmentRepo appointmentProvider;
@@ -385,6 +387,68 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           rating: event.feedback.rating,
           message: event.feedback.message,
         );
+      } catch (e) {}
+    });
+
+    on<AppEventCreatePost>((event, emit) async {
+      try {
+        final images = <String>[];
+
+        for (final file in event.image) {
+          final id = const Uuid().v4();
+          String url = await storageProvider.uploadImage(file, "question/$id.jpg");
+          images.add(url);
+        }
+
+        final now = DateTime.now();
+        final id = await postProvider.create(
+          patientId: event.patientId,
+          age: event.age,
+          specialization: event.specialization,
+          description: event.content,
+          gender: event.gender,
+          private: event.private,
+          images: images,
+        );
+
+        final posts = state.posts ?? [];
+
+        posts.add(PostModel(
+          id: id,
+          patientId: event.patientId,
+          age: event.age,
+          specialization: event.specialization,
+          description: event.content,
+          gender: event.gender,
+          private: event.private,
+          time: now,
+          images: images,
+          count: 0,
+        ));
+
+        emit(AppState(
+          false,
+          state.user,
+          state.doctor,
+          state.patient,
+          state.symptom,
+          state.doctors,
+          posts,
+          state.appointments,
+          state.records,
+          state.history,
+          state.availableTime,
+        ));
+      } catch (e) {}
+    });
+
+    on<AppEventReplyPost>((event, emit) async {
+      try {
+        if (state.doctor != null) {
+          await postProvider.replyasDoctor(event.message, state.user!.uid, state.doctor!.name, event.postId);
+        } else {
+          await postProvider.reply(event.message, state.user!.uid, event.postId);
+        }
       } catch (e) {}
     });
 
