@@ -12,7 +12,8 @@ class PatientSchedulePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(child: BlocBuilder<AppBloc, AppState>(
       builder: (context, state) {
-        return PatientSection(state.appointments!);
+        final appointments = state.appointments ?? [];
+        return PatientSection(appointments);
       },
     ));
   }

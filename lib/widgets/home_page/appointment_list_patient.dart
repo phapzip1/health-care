@@ -12,11 +12,13 @@ class AppointmentListPatient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return BlocBuilder<AppBloc, AppState>(builder: (context, state) {
+      final doctors = state.doctors ?? [];
       return ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: state.doctors!.length,
+          itemCount: doctors.length,
           itemBuilder: (ctx, index) {
             return Container(
               margin: const EdgeInsets.only(top: 16),
@@ -38,7 +40,7 @@ class AppointmentListPatient extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (_) => BlocProvider.value(
                         value: BlocProvider.of<AppBloc>(context),
-                        child: ViewDoctorInformation(state.doctors![index]),
+                        child: ViewDoctorInformation(doctors[index]),
                       ),
                     ),
                   )
@@ -66,7 +68,7 @@ class AppointmentListPatient extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                state.doctors![index].name,
+                                doctors[index].name,
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -76,7 +78,7 @@ class AppointmentListPatient extends StatelessWidget {
                                 height: 6,
                               ),
                               Text(
-                                state.doctors![index].specialization,
+                                doctors[index].specialization,
                                 style: const TextStyle(fontSize: 16, color: Color(0xFF828282)),
                               ),
                               const SizedBox(
@@ -95,7 +97,7 @@ class AppointmentListPatient extends StatelessWidget {
                                       const SizedBox(
                                         width: 8,
                                       ),
-                                      Text("${state.doctors![index].rating}"),
+                                      Text("${doctors[index].rating}"),
                                     ],
                                   ),
                                 ],

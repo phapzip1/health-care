@@ -26,7 +26,7 @@ class CallScreen extends StatefulWidget {
 
 class _CallScreenState extends State<CallScreen> {
   final RtcEngine _engine = createAgoraRtcEngine();
-  final String _token = "007eJxTYJgZcFpE7N+vfZ9OVKyoOJ1n+iv251QXHf6U/fO8ZzouOnFMgSExxSDN0NzQPMk82cLELM080Swt2cTYNNnS0tLIMjXRXNt+aUpDICPDrzfFLIwMEAjiMzMkJiUzMAAA7tchiA==";
+  final String _token = "007eJxTYMhpMpie2RKw9NHfdgb2GZ8v+37a7CqyWltMY2PEutxfthEKDIkpBmmG5obmSebJFiZmaeaJZmnJJsamyZaWlkaWqYnmx7evSmkIZGQoZHjHxMgAgSA+B0NuaVl+SmZyBgMDAOFkIYk=";
   int _remoteUid = -1;
 
   // local
@@ -113,7 +113,7 @@ class _CallScreenState extends State<CallScreen> {
 
       await _engine.joinChannel(
         token: _token,
-        channelId: "abc",
+        channelId: "muvodich",
         options: options,
         uid: 0,
       );
@@ -151,7 +151,7 @@ class _CallScreenState extends State<CallScreen> {
                   color: Colors.white,
                 ),
                 child: const Center(
-                  child: Text("Joining..."),
+                  child: Text("Wait for other..."),
                 ),
               )
             : Stack(
@@ -160,7 +160,7 @@ class _CallScreenState extends State<CallScreen> {
                     child: VideoCallView(
                       engine: _engine,
                       remoteUid: _remoteUid,
-                      channelId: "abc",
+                      channelId: "muvodich",
                       remoteName: widget.remotename,
                       remoteCover: widget.remotecover,
                       remoteCamoff: _rCamOff,
