@@ -1,16 +1,22 @@
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:health_care/firebase_options.dart';
+import 'package:health_care/screens/general/toast_notification.dart';
 import 'package:health_care/services/auth/auth_provider.dart';
 import 'package:health_care/services/auth/auth_user.dart';
 import 'package:health_care/services/auth/auth_exceptions.dart';
 
-import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth, FirebaseAuthException;
+import 'package:firebase_auth/firebase_auth.dart'
+    show FirebaseAuth, FirebaseAuthException;
 
 class FirebaseAuthProvider implements AuthProvider {
   @override
-  Future<AuthUser> createUser({required String email, required String password}) async {
+  Future<AuthUser> createUser(
+      {required String email, required String password}) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) =>
+              ToastNotification().showToast("Register successfully!", true));
       final user = currentUser;
       if (user != null) {
         return user;
@@ -20,11 +26,20 @@ class FirebaseAuthProvider implements AuthProvider {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'weak-password':
-          throw WeakPasswordAuthException();
+          {
+            ToastNotification().showToast("Weak password", false);
+            throw WeakPasswordAuthException();
+          }
         case 'email-already-in-use':
-          throw EmailAlreadyInUseAuthException();
+          {
+            ToastNotification().showToast("Email already in use", false);
+            throw EmailAlreadyInUseAuthException();
+          }
         case 'invalid-email':
-          throw InvalidEmailAuthException();
+          {
+            ToastNotification().showToast("Invalid email", false);
+            throw InvalidEmailAuthException();
+          }
         default:
           throw GenericAuthException();
       }
@@ -43,9 +58,13 @@ class FirebaseAuthProvider implements AuthProvider {
   }
 
   @override
-  Future<AuthUser> logIn({required String email, required String password}) async {
+  Future<AuthUser> logIn(
+      {required String email, required String password}) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) =>
+              ToastNotification().showToast("Login successfully!", true));
       final user = currentUser;
       if (user != null) {
         return user;
@@ -55,9 +74,15 @@ class FirebaseAuthProvider implements AuthProvider {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'user-not-found':
-          throw UserNotFoundAuthException();
+          {
+            ToastNotification().showToast("User not found", false);
+            throw UserNotFoundAuthException();
+          }
         case 'wrong-password':
-          throw UserNotFoundAuthException();
+          {
+            ToastNotification().showToast("Wrong password", false);
+            throw UserNotFoundAuthException();
+          }
         default:
           throw GenericAuthException();
       }

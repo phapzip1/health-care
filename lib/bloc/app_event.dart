@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:health_care/models/feedback_model.dart';
 import 'package:health_care/models/health_record_model.dart';
-import 'package:health_care/models/patient_model.dart';
 
 @immutable
 abstract class AppEvent {

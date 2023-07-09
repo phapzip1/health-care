@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +26,7 @@ class _InputQuestionModalState extends State<InputQuestionModal> {
   int _gender = 0;
 
   var _selectedValue = "All";
-  List<bool> _isSelected = [true, false, false];
+  final List<bool> _isSelected = [true, false, false];
   double _value = 20;
   File? _pickImageFile;
   bool _light = false;

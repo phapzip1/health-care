@@ -50,7 +50,8 @@ class AppointmentListPatient extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => BlocProvider.value(
                                   value: BlocProvider.of<AppBloc>(context),
-                                  child: ViewDoctorInformation(doctorList[index].data()),
+                                  // child: ViewDoctorInformation(doctorList[index].data()),
+                                  child: Container(),
                                 )),
                       )
                     },
