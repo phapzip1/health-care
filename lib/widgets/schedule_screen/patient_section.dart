@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_care/screens/general/appointment_detail_for_patient.dart';
+import 'package:health_care/widgets/home_page/appointment_list_patient.dart';
 import 'package:health_care/widgets/schedule_screen/header.dart';
 
 class PatientSection extends StatefulWidget {
@@ -29,22 +33,18 @@ class _PatientSectionState extends State<PatientSection> {
         Header(_click, _changedPage),
         Expanded(
             child: filterList.isEmpty
-                ? const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Image(
-                        image: AssetImage('assets/images/waiting.png')))
+                ? const Padding(padding: EdgeInsets.all(16), child: Image(image: AssetImage('assets/images/waiting.png')))
                 : ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: filterList.length,
                     itemBuilder: (ctx, index) {
                       return InkWell(
-                        // onTap: () => MaterialPageRoute(
-                        //   builder: (_) => BlocProvider.value(
-                        //     value: BlocProvider.of<AppBloc>(context),
-                        //     child:
-                        //         AppointmentListPatient(spec: filterList[index]),
-                        //   ),
-                        // ),
+                        onTap: () => MaterialPageRoute(
+                          builder: (_) => BlocProvider.value(
+                            value: BlocProvider.of<AppBloc>(context),
+                            child: AppointmentDetailForPatient(filterList[index]),
+                          ),
+                        ),
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 8.0, top: 8.0),
                           decoration: const BoxDecoration(
@@ -66,8 +66,7 @@ class _PatientSectionState extends State<PatientSection> {
                                   children: [
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             filterList[index].doctorName,
@@ -81,18 +80,14 @@ class _PatientSectionState extends State<PatientSection> {
                                           ),
                                           Text(
                                             filterList[index].specialization,
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                color: Color(0xFF828282)),
+                                            style: const TextStyle(fontSize: 16, color: Color(0xFF828282)),
                                           ),
                                           const SizedBox(
                                             height: 6,
                                           ),
                                           Text(
                                             filterList[index].doctorPhone,
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
+                                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                           ),
                                           const SizedBox(
                                             height: 6,
@@ -102,8 +97,7 @@ class _PatientSectionState extends State<PatientSection> {
                                     ),
                                     CircleAvatar(
                                       radius: 26.0,
-                                      backgroundImage: NetworkImage(
-                                          filterList[index].doctorImage),
+                                      backgroundImage: NetworkImage(filterList[index].doctorImage),
                                     ),
                                   ],
                                 ),
@@ -111,8 +105,7 @@ class _PatientSectionState extends State<PatientSection> {
                                   height: 4,
                                 ),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
@@ -124,10 +117,7 @@ class _PatientSectionState extends State<PatientSection> {
                                           width: 4,
                                         ),
                                         Text(
-                                          filterList[index]
-                                              .datetime
-                                              .toString()
-                                              .substring(0, 10),
+                                          filterList[index].datetime.toString().substring(0, 10),
                                           style: const TextStyle(fontSize: 16),
                                         ),
                                       ],
@@ -142,10 +132,7 @@ class _PatientSectionState extends State<PatientSection> {
                                           width: 4,
                                         ),
                                         Text(
-                                          filterList[index]
-                                              .datetime
-                                              .toString()
-                                              .substring(10, 16),
+                                          filterList[index].datetime.toString().substring(10, 16),
                                           style: const TextStyle(fontSize: 16),
                                         ),
                                       ],
@@ -154,10 +141,7 @@ class _PatientSectionState extends State<PatientSection> {
                                       children: [
                                         CircleAvatar(
                                           radius: 4,
-                                          backgroundColor:
-                                              filterList[index].status == 0
-                                                  ? const Color(0xFFE2B93B)
-                                                  : const Color(0xFF27AE60),
+                                          backgroundColor: filterList[index].status == 0 ? const Color(0xFFE2B93B) : const Color(0xFF27AE60),
                                         ),
                                         const SizedBox(
                                           width: 4,
