@@ -38,7 +38,10 @@ class PatientHomePage extends StatelessWidget {
                           FunctionCategory(state.user!.uid, false),
                           const Text(
                             'My Appointment',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                height: 1.1),
                           ),
                           const SizedBox(
                             height: 16,
@@ -53,7 +56,10 @@ class PatientHomePage extends StatelessWidget {
                           ),
                           const Text(
                             'Typical Doctor',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                height: 1.1),
                           ),
                           const SizedBox(
                             height: 16,
@@ -61,7 +67,13 @@ class PatientHomePage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    symptoms == null ? const Center(child: CircularProgressIndicator()) : TypicalDoctor(symptoms)
+                    symptoms == null
+                        ? Container(
+                          margin: const EdgeInsets.symmetric(vertical: 16),
+                            child: const Center(
+                                child: CircularProgressIndicator()),
+                          )
+                        : TypicalDoctor(symptoms)
                   ],
                 );
               },
