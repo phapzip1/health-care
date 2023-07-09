@@ -12,10 +12,10 @@ class AppointmentListPatient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-    return BlocBuilder<AppBloc, AppState>(builder: (context, state) {
-      final doctors = state.doctors ?? [];
-      return ListView.builder(
+    return BlocBuilder<AppBloc, AppState>(
+      builder: (context, state) {
+        final doctors = state.doctors ?? [];
+        return ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: doctors.length,
@@ -124,7 +124,9 @@ class AppointmentListPatient extends StatelessWidget {
                 ),
               ),
             );
-          });
-    });
+          },
+        );
+      },
+    );
   }
 }
