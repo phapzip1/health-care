@@ -5,7 +5,6 @@ import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/screens/general/appointment_detail_for_doctor.dart';
-import 'package:health_care/widgets/record_screen/write_record.dart';
 import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable

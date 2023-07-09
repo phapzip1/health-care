@@ -9,6 +9,7 @@ class PatientRecords extends StatelessWidget {
   final bool isDoctor;
   const PatientRecords(this.isDoctor, {super.key});
 
+  @override
   Widget build(BuildContext context) {
     context.read<AppBloc>().add(const AppEventLoadAppointments());
     return Scaffold(
@@ -36,13 +37,11 @@ class PatientRecords extends StatelessWidget {
         body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: BlocBuilder<AppBloc, AppState>(
-            // future: widget.isDoctor
-            //     ? HealthRecordModel.get(doctorId: user!.uid)
-            //     : HealthRecordModel.get(patientId: user!.uid),
             builder: (ctx, state) {
+              final record = state.appointments![1];
               return ListView.builder(
-                itemCount: state.appointments!.length,
-                itemBuilder: (ctx, index) => RecordTag(state.appointments![1][index].healthRecord, state.appointments![0][index], isDoctor),
+                itemCount: record.length,
+                itemBuilder: (ctx, index) => RecordTag(record[index], isDoctor),
               );
             },
           ),
