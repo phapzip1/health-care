@@ -4,16 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/models/appointment_model.dart';
-import 'package:health_care/models/health_record_model.dart';
 // import 'package:health_care/services/navigation_service.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class RecordDetail extends StatefulWidget {
-  final HealthRecordModel record;
   final bool isDoctor;
   final AppointmentModel appointment;
-  const RecordDetail(this.record, this.isDoctor, this.appointment, {super.key});
+  const RecordDetail(this.isDoctor, this.appointment, {super.key});
 
   @override
   State<RecordDetail> createState() => _RecordDetailState();
@@ -27,9 +25,9 @@ class _RecordDetailState extends State<RecordDetail> {
 
   @override
   void initState() {
-    diagnosticController.text = widget.record.diagnostic;
-    noteController.text = widget.record.note;
-    prescriptionController.text = widget.record.prescription;
+    diagnosticController.text = widget.appointment.healthRecord.diagnostic;
+    noteController.text = widget.appointment.healthRecord.note;
+    prescriptionController.text = widget.appointment.healthRecord.prescription;
     super.initState();
   }
 
@@ -44,7 +42,7 @@ class _RecordDetailState extends State<RecordDetail> {
   void _writeRecord(BuildContext context) async {
     try {
       if (diagnosticController.text != "") {
-        context.read<AppBloc>().add(AppEventUpdateHealthRecord(widget.record, widget.appointment.id));
+        context.read<AppBloc>().add(AppEventUpdateHealthRecord(widget.appointment.healthRecord, widget.appointment.id));
 
         Fluttertoast.showToast(
           msg: "Update successfully",

@@ -17,7 +17,9 @@ class AppointmentDetailForPatient extends StatelessWidget {
     final now = DateTime.now();
     final meeting = appointment.datetime;
     final mediaQuery = MediaQuery.of(context).size;
-    final callCondition = now.isAfter(meeting.subtract(const Duration(minutes: 1))) && now.isBefore(meeting.add(const Duration(minutes: 29)));
+    final callCondition =
+        now.isAfter(meeting.subtract(const Duration(minutes: 1))) &&
+            now.isBefore(meeting.add(const Duration(minutes: 29)));
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -62,16 +64,21 @@ class AppointmentDetailForPatient extends StatelessWidget {
                                 children: [
                                   CircleAvatar(
                                     radius: 24,
-                                    backgroundImage: NetworkImage(appointment.patientImage),
+                                    backgroundImage: NetworkImage(
+                                        appointment.patientImage),
                                   ),
                                   const SizedBox(
                                     width: 8,
                                   ),
                                   Container(
-                                    constraints: BoxConstraints(maxWidth: mediaQuery.width * 0.35),
+                                    constraints: BoxConstraints(
+                                        maxWidth: mediaQuery.width * 0.35),
                                     child: Text(
                                       appointment.patientName,
-                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
                                       overflow: TextOverflow.clip,
                                       softWrap: true,
                                     ),
@@ -84,7 +91,12 @@ class AppointmentDetailForPatient extends StatelessWidget {
                                 ],
                               ),
                               ElevatedButton(
-                                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2F80ED), elevation: 0, padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12)),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          const Color(0xFF2F80ED),
+                                      elevation: 0,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 12)),
                                   onPressed: () {},
                                   child: const Row(
                                     children: [
@@ -94,7 +106,9 @@ class AppointmentDetailForPatient extends StatelessWidget {
                                       ),
                                       Text(
                                         'Rating',
-                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   )),
@@ -112,7 +126,9 @@ class AppointmentDetailForPatient extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
                           ListTile(
-                            contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: listtileVerticalPadding,
+                                horizontal: 10),
                             leading: Padding(
                               padding: const EdgeInsets.only(top: 8),
                               child: Image.asset(
@@ -122,11 +138,17 @@ class AppointmentDetailForPatient extends StatelessWidget {
                             ),
                             title: const Text(
                               "Doctor",
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey),
                             ),
                             subtitle: Text(
                               appointment.doctorName,
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
                             ),
                           ),
                           const Divider(
@@ -134,7 +156,9 @@ class AppointmentDetailForPatient extends StatelessWidget {
                             height: 1,
                           ),
                           ListTile(
-                            contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: listtileVerticalPadding,
+                                horizontal: 10),
                             leading: Padding(
                               padding: const EdgeInsets.only(top: 6),
                               child: Image.asset(
@@ -144,11 +168,17 @@ class AppointmentDetailForPatient extends StatelessWidget {
                             ),
                             title: const Text(
                               "Way to consult",
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey),
                             ),
                             subtitle: const Text(
                               "Video call",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
                             ),
                           ),
                           const Divider(
@@ -156,7 +186,9 @@ class AppointmentDetailForPatient extends StatelessWidget {
                             height: 1,
                           ),
                           ListTile(
-                            contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: listtileVerticalPadding,
+                                horizontal: 10),
                             leading: Padding(
                               padding: const EdgeInsets.only(top: 6),
                               child: Image.asset(
@@ -166,7 +198,10 @@ class AppointmentDetailForPatient extends StatelessWidget {
                             ),
                             title: const Text(
                               "Cost",
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey),
                             ),
                             // subtitle: Text(
                             //   "$price vnd",
@@ -181,7 +216,9 @@ class AppointmentDetailForPatient extends StatelessWidget {
                             height: 1,
                           ),
                           ListTile(
-                            contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: listtileVerticalPadding,
+                                horizontal: 10),
                             leading: Padding(
                               padding: const EdgeInsets.only(top: 8),
                               child: Image.asset(
@@ -191,11 +228,17 @@ class AppointmentDetailForPatient extends StatelessWidget {
                             ),
                             title: const Text(
                               "Time",
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey),
                             ),
                             subtitle: Text(
                               DateFormat.yMd().add_Hm().format(meeting),
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
                             ),
                           ),
                           const Divider(
@@ -203,7 +246,9 @@ class AppointmentDetailForPatient extends StatelessWidget {
                             height: 1,
                           ),
                           ListTile(
-                            contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: listtileVerticalPadding,
+                                horizontal: 10),
                             leading: const Padding(
                               padding: EdgeInsets.only(top: 6),
                               child: Icon(
@@ -214,11 +259,17 @@ class AppointmentDetailForPatient extends StatelessWidget {
                             ),
                             title: const Text(
                               "Issue",
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey),
                             ),
                             subtitle: Text(
                               appointment.specialization,
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
                             ),
                           ),
                           const Divider(
@@ -226,7 +277,9 @@ class AppointmentDetailForPatient extends StatelessWidget {
                             height: 1,
                           ),
                           ListTile(
-                            contentPadding: const EdgeInsets.symmetric(vertical: listtileVerticalPadding, horizontal: 10),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: listtileVerticalPadding,
+                                horizontal: 10),
                             leading: const Padding(
                               padding: EdgeInsets.only(top: 6),
                               child: Icon(
@@ -237,7 +290,10 @@ class AppointmentDetailForPatient extends StatelessWidget {
                             ),
                             title: const Text(
                               "Status",
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey),
                             ),
                             subtitle: Text(
                               appointment.status == 0
@@ -245,7 +301,10 @@ class AppointmentDetailForPatient extends StatelessWidget {
                                   : appointment.status == 1
                                       ? "Confirmed"
                                       : "Rejected",
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
                             ),
                           ),
                         ],
@@ -257,43 +316,67 @@ class AppointmentDetailForPatient extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          if (now.isBefore(meeting.subtract(const Duration(minutes: 30))))
+                          if (now.isBefore(
+                              meeting.subtract(const Duration(minutes: 30))))
                             SizedBox(
                               width: mediaQuery.width * 0.4,
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFFE0E0E0), elevation: 0, padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.05, vertical: 12)),
+                                      backgroundColor:
+                                          const Color(0xFFE0E0E0),
+                                      elevation: 0,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
+                                          vertical: 12)),
                                   onPressed: () {
-                                    context.read<AppBloc>().appointmentProvider.cancelAppointment(appointment.id);
+                                    context
+                                        .read<AppBloc>()
+                                        .appointmentProvider
+                                        .cancelAppointment(appointment.id);
                                   },
                                   child: const Text(
                                     'Cancel',
-                                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                        fontSize: 16),
                                   )),
                             ),
                           if (callCondition)
-                            SizedBox(
-                              width: mediaQuery.width * 0.4,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF2F80ED), elevation: 0, padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.05, vertical: 12)),
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => BlocProvider.value(
-                                        value: BlocProvider.of<AppBloc>(context),
-                                        child: CallScreen(remotename: appointment.doctorName, remotecover: appointment.doctorImage),
-                                      ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF2F80ED),
+                                  elevation: 0,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: MediaQuery.of(context)
+                                              .size
+                                              .width *
+                                          0.05,
+                                      vertical: 12)),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                      value:
+                                          BlocProvider.of<AppBloc>(context),
+                                      child: CallScreen(
+                                          remotename:
+                                              appointment.doctorName,
+                                          remotecover:
+                                              appointment.doctorImage),
                                     ),
-                                  );
-                                },
-                                child: const Text(
-                                  'Join the meeting room',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
                                   ),
+                                );
+                              },
+                              child: const Text(
+                                'Join the meeting room',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
                                 ),
                               ),
                             ),

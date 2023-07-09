@@ -39,7 +39,9 @@ class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
       setState(() {
         _selectedDate = picked;
       });
-      context.read<AppBloc>().add(AppEventLoadAvailableTime(_selectedDate, widget.userDocs.id));
+      context
+          .read<AppBloc>()
+          .add(AppEventLoadAvailableTime(_selectedDate, widget.userDocs.id));
     }
   }
 
@@ -68,6 +70,12 @@ class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
         centerTitle: true,
         elevation: 1,
         backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
         iconTheme: const IconThemeData(
           color: Colors.black,
         ),

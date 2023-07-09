@@ -29,7 +29,7 @@ class FunctionCategory extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => BlocProvider.value(
+                              builder: (_) => BlocProvider.value(
                                     value: BlocProvider.of<AppBloc>(context),
                                     child: NewAppointment(id),
                                   )),
@@ -74,7 +74,7 @@ class FunctionCategory extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => BlocProvider.value(
+                        builder: (_) => BlocProvider.value(
                               value: BlocProvider.of<AppBloc>(context),
                               child: const CommunityQA(),
                             )),
@@ -118,7 +118,7 @@ class FunctionCategory extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => BlocProvider.value(
+                        builder: (_) => BlocProvider.value(
                               value: BlocProvider.of<AppBloc>(context),
                               child: PatientRecords(isDoctor),
                             )),

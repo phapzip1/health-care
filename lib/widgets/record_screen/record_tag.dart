@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/models/appointment_model.dart';
-import 'package:health_care/models/health_record_model.dart';
 import 'package:health_care/widgets/record_screen/record_detail.dart';
-// import 'package:health_care/models/health_record_model.dart';
 import 'package:intl/intl.dart';
 
 class RecordTag extends StatelessWidget {
-  final HealthRecordModel record;
   final AppointmentModel healthRecord;
   final bool isDoctor;
-  const RecordTag(this.record, this.healthRecord, this.isDoctor, {super.key});
+  const RecordTag(this.healthRecord, this.isDoctor, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +17,12 @@ class RecordTag extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        // NavigationService.navKey.currentState?.pushNamed('/record',
-        //     arguments: {"record": healthRecord, "isDoctor": isDoctor});
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => BlocProvider.value(
+                builder: (_) => BlocProvider.value(
                       value: BlocProvider.of<AppBloc>(context),
-                      child: RecordDetail(record, isDoctor, healthRecord),
+                      child: RecordDetail(isDoctor, healthRecord),
                     )),
           );
       },
