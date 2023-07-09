@@ -40,7 +40,7 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
     final now = DateTime.now();
     final meeting = widget.appointment.datetime;
     final mediaQuery = MediaQuery.of(context).size;
-
+    final callCondition = now.isAfter(meeting.subtract(const Duration(minutes: 1))) && now.isBefore(meeting.add(const Duration(minutes: 29)));
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -302,7 +302,7 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                                             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16),
                                           )),
                                     ),
-                                  if (now.isBefore(meeting.subtract(const Duration(minutes: 1))))
+                                  if (callCondition)
                                     SizedBox(
                                       width: mediaQuery.width * 0.5,
                                       child: ElevatedButton(
@@ -327,8 +327,8 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                                 ],
                               )
                             : Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
-                              child: Row(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
                                     SizedBox(
@@ -361,7 +361,7 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                                     )
                                   ],
                                 ),
-                            ),
+                              ),
                       ],
                     ),
                   ],
