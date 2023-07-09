@@ -100,7 +100,7 @@ class _CommunityQAState extends State<CommunityQA> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => BlocProvider.value(
+                builder: (_) => BlocProvider.value(
                       value: BlocProvider.of<AppBloc>(context),
                       child: const InputQuestionModal(),
                     )),
