@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:health_care/bloc/app_bloc.dart';
-
 import 'package:health_care/models/appointment_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:health_care/widgets/home_page/appointment_list_patient.dart';
-
 import 'package:health_care/widgets/schedule_screen/header.dart';
 
 class PatientSection extends StatefulWidget {
   const PatientSection(this.scheduleDocs, {super.key});
 
-  final List<AppointmentModel> scheduleDocs;
+  final List<List<AppointmentModel>> scheduleDocs;
 
   @override
   State<PatientSection> createState() => _PatientSectionState();
@@ -28,20 +23,7 @@ class _PatientSectionState extends State<PatientSection> {
 
   @override
   Widget build(BuildContext context) {
-    var filterList;
-    final now = DateTime.now();
-    if (_changedPage) {
-      filterList = widget.scheduleDocs
-          .where((element) =>
-              element.datetime.isBefore(now) && element.status <= 1)
-          .toList();
-    } else {
-      filterList = widget.scheduleDocs
-          .where(
-              (element) => element.datetime.isAfter(now) || element.status > 1)
-          .toList();
-    }
-
+    final filterList = _changedPage ? widget.scheduleDocs[0] : widget.scheduleDocs[1];
     return Column(
       children: [
         Header(_click, _changedPage),
@@ -56,16 +38,13 @@ class _PatientSectionState extends State<PatientSection> {
                     itemCount: filterList.length,
                     itemBuilder: (ctx, index) {
                       return InkWell(
-                        // onTap: () => NavigationService.navKey.currentState
-                        //     ?.pushNamed('/appointmentdetailforpatient',
-                        //         arguments: filterList[index]),
-                        onTap: () => MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                            value: BlocProvider.of<AppBloc>(context),
-                            child:
-                                AppointmentListPatient(spec: filterList[index]),
-                          ),
-                        ),
+                        // onTap: () => MaterialPageRoute(
+                        //   builder: (_) => BlocProvider.value(
+                        //     value: BlocProvider.of<AppBloc>(context),
+                        //     child:
+                        //         AppointmentListPatient(spec: filterList[index]),
+                        //   ),
+                        // ),
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 8.0, top: 8.0),
                           decoration: const BoxDecoration(
@@ -146,7 +125,7 @@ class _PatientSectionState extends State<PatientSection> {
                                         ),
                                         Text(
                                           filterList[index]
-                                              .dateTime
+                                              .datetime
                                               .toString()
                                               .substring(0, 10),
                                           style: const TextStyle(fontSize: 16),
@@ -164,7 +143,7 @@ class _PatientSectionState extends State<PatientSection> {
                                         ),
                                         Text(
                                           filterList[index]
-                                              .dateTime
+                                              .datetime
                                               .toString()
                                               .substring(10, 16),
                                           style: const TextStyle(fontSize: 16),

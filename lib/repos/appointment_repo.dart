@@ -20,6 +20,7 @@ abstract class AppointmentRepo {
     required String patientImage,
     required String patientPhone,
     required String specialization,
+    required double price,
     required DateTime datetime,
   });
 
@@ -29,6 +30,7 @@ abstract class AppointmentRepo {
   Future<void> cancelAppointment(String id);
 
   // for doctor
+  Future<void> acceptAppointment(String id);
   Future<void> declineAppointment(String id);
 
   Future<void> updateHeathRecord(String appointmentId, HealthRecordModel healthrecord);

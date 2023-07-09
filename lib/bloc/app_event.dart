@@ -107,7 +107,8 @@ class AppEventLoadHistory extends AppEvent {
 class AppEventLoadAvailableTime extends AppEvent {
 
   final DateTime date;
-  const AppEventLoadAvailableTime(this.date);
+  final String doctorId;
+  const AppEventLoadAvailableTime(this.date, this.doctorId);
 }
 
 // update data
@@ -153,6 +154,7 @@ class AppEventMakeAppointment extends AppEvent {
   final String patientImage;
   final String patientPhone;
   final String specialization;
+  final double price;
   final DateTime datetime;
 
   const AppEventMakeAppointment(
@@ -165,6 +167,7 @@ class AppEventMakeAppointment extends AppEvent {
     this.patientImage,
     this.patientPhone,
     this.specialization,
+    this.price,
     this.datetime,
   );
 }
@@ -175,10 +178,10 @@ class AppEventCancelAppointment extends AppEvent {
   const AppEventCancelAppointment(this.appointmentId);
 }
 
-class AppEventDeclineAppoitment extends AppEvent {
+class AppEventDeclineAppointment extends AppEvent {
   final String appointmentId;
 
-  const AppEventDeclineAppoitment(this.appointmentId);
+  const AppEventDeclineAppointment(this.appointmentId);
 }
 
 class AppEventSendFeedback extends AppEvent {
@@ -199,4 +202,10 @@ class AppEventUpdateHealthRecord extends AppEvent {
   final String appointmentId;
 
   const AppEventUpdateHealthRecord(this.healthRecord, this.appointmentId);
+}
+
+class AppEventAcceptAppointment extends AppEvent {
+
+  final String appointmentId;
+  const AppEventAcceptAppointment(this.appointmentId);
 }

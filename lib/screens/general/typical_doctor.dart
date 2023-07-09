@@ -1,6 +1,9 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/models/symptom_model.dart';
 import 'package:health_care/widgets/home_page/appointment_list_patient.dart';
 
@@ -31,9 +34,16 @@ class _TypicalDoctorState extends State<TypicalDoctor> {
               itemBuilder: (ctx2, index) {
                 return InkWell(
                   onTap: () {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
+                    if (_selectedIndex != index) {
+                      setState(() {
+                        _selectedIndex = index;
+                      });
+                      if (index == 0) {
+                        context.read<AppBloc>().add(const AppEventLoadDoctors(null));
+                      } else {
+                        context.read<AppBloc>().add(AppEventLoadDoctors(widget.symptoms[index].name));
+                      }
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(2.0),
@@ -57,21 +67,18 @@ class _TypicalDoctorState extends State<TypicalDoctor> {
                             children: [
                               Text(
                                 widget.symptoms[index].name,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(
                                 width: 4,
                               ),
                               Image.network(
                                 widget.symptoms[index].icon,
-                                frameBuilder: (context, child, frame,
-                                    wasSynchronouslyLoaded) {
+                                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                                   if (wasSynchronouslyLoaded) {
                                     return child;
                                   }
-                                  return Image.asset(
-                                      "assets/images/fallback.jpg");
+                                  return Image.asset("assets/images/fallback.jpg");
                                 },
                                 width: 24,
                               )
@@ -85,8 +92,7 @@ class _TypicalDoctorState extends State<TypicalDoctor> {
               },
             ),
           ),
-          if (widget.symptoms.isNotEmpty)
-            AppointmentListPatient(spec: widget.symptoms[_selectedIndex].name),
+          if (widget.symptoms.isNotEmpty) AppointmentListPatient(spec: widget.symptoms[_selectedIndex].name),
         ],
       ),
     );

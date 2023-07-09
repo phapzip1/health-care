@@ -41,9 +41,9 @@ class PatientRecords extends StatelessWidget {
             //     : HealthRecordModel.get(patientId: user!.uid),
             builder: (ctx, state) {
               return ListView.builder(
-                  itemCount: state.appointments!.length,
-                  itemBuilder: (ctx, index) =>
-                      RecordTag(state.appointments![index].healthRecord, state.appointments![index], isDoctor));
+                itemCount: state.appointments!.length,
+                itemBuilder: (ctx, index) => RecordTag(state.appointments![1][index].healthRecord, state.appointments![0][index], isDoctor),
+              );
             },
           ),
         ));

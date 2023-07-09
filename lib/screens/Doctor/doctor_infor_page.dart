@@ -1,6 +1,3 @@
-// ignore_for_file: avoid_print, unused_element
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
@@ -14,7 +11,6 @@ class DoctorInforPage extends StatefulWidget {
   @override
   State<DoctorInforPage> createState() => _DoctorInforPageState();
 }
-
 
 class _DoctorInforPageState extends State<DoctorInforPage> {
   @override
@@ -108,21 +104,17 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                             style: TextStyle(),
                           ),
                           FutureBuilder(
-                              future: context
-                                  .read<AppBloc>()
-                                  .appointmentProvider
-                                  .getCompletedAppointmentCount(userDocs.id),
-                              builder: (ctx, total) {
-                                if (total.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const CircularProgressIndicator();
-                                }
-                                return Text(
-                                  total.data.toString(),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                );
-                              })
+                            future: context.read<AppBloc>().appointmentProvider.getCompletedAppointmentCount(userDocs.id),
+                            builder: (ctx, total) {
+                              if (total.connectionState == ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
+                              return Text(
+                                total.data.toString(),
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              );
+                            },
+                          )
                         ],
                       ),
                     ],

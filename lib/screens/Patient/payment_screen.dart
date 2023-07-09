@@ -13,7 +13,6 @@ class PaymentScreen extends StatelessWidget {
   final String doctorImage;
   final String doctorSpecialization;
   final DateTime date;
-  final int hour;
   const PaymentScreen(
       this.doctorId,
       this.doctorName,
@@ -22,14 +21,11 @@ class PaymentScreen extends StatelessWidget {
       this.doctorImage,
       this.doctorSpecialization,
       this.date,
-      this.hour,
       {super.key});
 
   @override
   Widget build(BuildContext context) {
     const double listtileVerticalPadding = 4.5;
-
-    String time = hour % 10 == 3 ? '${hour ~/ 10}:30' : '${hour ~/ 10}:00';
 
     return Scaffold(
       body: BlocBuilder<AppBloc, AppState>(
@@ -216,7 +212,7 @@ class PaymentScreen extends StatelessWidget {
                                   color: Colors.grey),
                             ),
                             subtitle: Text(
-                              "${DateFormat('dd-MM-y').format(date)}    $time",
+                              DateFormat.yMd().add_Hm().format(date),
                               style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -246,7 +242,6 @@ class PaymentScreen extends StatelessWidget {
                                 doctorImage,
                                 doctorSpecialization,
                                 date,
-                                hour,
                                 patientUser),
                           ),
                         ),
