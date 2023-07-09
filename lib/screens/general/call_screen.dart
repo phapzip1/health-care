@@ -5,14 +5,12 @@ import 'package:flutter/material.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 
-
 import '../../widgets/video_call_view.dart';
 import '../../widgets/video_call_panel.dart';
 
 class CallScreen extends StatefulWidget {
   final String remotename;
   final String remotecover;
-
 
   const CallScreen({
     super.key,
@@ -89,18 +87,16 @@ class _CallScreenState extends State<CallScreen> {
         // NavigationService.isCalling = false;
         if (mounted) {
           // NavigationService.navKey.currentState!.pop();
+          Navigator.of(context).pop();
         }
       },
       onUserOffline: (connection, remoteUid, reason) {
-        // NavigationService.navKey.currentState!.pop();
+        Navigator.of(context).pop();
       },
     ));
 
     _join();
   }
-
-
-
 
   Future<void> _join() async {
     try {

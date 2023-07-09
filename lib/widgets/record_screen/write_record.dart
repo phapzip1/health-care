@@ -235,7 +235,9 @@ class _RecordDetailState extends State<WriteRecord> {
                               elevation: 0,
                               padding:
                                   const EdgeInsets.symmetric(vertical: 12)),
-                          onPressed:() => _writeRecord(context),
+                          onPressed:() {
+                            _writeRecord(context);
+                          },
                           child: const Text(
                             'Save',
                             style: TextStyle(
