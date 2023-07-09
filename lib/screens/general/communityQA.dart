@@ -97,14 +97,11 @@ class _CommunityQAState extends State<CommunityQA> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF3A86FF),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => BlocProvider.value(
-                      value: BlocProvider.of<AppBloc>(context),
-                      child: const InputQuestionModal(),
-                    )),
-          );
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                    value: BlocProvider.of<AppBloc>(context),
+                    child: const InputQuestionModal(),
+                  )));
         },
         child: const Icon(Icons.add),
       ),
