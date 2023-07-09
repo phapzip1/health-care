@@ -104,14 +104,19 @@ class _DoctorInforPageState extends State<DoctorInforPage> {
                             style: TextStyle(),
                           ),
                           FutureBuilder(
-                            future: context.read<AppBloc>().appointmentProvider.getCompletedAppointmentCount(userDocs.id),
+                            future: context
+                                .read<AppBloc>()
+                                .appointmentProvider
+                                .getCompletedAppointmentCount(userDocs.id),
                             builder: (ctx, total) {
-                              if (total.connectionState == ConnectionState.waiting) {
+                              if (total.connectionState ==
+                                  ConnectionState.waiting) {
                                 return const CircularProgressIndicator();
                               }
                               return Text(
                                 total.data.toString(),
-                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               );
                             },
                           )
