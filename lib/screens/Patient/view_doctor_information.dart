@@ -46,7 +46,9 @@ class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
   void initState() {
     super.initState();
     _selectedDate = DateTime.now();
-    context.read<AppBloc>().add(AppEventLoadAvailableTime(_selectedDate, widget.userDocs.id));
+    context
+        .read<AppBloc>()
+        .add(AppEventLoadAvailableTime(_selectedDate, widget.userDocs.id));
   }
 
   @override
@@ -120,14 +122,20 @@ class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
                             style: TextStyle(),
                           ),
                           FutureBuilder(
-                            future: context.read<AppBloc>().appointmentProvider.getCompletedAppointmentCount(widget.userDocs.id),
+                            future: context
+                                .read<AppBloc>()
+                                .appointmentProvider
+                                .getCompletedAppointmentCount(
+                                    widget.userDocs.id),
                             builder: (ctx, total) {
-                              if (total.connectionState == ConnectionState.waiting) {
+                              if (total.connectionState ==
+                                  ConnectionState.waiting) {
                                 return const CircularProgressIndicator();
                               }
                               return Text(
                                 total.data.toString(),
-                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               );
                             },
                           ),
@@ -151,20 +159,23 @@ class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
                         style: OutlinedButton.styleFrom(
                           primary: Colors.black,
                           textStyle: const TextStyle(fontSize: 16),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
                           ),
                         ),
-                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text(
-                            DateFormat('dd/MM/y').format(_selectedDate),
-                          ),
-                          const Icon(
-                            FontAwesomeIcons.calendar,
-                            color: Colors.black,
-                          ),
-                        ]),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                DateFormat('dd/MM/y').format(_selectedDate),
+                              ),
+                              const Icon(
+                                FontAwesomeIcons.calendar,
+                                color: Colors.black,
+                              ),
+                            ]),
                       ),
                       const SizedBox(
                         height: 16,
@@ -182,12 +193,18 @@ class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
                 BlocBuilder<AppBloc, AppState>(
                   builder: (context, state) {
                     if (state.availableTime == null) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 16),
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
                       );
                     }
                     if (state.availableTime!.isEmpty) {
-                      return const Text('There is no time frame available');
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        child: const Text('There is no time frame available'),
+                      );
                     }
                     return TimeChoosing(
                       time: state.availableTime!,
@@ -200,7 +217,8 @@ class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
                   ),
                   onPressed: () {
                     _meetingTime == null
