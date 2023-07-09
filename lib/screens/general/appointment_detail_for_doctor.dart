@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/models/appointment_model.dart';
+import 'package:health_care/screens/general/call_screen.dart';
 import 'package:health_care/widgets/record_screen/record_detail.dart';
 import 'package:intl/intl.dart';
 
@@ -305,7 +306,16 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor: const Color(0xFF2F80ED), elevation: 0, padding: EdgeInsets.symmetric(horizontal: mediaQuery.width * 0.05, vertical: 12)),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) => BlocProvider.value(
+                                              value: BlocProvider.of<AppBloc>(context),
+                                              child: CallScreen(remotename: widget.appointment.patientName, remotecover: widget.appointment.patientImage),
+                                            ),
+                                          ),
+                                        );
+                                      },
                                       child: const Text(
                                         'Join the meeting room',
                                         style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),

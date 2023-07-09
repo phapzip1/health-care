@@ -12,7 +12,10 @@ class DoctorSchedulePage extends StatelessWidget {
 
     return SafeArea(
       child: BlocBuilder<AppBloc, AppState>(
-        builder: (context, state) => DoctorSection(list: state.appointments!),
+        builder: (context, state) {
+          final appointments = state.appointments ?? [];
+          return DoctorSection(list: appointments);
+        }
       ),
     );
   }
