@@ -52,7 +52,7 @@ class AppointmentModel {
         price = map["price"],
         datetime = map["datetime"],
         status = map["status"],
-        healthRecord = HealthRecordModel.fromMap(map["record"]);
+        healthRecord = HealthRecordModel.fromMap(map["health_record"]);
 
   Map<String, dynamic> toMap() {
     return {

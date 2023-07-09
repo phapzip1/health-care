@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'patient_home_page.dart';
 import './patientSchedulePage.dart';
@@ -14,7 +13,6 @@ class MainPagePatient extends StatefulWidget {
 class _MyWidgetState extends State<MainPagePatient> {
   int _selectedIndex = 0;
 
-  final user = FirebaseAuth.instance.currentUser!.uid;
 
   Widget currentPagePatient(int index) {
     switch (index) {

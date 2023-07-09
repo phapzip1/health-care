@@ -2,9 +2,10 @@ import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:health_care/bloc/app_bloc.dart";
 import "package:health_care/bloc/app_event.dart";
+import "package:health_care/main.dart";
 import "package:health_care/models/patient_model.dart";
-// import 'package:fluttertoast/fluttertoast.dart';
-import "package:health_care/screens/Patient/patient_home_page.dart";
+import "package:health_care/screens/Patient/main_page_patient.dart";
+
 
 class CardsAndWalletsScreen extends StatelessWidget {
   final String doctorId;
@@ -14,41 +15,34 @@ class CardsAndWalletsScreen extends StatelessWidget {
   final String doctorImage;
   final String specialization;
   final DateTime datetime;
-  final int hour;
   final PatientModel patient;
 
-  const CardsAndWalletsScreen(
-      this.doctorId,
-      this.doctorName,
-      this.price,
-      this.doctorPhone,
-      this.doctorImage,
-      this.specialization,
-      this.datetime,
-      this.hour,
-      this.patient,
-      {super.key});
+  const CardsAndWalletsScreen(this.doctorId, this.doctorName, this.price, this.doctorPhone, this.doctorImage, this.specialization, this.datetime, this.patient, {super.key});
 
   void _makeAppointment(BuildContext context) async {
-    context.read<AppBloc>().add(AppEventMakeAppointment(
-          doctorId,
-          doctorName,
-          doctorPhone,
-          doctorImage,
-          patient.id.toString(),
-          patient.name,
-          patient.image,
-          patient.phoneNumber,
-          specialization,
-          datetime,
-        ));
-    Navigator.of(context).push(
+    context.read<AppBloc>().add(
+          AppEventMakeAppointment(
+            doctorId,
+            doctorName,
+            doctorPhone,
+            doctorImage,
+            patient.id.toString(),
+            patient.name,
+            patient.image,
+            patient.phoneNumber,
+            specialization,
+            price.toDouble(),
+            datetime,
+          ),
+        );
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => BlocProvider.value(
           value: BlocProvider.of<AppBloc>(context),
-          child: const PatientHomePage(),
+          child: const HomePage(),
         ),
       ),
+      (route) => false,
     );
   }
 
@@ -75,17 +69,14 @@ class CardsAndWalletsScreen extends StatelessWidget {
                           Navigator.pop(context);
                         },
                         backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                         elevation: 1,
-                        child:
-                            const Icon(Icons.arrow_back, color: Colors.black),
+                        child: const Icon(Icons.arrow_back, color: Colors.black),
                       ),
                       const SizedBox(width: 22),
                       const Text(
                         "Payment method",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -220,8 +211,7 @@ class CardsAndWalletsScreen extends StatelessWidget {
                       flex: 3,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.grey),
+                          backgroundColor: MaterialStateProperty.all(Colors.grey),
                         ),
                         onPressed: () {},
                         child: const Padding(
@@ -243,8 +233,7 @@ class CardsAndWalletsScreen extends StatelessWidget {
                       flex: 7,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.blue),
+                          backgroundColor: MaterialStateProperty.all(Colors.blue),
                         ),
 
                         /// make appointment successfully

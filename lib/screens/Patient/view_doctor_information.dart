@@ -4,9 +4,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
+import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/doctor_model.dart';
 import 'package:health_care/screens/Patient/payment_screen.dart';
 import 'package:health_care/screens/general/review_section.dart';
+import 'package:health_care/widgets/infomation_page/time_choosing.dart';
 import 'package:health_care/widgets/infomation_page/upper_part.dart';
 import 'package:intl/intl.dart';
 
@@ -20,6 +22,7 @@ class ViewDoctorInformation extends StatefulWidget {
 
 class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
   late DateTime _selectedDate;
+  late DateTime? _meetingTime;
 
   _selectDate(BuildContext context) async {
     final now = DateTime.now();
@@ -31,6 +34,7 @@ class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
         const Duration(days: 7),
       ),
     );
+
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
@@ -42,13 +46,7 @@ class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
   void initState() {
     super.initState();
     _selectedDate = DateTime.now();
-    context.read<AppBloc>().add(AppEventLoadAvailableTime(_selectedDate));
-  }
-
-  int _choosingTime = -1;
-
-  void _onChange(index) {
-    _choosingTime = index;
+    context.read<AppBloc>().add(AppEventLoadAvailableTime(_selectedDate, widget.userDocs.id));
   }
 
   @override
@@ -79,243 +77,193 @@ class _ViewDoctorInformationState extends State<ViewDoctorInformation> {
             height: 8,
           ),
           Card(
-            child: Column(children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'About doctor',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'About doctor',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Year of experience',
-                          style: TextStyle(),
-                        ),
-                        Text(
-                          '${widget.userDocs.experience} years',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    // ignore: prefer_const_constructors
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Patients checked',
-                          style: TextStyle(),
-                        ),
-                        FutureBuilder(
-                            future: context
-                                .read<AppBloc>()
-                                .appointmentProvider
-                                .getCompletedAppointmentCount(
-                                    widget.userDocs.id),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Year of experience',
+                            style: TextStyle(),
+                          ),
+                          Text(
+                            '${widget.userDocs.experience} years',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      // ignore: prefer_const_constructors
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Patients checked',
+                            style: TextStyle(),
+                          ),
+                          FutureBuilder(
+                            future: context.read<AppBloc>().appointmentProvider.getCompletedAppointmentCount(widget.userDocs.id),
                             builder: (ctx, total) {
-                              if (total.connectionState ==
-                                  ConnectionState.waiting) {
+                              if (total.connectionState == ConnectionState.waiting) {
                                 return const CircularProgressIndicator();
                               }
                               return Text(
                                 total.data.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                style: const TextStyle(fontWeight: FontWeight.bold),
                               );
-                            })
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                children: [
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  const Text(
-                    'Schedules',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  OutlinedButton(
-                    onPressed: () {
-                      _selectDate(context);
-                    },
-                    style: OutlinedButton.styleFrom(
-                      primary: Colors.black,
-                      textStyle: const TextStyle(fontSize: 16),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                            },
+                          ),
+                        ],
                       ),
-                    ),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(DateFormat('dd/MM/y').format(_selectedDate)),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Text(
+                        'Schedules',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          primary: Colors.black,
+                          textStyle: const TextStyle(fontSize: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                          ),
+                        ),
+                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          Text(
+                            DateFormat('dd/MM/y').format(_selectedDate),
+                          ),
                           const Icon(
                             FontAwesomeIcons.calendar,
                             color: Colors.black,
                           ),
                         ]),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  const Text(
-                    'Time available',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  // FutureBuilder(
-                  //     future: userDocs.checkTime(),
-                  //     builder: (ctx, futureCheck) {
-                  //       if (futureCheck.connectionState ==
-                  //           ConnectionState.waiting) {
-                  //         return const Center(
-                  //           child: CircularProgressIndicator(),
-                  //         );
-                  //       }
-                  //       if (futureCheck.data!) {
-                  //         return ElevatedButton(
-                  //           style: ElevatedButton.styleFrom(
-                  //             padding: const EdgeInsets.symmetric(
-                  //                 horizontal: 16, vertical: 12),
-                  //           ),
-                  //           onPressed: () {
-                  //             NavigationService.navKey.currentState
-                  //                 ?.pushNamed('/schedule',
-                  //                     arguments: userDocs.id);
-                  //           },
-                  //           child: const Text(
-                  //             'Choose your time for consultant',
-                  //             style: TextStyle(
-                  //                 fontWeight: FontWeight.bold,
-                  //                 fontSize: 16),
-                  //           ),
-                  //         );
-                  //       }
-
-                  //       return FutureBuilder(
-                  //           future: userDocs.getAvailableTime(
-                  //             _selectedDate.day,
-                  //             _selectedDate.month,
-                  //             _selectedDate.year,
-                  //           ),
-                  //           builder: (ctx, future) {
-                  //             if (future.connectionState ==
-                  //                 ConnectionState.waiting) {
-                  //               return const Center(
-                  //                 child: CircularProgressIndicator(),
-                  //               );
-                  //             }
-                  //             final time = future.data!;
-                  //             return time.isEmpty
-                  //                 ? const Text(
-                  //                     'There is no time frame available')
-                  //                 : TimeChoosing(
-                  //                     time,
-                  //                     mediaQuery,
-                  //                     _selectedDate.day,
-                  //                     _selectedDate.month,
-                  //                     _selectedDate.year,
-                  //                     _onChange,
-                  //                     widget.isDoctor);
-                  //           });
-                  //     }),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
                       ),
-                      onPressed: () {
-                        //payment screen
-                        _choosingTime == -1
-                            ? Fluttertoast.showToast(
-                                msg: "You must choose time",
-                                toastLength: Toast.LENGTH_SHORT,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0,
-                              )
-                            : Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => BlocProvider.value(
-                                    value: BlocProvider.of<AppBloc>(context),
-                                    child: PaymentScreen(
-                                        widget.userDocs.id,
-                                        widget.userDocs.name,
-                                        widget.userDocs.price.truncate(),
-                                        widget.userDocs.phoneNumber,
-                                        widget.userDocs.image,
-                                        widget.userDocs.specialization,
-                                        _selectedDate,
-                                        _choosingTime),
-                                  ),
-                                ),
-                              );
-                      },
-                      child: const Text(
-                        'Make appointment',
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Text(
+                        'Time available',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      )),
-                ],
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                // ignore: prefer_const_constructors
-                child: Column(children: [
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Reviews',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                  const SizedBox(
-                    height: 16,
+                ),
+                BlocBuilder<AppBloc, AppState>(
+                  builder: (context, state) {
+                    if (state.availableTime == null) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (state.availableTime!.isEmpty) {
+                      return const Text('There is no time frame available');
+                    }
+                    return TimeChoosing(
+                      time: state.availableTime!,
+                      mediaQuery: MediaQuery.of(context).size,
+                      onChange: (date) {
+                        _meetingTime = date;
+                      },
+                    );
+                  },
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   ),
-                  ReviewSection(widget.userDocs),
-                  const SizedBox(
-                    height: 16,
+                  onPressed: () {
+                    _meetingTime == null
+                        ? Fluttertoast.showToast(
+                            msg: "You must choose time",
+                            toastLength: Toast.LENGTH_SHORT,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          )
+                        : Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                value: BlocProvider.of<AppBloc>(context),
+                                child: PaymentScreen(
+                                  widget.userDocs.id,
+                                  widget.userDocs.name,
+                                  widget.userDocs.price.truncate(),
+                                  widget.userDocs.phoneNumber,
+                                  widget.userDocs.image,
+                                  widget.userDocs.specialization,
+                                  _meetingTime!,
+                                ),
+                              ),
+                            ),
+                          );
+                  },
+                  child: const Text(
+                    'Make appointment',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-                ]),
-              ),
-            ]),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  // ignore: prefer_const_constructors
+                  child: Column(
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Reviews',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      ReviewSection(widget.userDocs),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       )),

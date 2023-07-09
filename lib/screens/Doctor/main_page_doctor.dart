@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/screens/Doctor/doctorSchedulePage.dart';
 import 'package:health_care/screens/Doctor/doctor_home_screen.dart';
 import 'package:health_care/screens/Doctor/doctor_infor_page.dart';
@@ -13,6 +16,12 @@ class MainPageDoctor extends StatefulWidget {
 
 class _MyWidgetState extends State<MainPageDoctor> {
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<AppBloc>().add(const AppEventLoadAppointments());
+  }
 
   Widget currentPageDoctor(int index) {
     switch (index) {

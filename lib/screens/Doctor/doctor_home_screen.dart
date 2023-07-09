@@ -21,42 +21,39 @@ class _DoctorHomeScreen extends State<DoctorHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 24),
-        child: SingleChildScrollView(
-          child: BlocBuilder<AppBloc, AppState>(builder: (ctx, state) {
-            final userDocs = state.doctor!;
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 24),
+          child: SingleChildScrollView(
+            child: BlocBuilder<AppBloc, AppState>(builder: (ctx, state) {
+              final userDocs = state.doctor!;
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      HeaderSection(
-                          url: userDocs.image, userName: userDocs.name),
-                      FunctionCategory(userDocs.id, true),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        HeaderSection(url: userDocs.image, userName: userDocs.name),
+                        FunctionCategory(userDocs.id, true),
 
-                      // Appointment list
-                      const Text(
-                        'My Appointment',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            height: 1.1),
-                      ),
-                    ],
+                        // Appointment list
+                        const Text(
+                          'My Appointment',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const AppointmentListDoctor(),
-              ],
-            );
-          }),
+                  const AppointmentListDoctor(),
+                ],
+              );
+            }),
+          ),
         ),
       ),
-    ));
+    );
   }
 }

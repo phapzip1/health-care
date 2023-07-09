@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
 // import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/bloc/app_state.dart';
 // import 'package:health_care/models/patient_model.dart';
@@ -10,15 +11,12 @@ import 'package:health_care/widgets/function_category.dart';
 import 'package:health_care/widgets/home_page/personal_appointment.dart';
 import 'package:health_care/widgets/header_section.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
-
 class PatientHomePage extends StatelessWidget {
   const PatientHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    final user = FirebaseAuth.instance.currentUser!;
+    context.read<AppBloc>().add(const AppEventLoadDoctors(null));
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -26,7 +24,7 @@ class PatientHomePage extends StatelessWidget {
           child: SingleChildScrollView(
             child: BlocBuilder<AppBloc, AppState>(
               builder: (ctx, state) {
-                final symptoms = state.symptom!;
+                final symptoms = state.symptom;
                 return Column(
                   children: [
                     Padding(
@@ -38,7 +36,7 @@ class PatientHomePage extends StatelessWidget {
                             url: state.patient!.image,
                             userName: state.patient!.name,
                           ),
-                          FunctionCategory(user.uid, false),
+                          FunctionCategory(state.user!.uid, false),
                           const Text(
                             'My Appointment',
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, height: 1.1),
@@ -64,7 +62,7 @@ class PatientHomePage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    TypicalDoctor(symptoms)
+                    symptoms == null ? const Center(child: CircularProgressIndicator()) : TypicalDoctor(symptoms)
                   ],
                 );
               },

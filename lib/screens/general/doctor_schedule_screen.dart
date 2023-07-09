@@ -106,6 +106,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                     vertical: 10,
                   ),
                   child: ListView.builder(
+                    itemCount: _time.length,
                     itemBuilder: (context, index) {
                       final checked = _checkedTime.contains(_time[index]);
                       return ElevatedButton(
