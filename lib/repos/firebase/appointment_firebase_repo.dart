@@ -97,7 +97,7 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
   Future<List<AppointmentModel>> getAppointmentByDoctorId(String id) async {
     try {
       final anchor = DateTime.now().subtract(const Duration(minutes: 30));
-      final querySnapshot = await _ref.where("doctor_id", isEqualTo: id).where("datetime", isGreaterThan: Timestamp.fromDate(anchor)).where("status", whereIn: [0, 1, 2]).get();
+      final querySnapshot = await _ref.where("doctor_id", isEqualTo: id).where("datetime", isGreaterThan: Timestamp.fromDate(anchor)).where("status", whereIn: [0, 1]).get();
       return querySnapshot.docs
           .map((e) => AppointmentModel.fromMap({
                 "id": e.id,
@@ -125,7 +125,7 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
   Future<List<AppointmentModel>> getAppointmentByPatientId(String id) async {
     try {
       final anchor = DateTime.now().subtract(const Duration(minutes: 30));
-      final querySnapshot = await _ref.where("patient_id", isEqualTo: id).where("datetime", isGreaterThan: Timestamp.fromDate(anchor)).where("status", whereIn: [0, 1, 2]).get();
+      final querySnapshot = await _ref.where("patient_id", isEqualTo: id).where("datetime", isGreaterThan: Timestamp.fromDate(anchor)).where("status", whereIn: [0, 1]).get();
       return querySnapshot.docs
           .map((e) => AppointmentModel.fromMap({
                 "id": e.id,
@@ -152,9 +152,9 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
   @override
   Future<List<AppointmentModel>> getOldAppointmentByDoctorId(String id) async {
     try {
-      final now = DateTime.now();
+      final anchor = DateTime.now().subtract(const Duration(minutes: 30));
       final rejected = await _ref.where("doctor_id", isEqualTo: id).where("status", whereIn: [2, 3, 4]).get();
-      final outdated = await _ref.where("doctor_id", isEqualTo: id).where("datetime", isGreaterThan: Timestamp.fromDate(now)).get();
+      final outdated = await _ref.where("doctor_id", isEqualTo: id).where("datetime", isLessThan: Timestamp.fromDate(anchor)).where("status", whereIn: [0, 1]).get();
       final list = rejected.docs;
       list.addAll(outdated.docs);
       return list
@@ -183,8 +183,9 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
   @override
   Future<List<AppointmentModel>> getOldAppointmentByPatientId(String id) async {
     try {
+      final anchor = DateTime.now().subtract(const Duration(minutes: 30));
       final rejected = await _ref.where("patient_id", isEqualTo: id).where("status", whereIn: [2, 3, 4]).get();
-      final outdated = await _ref.where("patient_id", isEqualTo: id).where("datetime", isLessThan: Timestamp.now()).get();
+      final outdated = await _ref.where("patient_id", isEqualTo: id).where("datetime", isLessThan: Timestamp.fromDate(anchor)).where("status", whereIn: [0, 1]).get();
       final list = rejected.docs;
       list.addAll(outdated.docs);
       return list
@@ -213,7 +214,9 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
   @override
   Future<void> updateHeathRecord(String appointmentId, HealthRecordModel healthrecord) async {
     try {
-      await _ref.doc(appointmentId).update(healthrecord.toMap());
+      await _ref.doc(appointmentId).update({
+        "health_record": healthrecord.toMap(),
+      });
     } catch (e) {
       throw GenericDBException();
     }
