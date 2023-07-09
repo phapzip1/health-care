@@ -13,6 +13,22 @@ class PostModel {
   final List<String> images;
   final int count;
 
+  PostModel({
+    required this.id,
+    required this.patientId,
+    required this.age,
+    required this.specialization,
+    required this.description,
+    required this.gender,
+    required this.private,
+    required this.time,
+    required this.images,
+    required this.count,
+    this.doctorId,
+    this.doctorName,
+    this.doctorImage,
+  });
+
   PostModel.fromMap(Map<String, dynamic> map)
       : id = map["id"],
         patientId = map["patient_id"],
