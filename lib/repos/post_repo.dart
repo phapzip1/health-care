@@ -1,7 +1,7 @@
 import 'package:health_care/models/post_model.dart';
 
 abstract class PostRepo {
-  Future<void> create({
+  Future<String> create({
     required String patientId,
     required int age,
     required String specialization,

@@ -218,7 +218,7 @@ class AppEventCreatePost extends AppEvent {
 }
 
 class AppEventReplyPost extends AppEvent {
+  final String postId;
   final String message;
-
-  const AppEventReplyPost(this.message);
+  const AppEventReplyPost(this.postId, this.message);
 }

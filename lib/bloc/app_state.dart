@@ -16,7 +16,7 @@ class AppState {
   final PatientModel? patient;
   final List<DoctorModel>? doctors;
   final List<PostModel>? posts;
-  final List<List<AppointmentModel>>? appointments;
+  final List<List<AppointmentModel>>?   appointments;
   final List<HealthRecordModel>? records;
   final int? history;
   final List<DateTime>? availableTime;
