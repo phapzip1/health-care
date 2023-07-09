@@ -4,7 +4,6 @@ import "package:health_care/bloc/app_bloc.dart";
 import "package:health_care/bloc/app_event.dart";
 import "package:health_care/main.dart";
 import "package:health_care/models/patient_model.dart";
-import "package:health_care/screens/Patient/main_page_patient.dart";
 
 
 class CardsAndWalletsScreen extends StatelessWidget {

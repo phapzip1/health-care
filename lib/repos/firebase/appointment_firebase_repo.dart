@@ -96,8 +96,8 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
   @override
   Future<List<AppointmentModel>> getAppointmentByDoctorId(String id) async {
     try {
-      final now = DateTime.now();
-      final querySnapshot = await _ref.where("doctor_id", isEqualTo: id).where("datetime", isGreaterThan: Timestamp.fromDate(now)).where("status", whereIn: [0, 1, 2]).get();
+      final anchor = DateTime.now().subtract(const Duration(minutes: 30));
+      final querySnapshot = await _ref.where("doctor_id", isEqualTo: id).where("datetime", isGreaterThan: Timestamp.fromDate(anchor)).where("status", whereIn: [0, 1, 2]).get();
       return querySnapshot.docs
           .map((e) => AppointmentModel.fromMap({
                 "id": e.id,
@@ -124,7 +124,8 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
   @override
   Future<List<AppointmentModel>> getAppointmentByPatientId(String id) async {
     try {
-      final querySnapshot = await _ref.where("patient_id", isEqualTo: id).where("datetime", isGreaterThan: Timestamp.now()).where("status", whereIn: [0, 1, 2]).get();
+      final anchor = DateTime.now().subtract(const Duration(minutes: 30));
+      final querySnapshot = await _ref.where("patient_id", isEqualTo: id).where("datetime", isGreaterThan: Timestamp.fromDate(anchor)).where("status", whereIn: [0, 1, 2]).get();
       return querySnapshot.docs
           .map((e) => AppointmentModel.fromMap({
                 "id": e.id,
@@ -212,9 +213,7 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
   @override
   Future<void> updateHeathRecord(String appointmentId, HealthRecordModel healthrecord) async {
     try {
-      await _ref
-          .doc(appointmentId)
-          .update(healthrecord.toMap());
+      await _ref.doc(appointmentId).update(healthrecord.toMap());
     } catch (e) {
       throw GenericDBException();
     }
@@ -263,7 +262,7 @@ class AppointmentFirebaseRepo extends AppointmentRepo {
       throw GenericDBException();
     }
   }
-  
+
   @override
   Future<void> acceptAppointment(String id) async {
     try {
