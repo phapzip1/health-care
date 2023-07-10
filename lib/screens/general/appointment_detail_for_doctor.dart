@@ -6,7 +6,6 @@ import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/screens/general/call_screen.dart';
 import 'package:health_care/widgets/record_screen/record_detail.dart';
-import 'package:health_care/widgets/record_screen/write_record.dart';
 import 'package:intl/intl.dart';
 
 class AppointmentDetailForDoctor extends StatefulWidget {
@@ -29,7 +28,6 @@ class _AppointmentDetailForDoctorState extends State<AppointmentDetailForDoctor>
 
   void _updateState(int status) {
     // update status
-
     setState(() {
       isConfirm = status == 1;
     });

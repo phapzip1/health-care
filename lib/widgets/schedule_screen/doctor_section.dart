@@ -5,6 +5,7 @@ import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/widgets/card_appointment_doctor.dart';
 import 'package:health_care/widgets/schedule_screen/header.dart';
+import 'package:intl/intl.dart';
 
 class DoctorSection extends StatefulWidget {
   const DoctorSection({super.key, required this.list});
@@ -36,12 +37,15 @@ class _DoctorSectionState extends State<DoctorSection> {
         Header(_click, _changedPage),
         Expanded(
           child: filterList.isEmpty
-              ? const Padding(padding: EdgeInsets.all(16), child: Image(image: AssetImage('assets/images/waiting.png')))
+              ? const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Image(image: AssetImage('assets/images/waiting.png')))
               : ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: filterList.length,
                   itemBuilder: (ctx, index) {
-                    String time = filterList[index].datetime.hour % 10 == 3 ? '${filterList[index].datetime.hour ~/ 10}:30' : '${filterList[index].datetime.hour ~/ 10}:00';
+                    String time =
+                        DateFormat.Hm().format(filterList[index].datetime);
                     return CardAppointmentDoctor(
                       _changedPage,
                       MediaQuery.of(context).size,

@@ -4,14 +4,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/bloc/app_state.dart';
 // import 'package:health_care/screens/general/communityQA.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:health_care/screens/general/communityQA.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 // import 'package:fluttertoast/fluttertoast.dart';
-
 
 class InputQuestionModal extends StatefulWidget {
   const InputQuestionModal({super.key});
@@ -34,55 +35,22 @@ class _InputQuestionModalState extends State<InputQuestionModal> {
 
   List<File> _fileImage = [];
 
-  void _submitData() async {
+  void _submitData(BuildContext context) async {
     setState(() {
       _isLoading = true;
     });
 
-    //Có thể up được nhiều hình trong 1 bài post
-    // List<String>? images = [];
-    // for (int i = 0; i < _fileImage.length; i++) {
-    //   final ref_img = FirebaseStorage.instance
-    //       .ref()
-    //       .child('user_image')
-    //       .child('${userId.uid}/${userId.email}')
-    //       .child('post_image_${userId.uid}_${i}.jpg');
+    context.read<AppBloc>().add(AppEventCreatePost(_fileImage, userId.uid,
+        _selectedValue, _value.round(), _gender, _textController.text, _light));
 
-    //   await ref_img.putFile(File(_fileImage[i].path));
-
-    //   final url = await ref_img.getDownloadURL();
-    //   images.add(url);
-    // }
-
-    //public bài post và navigate về CommunityQA()
-    // await PostModel.create(
-    //         userId.uid,
-    //         _selectedValue,
-    //         _value.round(),
-    //         _textController.text,
-    //         _gender,
-    //         "",
-    //         "",
-    //         "",
-    //         _light,
-    //         DateTime.now(),
-    //         images)
-    //     .post()
-    //     .onError((error, stackTrace) => Fluttertoast.showToast(
-    //           msg: "Post unsuccessfully!",
-    //           toastLength: Toast.LENGTH_SHORT,
-    //           timeInSecForIosWeb: 1,
-    //           backgroundColor: Colors.red,
-    //           textColor: Colors.white,
-    //           fontSize: 16.0,
-    //         ))
-    //     .then((value) {
-    //   setState(() {
-    //     _isLoading = false;
-    //   });
-    //   Navigator.push(
-    //       context, MaterialPageRoute(builder: (context) => CommunityQA()));
-    // });
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: BlocProvider.of<AppBloc>(context),
+          child: const CommunityQA(),
+        ),
+      ),
+    );
   }
 
   void _pickImage() async {
@@ -418,7 +386,7 @@ class _InputQuestionModalState extends State<InputQuestionModal> {
                               horizontal: 12, vertical: 4),
                         ),
                         onPressed: _textController.text.isNotEmpty
-                            ? _submitData
+                            ? () => _submitData(context)
                             : null,
                         child: _isLoading
                             ? const Center(

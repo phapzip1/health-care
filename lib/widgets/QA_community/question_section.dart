@@ -58,12 +58,16 @@ class QuestionSection extends StatelessWidget {
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: question.images.length,
-            itemBuilder: (context, index) =>
-                Image(image: NetworkImage(question.images[index])),
+            itemBuilder: (context, index) => SizedBox(
+                child: Image(image: NetworkImage(question.images[index]))),
             separatorBuilder: (context, index) => const SizedBox(
               width: 8,
             ),
           ),
+        ),
+
+        const SizedBox(
+          height: 16,
         ),
 
         Container(
@@ -77,7 +81,7 @@ class QuestionSection extends StatelessWidget {
                 color: Color(0xFFFFBE0B), fontWeight: FontWeight.w600),
           ),
         ),
-        question.doctorId != ""
+        question.doctorId != null
             ? Column(
                 children: [
                   const SizedBox(

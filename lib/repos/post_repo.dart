@@ -11,7 +11,7 @@ abstract class PostRepo {
     required List<String> images,
   });
   Future<void> reply(String message, String senderId, String postId);
-  Future<void> replyasDoctor(String message, String senderId, String senderName, String postId);
+  Future<void> replyasDoctor(String message, String senderId, String senderName, String postId, String doctorImage);
 
   // nhung cau hoi theo linh vuc
   Future<List<PostModel>> getByField(String? field);

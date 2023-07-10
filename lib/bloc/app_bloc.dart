@@ -445,7 +445,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppEventReplyPost>((event, emit) async {
       try {
         if (state.doctor != null) {
-          await postProvider.replyasDoctor(event.message, state.user!.uid, state.doctor!.name, event.postId);
+          await postProvider.replyasDoctor(event.message, state.user!.uid, state.doctor!.name, event.postId, state.doctor!.image);
         } else {
           await postProvider.reply(event.message, state.user!.uid, event.postId);
         }

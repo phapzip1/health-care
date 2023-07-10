@@ -1,7 +1,11 @@
 // ignore_for_file: unused_field
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_event.dart';
+import 'package:health_care/models/feedback_model.dart';
 
 // ignore: must_be_immutable
 class ReviewModal extends StatefulWidget {
@@ -23,48 +27,14 @@ class _ReviewModalState extends State<ReviewModal> {
 
   void _submitFeedback() async {
     try {
-      // final review = await ReviewModel.getByDoctorIdAndPatientId(
-      //   widget.doctorId,
-      //   widget.patientId,
-      // );
-      // if (review == null) {
-      //   await ReviewModel.create(
-      //           widget.doctorId,
-      //           widget.patientId,
-      //           widget.patientName,
-      //           widget.patientImage,
-      //           DateTime.now(),
-      //           _rating,
-      //           _feedback.text)
-      //       .save();
-      //   Fluttertoast.showToast(
-      //     msg: "Rating successfully",
-      //     toastLength: Toast.LENGTH_SHORT,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Colors.greenAccent,
-      //     textColor: Colors.black,
-      //     fontSize: 16.0,
-      //   );
-      // } else {
-      //   await ReviewModel(
-      //           review.id,
-      //           review.doctorId,
-      //           review.patientId,
-      //           review.patientName,
-      //           widget.patientImage,
-      //           DateTime.now(),
-      //           _rating,
-      //           _feedback.text)
-      //       .save();
-      //   Fluttertoast.showToast(
-      //     msg: "Update successfully",
-      //     toastLength: Toast.LENGTH_SHORT,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Colors.grey,
-      //     textColor: Colors.black,
-      //     fontSize: 16.0,
-      //   );
-      // }
+      context.read<AppBloc>().add(AppEventSendFeedback(FeedbackModel(
+          widget.doctorId,
+          widget.patientId,
+          widget.patientName,
+          widget.patientImage,
+          DateTime.now(),
+          _rating,
+          _feedback.text)));
       _feedback.clear();
       Navigator.of(context).pop();
     } catch (e) {

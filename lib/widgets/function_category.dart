@@ -71,8 +71,7 @@ class FunctionCategory extends StatelessWidget {
               alignment: Alignment.center,
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
+                  Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
                               value: BlocProvider.of<AppBloc>(context),

@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/post_model.dart';
 import 'package:health_care/widgets/QA_community/question_section.dart';
 import 'package:health_care/widgets/chat/messages.dart';
 import 'package:health_care/widgets/chat/new_message.dart';
-import 'package:intl/intl.dart';
 
 class ParticularQuestion extends StatelessWidget {
   const ParticularQuestion(this.question, {super.key});
@@ -37,9 +39,9 @@ class ParticularQuestion extends StatelessWidget {
           children: [
             Container(
               constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.6,
+                maxHeight: MediaQuery.of(context).size.height * 0.4,
               ),
-              child: ListView(
+              child: Column(
                 children: [
                   QuestionSection(question),
                   const Divider(
@@ -50,32 +52,21 @@ class ParticularQuestion extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Column(children: [
-                Text(
-                  DateFormat('hh:mm dd/MM/y').format(DateTime.now()),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF828282),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Messages(
+                      post: question,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Messages(
-                          post: question,
-                        ),
-                      ),
-                      question.patientId == userId
-                          ? NewMessage(post: question)
-                          : Container(),
-                    ],
+                  BlocBuilder<AppBloc, AppState>(
+                    builder: (context, state) =>
+                        (question.patientId == userId || state.doctor != null)
+                            ? NewMessage(post: question)
+                            : Container(),
                   ),
-                )
-              ]),
+                ],
+              ),
             ),
           ],
         ),

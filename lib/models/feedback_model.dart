@@ -16,6 +16,16 @@ class FeedbackModel {
         rating = map["rating"],
         message = map["message"];
 
+  FeedbackModel(
+    this.doctorId,
+    this.patientId,
+    this.patientName,
+    this.patientImage,
+    this.createAt,
+    this.rating,
+    this.message,
+  );
+
   Map<String, dynamic> toMap() {
     return {
       "doctor_id": doctorId,

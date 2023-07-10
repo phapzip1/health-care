@@ -85,14 +85,16 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                             ),
                             Text(
                               "Issues: ${widget.schedule.specialization}",
-                              style: const TextStyle(fontSize: 16, color: Color(0xFF828282)),
+                              style: const TextStyle(
+                                  fontSize: 16, color: Color(0xFF828282)),
                             ),
                             const SizedBox(
                               height: 6,
                             ),
                             Text(
                               widget.schedule.patientPhone,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(
                               height: 6,
@@ -102,7 +104,8 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                       ),
                       CircleAvatar(
                         radius: 26.0,
-                        backgroundImage: NetworkImage(widget.schedule.patientImage),
+                        backgroundImage:
+                            NetworkImage(widget.schedule.patientImage),
                       ),
                     ],
                   ),
@@ -122,7 +125,8 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                             width: 4,
                           ),
                           Text(
-                            DateFormat('dd-MM-y').format(widget.schedule.datetime),
+                            DateFormat('dd-MM-y')
+                                .format(widget.schedule.datetime),
                             style: const TextStyle(fontSize: 16),
                           ),
                         ],
@@ -147,13 +151,17 @@ class _MyWidgetState extends State<CardAppointmentDoctor> {
                               children: [
                                 CircleAvatar(
                                   radius: 4,
-                                  backgroundColor: widget.schedule.status == 0 ? const Color(0xFFE2B93B) : const Color(0xFFEB5757),
+                                  backgroundColor: widget.schedule.status == 0
+                                      ? const Color(0xFFE2B93B)
+                                      : const Color(0xFFEB5757),
                                 ),
                                 const SizedBox(
                                   width: 4,
                                 ),
                                 Text(
-                                  widget.schedule.status == 0 ? "Waiting" : "Rejected",
+                                  widget.schedule.status == 0
+                                      ? "Waiting"
+                                      : "Rejected",
                                   style: const TextStyle(fontSize: 16),
                                 ),
                               ],

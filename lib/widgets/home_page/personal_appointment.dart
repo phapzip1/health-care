@@ -12,7 +12,6 @@ class PersonalAppointment extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<AppBloc>().add(const AppEventLoadAppointments());
     return BlocBuilder<AppBloc, AppState>(
-        // future: AppointmentModel.getAppointment(patientId: user!.uid),
         builder: (ctx, state) {
       if (state.appointments == null) {
         return const Center(child: CircularProgressIndicator());

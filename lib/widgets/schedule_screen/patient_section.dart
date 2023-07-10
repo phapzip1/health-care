@@ -4,7 +4,6 @@ import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/screens/general/appointment_detail_for_patient.dart';
-import 'package:health_care/widgets/home_page/appointment_list_patient.dart';
 import 'package:health_care/widgets/schedule_screen/header.dart';
 
 class PatientSection extends StatefulWidget {
@@ -180,104 +179,6 @@ class _PatientSectionState extends State<PatientSection> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                // widget.changedPage
-                                //     ? Column(
-                                //         children: [
-                                //           filterList[index].status == 0
-                                //               ? ElevatedButton(
-                                //                   style: ElevatedButton.styleFrom(
-                                //                     backgroundColor:
-                                //                         const Color(0xFFE0E0E0),
-                                //                     elevation: 0,
-                                //                   ),
-                                //                   onPressed: () {
-                                //                     FirebaseFirestore.instance
-                                //                         .collection('patient')
-                                //                         .doc(user!.uid)
-                                //                         .collection('schedule')
-                                //                         .doc(filterList[index].id)
-                                //                         .delete();
-                                //                   },
-                                //                   child: const Align(
-                                //                     alignment: Alignment.center,
-                                //                     child: Text(
-                                //                       'Cancel',
-                                //                       style: TextStyle(
-                                //                         fontWeight: FontWeight.bold,
-                                //                         color: Colors.black,
-                                //                       ),
-                                //                     ),
-                                //                   ),
-                                //                 )
-                                //               : Row(
-                                //                   mainAxisAlignment:
-                                //                       MainAxisAlignment.spaceEvenly,
-                                //                   children: [
-                                //                     ///Button Cancel
-                                //                     if (now.isBefore(meeting.subtract(
-                                //                         const Duration(minutes: 30))))
-                                //                       ElevatedButton(
-                                //                           style: ElevatedButton.styleFrom(
-                                //                               backgroundColor:
-                                //                                   const Color(0xFFFFBE0B),
-                                //                               elevation: 0,
-                                //                               padding: EdgeInsets.symmetric(
-                                //                                   horizontal:
-                                //                                       MediaQuery.of(context)
-                                //                                               .size
-                                //                                               .width *
-                                //                                           0.05,
-                                //                                   vertical: 12)),
-                                //                           onPressed: () {},
-                                //                           child: const Text(
-                                //                             'Cancel',
-                                //                             style: TextStyle(
-                                //                                 fontWeight: FontWeight.bold,
-                                //                                 color: Colors.black,
-                                //                                 fontSize: 16),
-                                //                           )),
-                                //                     if (now.isBefore(meeting.subtract(
-                                //                         const Duration(minutes: 5))))
-                                //                       ElevatedButton(
-                                //                         style: ElevatedButton.styleFrom(
-                                //                             backgroundColor:
-                                //                                 const Color(0xFF2F80ED),
-                                //                             elevation: 0,
-                                //                             padding: EdgeInsets.symmetric(
-                                //                                 horizontal:
-                                //                                     MediaQuery.of(context)
-                                //                                             .size
-                                //                                             .width *
-                                //                                         0.05,
-                                //                                 vertical: 12)),
-                                //                         onPressed: () {
-                                //                           NavigationService
-                                //                               .navKey.currentState
-                                //                               ?.pushNamed('/chat',
-                                //                                   arguments:
-                                //                                       filterList[index]);
-                                //                         },
-                                //                         child: const Text(
-                                //                           'Send message',
-                                //                           style: TextStyle(
-                                //                             color: Colors.white,
-                                //                             fontWeight: FontWeight.bold,
-                                //                             fontSize: 16,
-                                //                           ),
-                                //                         ),
-                                //                       ),
-                                //                   ],
-                                //                 ),
-                                //         ],
-                                //       )
-                                //     : ReviewModal(
-                                //         filterList[index].doctorId,
-                                //         filterList[index].patientId,
-                                //         filterList[index].patientName,
-                                //         filterList[index].patientImage),
                               ],
                             ),
                           ),

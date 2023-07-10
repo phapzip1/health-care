@@ -67,7 +67,7 @@ class PostFirebaseRepo extends PostRepo {
   @override
   Future<List<PostModel>> getByField(String? field) async {
     try {
-      if (field != null) {
+      if (field != null && field != "All") {
         final querySnapshot = await _ref
             .where("specialization", isEqualTo: field)
             .orderBy("time", descending: false)
@@ -115,7 +115,7 @@ class PostFirebaseRepo extends PostRepo {
                 "description": e.get("description"),
                 "gender": e.get("gender"),
                 "private": e.get("private"),
-                "time": e.get("time"),
+                "time": (e.get("time") as Timestamp).toDate(),
                 "images":
                     (e.get("images") as List).map((e) => e as String).toList(),
                 "count": e.get("count"),
@@ -158,6 +158,7 @@ class PostFirebaseRepo extends PostRepo {
   Future<void> reply(String message, String senderId, String postId) async {
     try {
       await _ref.doc(postId).collection("chat").add({
+        "sender_id": senderId,
         "message": message,
         "create_at": Timestamp.now(),
       });
@@ -171,16 +172,18 @@ class PostFirebaseRepo extends PostRepo {
 
   @override
   Future<void> replyasDoctor(
-      String message, String senderId, String senderName, String postId) async {
+      String message, String senderId, String senderName, String postId, String doctorImage) async {
     try {
       final snapshot = await _ref.doc(postId).get();
       if (snapshot.get("doctor_id") == "undefined") {
         await _ref.doc(postId).update({
           "doctor_id": senderId,
           "doctor_name": senderName,
+          "doctor_image": senderName,
         });
       }
       await _ref.doc(postId).collection("chat").add({
+        "sender_id": senderId,
         "message": message,
         "create_at": Timestamp.now(),
       });

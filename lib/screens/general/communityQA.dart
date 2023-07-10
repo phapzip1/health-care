@@ -26,20 +26,24 @@ class _CommunityQAState extends State<CommunityQA> {
   void initState() {
     super.initState();
 
-    context.read<AppBloc>().add(const AppEventLoadPosts(null));
+    context.read<AppBloc>().add(const AppEventLoadPosts('All'));
   }
 
-  void _openFilterSymptom(BuildContext ctx) {
+  void _openFilterSymptom(symptom) {
     showModalBottomSheet(
-      context: ctx,
+      context: context,
       builder: (_) {
         return GestureDetector(
           onTap: () {},
           behavior: HitTestBehavior.opaque,
-          child: const FilterSymptom(),
+          child: FilterSymptom(symptom, _getPosts),
         );
       },
     );
+  }
+
+  void _getPosts(String name) {
+    context.read<AppBloc>().add(AppEventLoadPosts(name));
   }
 
   void _click(value) {
@@ -53,7 +57,7 @@ class _CommunityQAState extends State<CommunityQA> {
       child: ListView.builder(
         itemCount: socialPost.length,
         itemBuilder: (context, index) {
-          return QuestionCard(socialPost[index], context);
+          return QuestionCard(socialPost[index]);
         },
       ),
     );
@@ -82,18 +86,22 @@ class _CommunityQAState extends State<CommunityQA> {
           color: Colors.black, //change your color here
         ),
       ),
-      body: Column(
-        children: [
-          HeaderNavigateSection(_click, _changedPage, mediaQuery, context,
-              _searchController, _openFilterSymptom),
-          BlocBuilder<AppBloc, AppState>(builder: (context, state) {
-            if (state.posts == null) {
-              return Container();
-            }
-            return _buildListAll(state.posts!);
-          }),
-        ],
-      ),
+      body: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
+        final posts = state.posts ?? [];
+        return Column(
+          children: [
+            HeaderNavigateSection(
+              _click,
+              _changedPage,
+              mediaQuery,
+              _searchController,
+              _openFilterSymptom,
+              state.symptom ?? [],
+            ),
+            _buildListAll(posts),
+          ],
+        );
+      }),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFF3A86FF),
         onPressed: () {

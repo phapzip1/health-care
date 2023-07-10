@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:health_care/bloc/app_bloc.dart';
-import 'package:health_care/bloc/app_state.dart';
+import 'package:health_care/models/symptom_model.dart';
 
 class FilterSymptom extends StatefulWidget {
-  const FilterSymptom({super.key});
+  final List<SymptomModel> symptom;
+  final Function getPosts;
+  const FilterSymptom(this.symptom, this.getPosts, {super.key});
 
   @override
   State<FilterSymptom> createState() => _FilterSymptomState();
@@ -51,33 +51,37 @@ class _FilterSymptomState extends State<FilterSymptom> {
             ),
           ),
           Expanded(
-            child: BlocBuilder<AppBloc, AppState>(
-                // future: SymptomsProvider.getSymtoms(),
-                builder: (ctx, state) {
-          
-                  return ListView.builder(
-                      itemCount: state.symptom!.length,
-                      itemBuilder: (ctx, index) {
-                        return Column(
-                          children: [
-                            Container(
-                                alignment: Alignment.centerLeft,
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                                child: Text(
-                                  state.symptom![index].name,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600),
-                                )),
-                            const Divider(
-                              color: Colors.black,
-                            ),
-                          ],
-                        );
-                      });
-                }),
-          ),
+              child: ListView.builder(
+                  itemCount: widget.symptom.length,
+                  itemBuilder: (ctx, index) {
+                    return Column(
+                      children: [
+                        Container(
+                            alignment: Alignment.centerLeft,
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            child: TextButton(
+                              onPressed: () {
+                                widget.getPosts(widget.symptom[index].name);
+                              },
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                minimumSize: const Size(50, 30),
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              child: Text(
+                                widget.symptom[index].name,
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                            )),
+                        const Divider(
+                          color: Colors.black,
+                        ),
+                      ],
+                    );
+                  })),
         ],
       ),
     ));

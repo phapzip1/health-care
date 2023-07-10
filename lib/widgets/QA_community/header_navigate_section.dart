@@ -1,17 +1,18 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:health_care/models/symptom_model.dart';
 import 'package:health_care/widgets/button_section.dart';
 
 class HeaderNavigateSection extends StatelessWidget {
   final Function click;
   final bool changedPage;
   MediaQueryData mediaQuery;
-  BuildContext context;
   TextEditingController searchController;
   final Function openFilterSymptom;
+  final List<SymptomModel> symptom;
   HeaderNavigateSection(this.click, this.changedPage, this.mediaQuery,
-      this.context, this.searchController, this.openFilterSymptom,
+      this.searchController, this.openFilterSymptom, this.symptom,
       {super.key});
 
   @override
@@ -40,7 +41,7 @@ class HeaderNavigateSection extends StatelessWidget {
                 hintText: 'Search...',
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.menu),
-                  onPressed: () => openFilterSymptom(context),
+                  onPressed: () => openFilterSymptom(symptom),
                 ),
                 prefixIcon: IconButton(
                   icon: const Icon(Icons.search),

@@ -5,7 +5,7 @@ class BottomNavBar extends StatefulWidget {
   final void Function(int) onItemTapped;
   
 
-  BottomNavBar(this.selectedIndex, this.onItemTapped);
+  const BottomNavBar(this.selectedIndex, this.onItemTapped);
 
   @override
   State<BottomNavBar> createState() => _MyWidgetState();

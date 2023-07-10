@@ -10,8 +10,7 @@ import 'package:intl/intl.dart';
 
 class QuestionCard extends StatelessWidget {
   PostModel question;
-  BuildContext context;
-  QuestionCard(this.question, this.context, {super.key});
+  QuestionCard(this.question, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +22,14 @@ class QuestionCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ParticularQuestion(question)));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: BlocProvider.of<AppBloc>(context),
+              child: ParticularQuestion(question),
+            ),
+          ),
+        );
       },
       child: Container(
         margin: const EdgeInsets.only(top: 16),
@@ -76,7 +79,7 @@ class QuestionCard extends StatelessWidget {
           const SizedBox(
             height: 16,
           ),
-          question.doctorId != ""
+          question.doctorId != null
               ? Column(children: [
                   Container(
                     padding: const EdgeInsets.all(8),
@@ -130,15 +133,7 @@ class QuestionCard extends StatelessWidget {
                   const SizedBox(
                     width: 4,
                   ),
-                  StreamBuilder(
-                    stream: context
-                        .read<AppBloc>()
-                        .postProvider
-                        .getStreamChat(question.id),
-                    builder: (ctx, state) {
-                      return Text(state.data.toString());
-                    },
-                  )
+                  Text(question.count.toString()),
                 ],
               ),
             ],
