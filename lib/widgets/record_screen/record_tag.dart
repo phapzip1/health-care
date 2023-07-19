@@ -64,7 +64,7 @@ class RecordTag extends StatelessWidget {
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                    'Time: ${DateFormat('dd-MM-y').format(meeting)}  ${DateFormat.yMd().add_Hm().format(meeting)}'),
+                    'Time: ${DateFormat.yMd().add_Hm().format(meeting)}'),
               ],
             ),
           ]),

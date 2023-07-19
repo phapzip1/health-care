@@ -6,7 +6,6 @@ import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/bloc/app_event.dart';
 import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/widgets/home_page/appointment_list_patient.dart';
-import 'package:health_care/widgets/search.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 
 class NewAppointment extends StatefulWidget {
@@ -53,11 +52,12 @@ class _NewAppointmentState extends State<NewAppointment> {
           },
           child: Column(
             children: [
+              // Container(
+              //   padding: const EdgeInsets.symmetric(horizontal: 16),
+              //   child: Search(_searchController),
+              // ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Search(_searchController),
-              ),
-              Container(
+                margin: const EdgeInsets.only(top: 16),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 width: double.infinity,
                 child: DropDownTextField(
