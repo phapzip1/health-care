@@ -12,19 +12,18 @@ class RecordTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _time = DateFormat('dd-MM-y').format(healthRecord.datetime);
-    final _hour = DateFormat.Hm().format(healthRecord.datetime);
+    final meeting = healthRecord.datetime;
 
     return InkWell(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => BlocProvider.value(
-                      value: BlocProvider.of<AppBloc>(context),
-                      child: RecordDetail(isDoctor, healthRecord),
-                    )),
-          );
+          context,
+          MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                    value: BlocProvider.of<AppBloc>(context),
+                    child: RecordDetail(isDoctor, healthRecord),
+                  )),
+        );
       },
       child: Container(
         margin: const EdgeInsets.only(top: 16),
@@ -64,7 +63,8 @@ class RecordTag extends StatelessWidget {
                   isDoctor ? healthRecord.patientName : healthRecord.doctorName,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Text('Time: ${_time}  ${_hour}'),
+                Text(
+                    'Time: ${DateFormat('dd-MM-y').format(meeting)}  ${DateFormat.yMd().add_Hm().format(meeting)}'),
               ],
             ),
           ]),

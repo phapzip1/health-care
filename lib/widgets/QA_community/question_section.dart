@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
+import 'package:health_care/bloc/app_state.dart';
 import 'package:health_care/models/post_model.dart';
 import 'package:intl/intl.dart';
 
@@ -13,6 +17,7 @@ class QuestionSection extends StatelessWidget {
         : question.gender == 1
             ? "Female"
             : "Other";
+    final userId = FirebaseAuth.instance.currentUser!.uid;
     return Padding(
       padding: const EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 10),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -52,19 +57,23 @@ class QuestionSection extends StatelessWidget {
         ),
 
         //Check có phải doctor ko để có thể xem hình
-        SizedBox(
-          width: MediaQuery.sizeOf(context).width,
-          height: MediaQuery.sizeOf(context).width * 0.24,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: question.images.length,
-            itemBuilder: (context, index) => SizedBox(
-                child: Image(image: NetworkImage(question.images[index]))),
-            separatorBuilder: (context, index) => const SizedBox(
-              width: 8,
-            ),
-          ),
-        ),
+        BlocBuilder<AppBloc, AppState>(
+            builder: (context, state) => (state.doctor != null || question.patientId == userId)
+                ? SizedBox(
+                    width: MediaQuery.sizeOf(context).width,
+                    height: MediaQuery.sizeOf(context).width * 0.24,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: question.images.length,
+                      itemBuilder: (context, index) => SizedBox(
+                          child: Image(
+                              image: NetworkImage(question.images[index]))),
+                      separatorBuilder: (context, index) => const SizedBox(
+                        width: 8,
+                      ),
+                    ),
+                  )
+                : Container()),
 
         const SizedBox(
           height: 16,

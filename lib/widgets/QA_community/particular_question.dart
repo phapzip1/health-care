@@ -39,7 +39,7 @@ class ParticularQuestion extends StatelessWidget {
           children: [
             Container(
               constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.4,
+                maxHeight: MediaQuery.of(context).size.height * 0.49,
               ),
               child: Column(
                 children: [

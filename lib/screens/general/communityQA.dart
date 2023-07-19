@@ -52,12 +52,23 @@ class _CommunityQAState extends State<CommunityQA> {
     });
   }
 
-  Widget _buildListAll(List<PostModel> socialPost) {
+  Widget _buildListAll(
+      List<PostModel> socialPost, bool changedPage, bool isDoctor, String id) {
+    var filterList;
+    if (isDoctor) {
+      filterList = !changedPage
+          ? socialPost.where((element) => element.doctorId == id).toList()
+          : socialPost;
+    } else {
+      filterList = !changedPage
+          ? socialPost.where((element) => element.patientId == id).toList()
+          : socialPost;
+    }
     return Expanded(
       child: ListView.builder(
-        itemCount: socialPost.length,
+        itemCount: filterList.length,
         itemBuilder: (context, index) {
-          return QuestionCard(socialPost[index]);
+          return QuestionCard(filterList[index]);
         },
       ),
     );
@@ -67,51 +78,58 @@ class _CommunityQAState extends State<CommunityQA> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Q&A community',
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+    return BlocBuilder<AppBloc, AppState>(
+      builder: (context, state) => Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Q&A community',
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            },
+            icon: const Icon(Icons.arrow_back_ios),
+          ),
+          iconTheme: const IconThemeData(
+            color: Colors.black,
+          ),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.black, //change your color here
-        ),
-      ),
-      body: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
-        final posts = state.posts ?? [];
-        return Column(
-          children: [
-            HeaderNavigateSection(
-              _click,
-              _changedPage,
-              mediaQuery,
-              _searchController,
-              _openFilterSymptom,
-              state.symptom ?? [],
-            ),
-            _buildListAll(posts),
-          ],
-        );
-      }),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF3A86FF),
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => BlocProvider.value(
-                    value: BlocProvider.of<AppBloc>(context),
-                    child: const InputQuestionModal(),
-                  )));
-        },
-        child: const Icon(Icons.add),
+        body: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
+          final posts = state.posts ?? [];
+          return Column(
+            children: [
+              HeaderNavigateSection(
+                _click,
+                _changedPage,
+                mediaQuery,
+                _searchController,
+                _openFilterSymptom,
+                state.symptom ?? [],
+              ),
+              _buildListAll(
+                  posts, _changedPage, state.doctor != null, state.user!.uid),
+            ],
+          );
+        }),
+        floatingActionButton: state.doctor != null
+            ? null
+            : FloatingActionButton(
+                backgroundColor: const Color(0xFF3A86FF),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                              value: BlocProvider.of<AppBloc>(context),
+                              child: const InputQuestionModal(),
+                            )),
+                  );
+                },
+                child: const Icon(Icons.add),
+              ),
       ),
     );
   }

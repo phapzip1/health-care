@@ -18,20 +18,19 @@ class PostFirebaseRepo extends PostRepo {
     required List<String> images,
   }) async {
     try {
-      final docRef = await _ref
-          .add({
-            "patient_id": patientId,
-            "age": age,
-            "doctor_id": "undefined",
-            "doctor_name": "undefined",
-            "specialization": specialization,
-            "description": description,
-            "gender": gender,
-            "private": private,
-            "time": Timestamp.now(),
-            "images": images,
-            "count": 0,
-          });
+      final docRef = await _ref.add({
+        "patient_id": patientId,
+        "age": age,
+        "doctor_id": "undefined",
+        "doctor_name": "undefined",
+        "specialization": specialization,
+        "description": description,
+        "gender": gender,
+        "private": private,
+        "time": Timestamp.now(),
+        "images": images,
+        "count": 0,
+      });
       return docRef.id;
     } catch (e) {
       throw GenericDBException();
@@ -48,6 +47,7 @@ class PostFirebaseRepo extends PostRepo {
                 "patient_id": e.get("patient_id"),
                 "doctor_id": e.get("doctor_id"),
                 "doctor_name": e.get("doctor_name"),
+                "doctor_image": e.get("doctor_image"),
                 "age": e.get("age"),
                 "specialization": e.get("specialization"),
                 "description": e.get("description"),
@@ -84,12 +84,13 @@ class PostFirebaseRepo extends PostRepo {
                 "doctor_name": (e.get("doctor_name") == "undefined"
                     ? null
                     : e.get("doctor_name")),
+                "doctor_image": e.get("doctor_image"),
                 "age": e.get("age"),
                 "specialization": e.get("specialization"),
                 "description": e.get("description"),
                 "gender": e.get("gender"),
                 "private": e.get("private"),
-                "time": e.get("time"),
+                "time": (e.get("time") as Timestamp).toDate(),
                 "images":
                     (e.get("images") as List).map((e) => e as String).toList(),
                 "count": e.get("count"),
@@ -111,6 +112,9 @@ class PostFirebaseRepo extends PostRepo {
                     ? null
                     : e.get("doctor_name")),
                 "age": e.get("age"),
+                "doctor_image": (e.get("doctor_image") == "undefined"
+                    ? null
+                    : e.get("doctor_image")),
                 "specialization": e.get("specialization"),
                 "description": e.get("description"),
                 "gender": e.get("gender"),
@@ -171,14 +175,14 @@ class PostFirebaseRepo extends PostRepo {
   }
 
   @override
-  Future<void> replyasDoctor(
-      String message, String senderId, String senderName, String postId, String doctorImage) async {
+  Future<void> replyasDoctor(String message, String senderId, String senderName,
+      String postId, String doctorImage) async {
     try {
       final snapshot = await _ref.doc(postId).get();
       if (snapshot.get("doctor_id") == "undefined") {
         await _ref.doc(postId).update({
           "doctor_id": senderId,
-          "doctor_name": senderName,
+          "doctor_name": doctorImage,
           "doctor_image": senderName,
         });
       }

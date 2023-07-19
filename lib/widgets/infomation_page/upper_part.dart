@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UpperPart extends StatelessWidget {
   final DoctorModel doctor;
-  UpperPart(this.doctor, {super.key});
+  const UpperPart(this.doctor, {super.key});
 
   @override
   Widget build(BuildContext context) {

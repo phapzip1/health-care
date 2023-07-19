@@ -34,7 +34,7 @@ class PersonalAppointment extends StatelessWidget {
                 ],
               ),
             )
-          : ListView.builder(
+          : ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: appointmentDocs.length,
               itemBuilder: (ctx, index) {
@@ -117,7 +117,7 @@ class PersonalAppointment extends StatelessWidget {
                     ),
                   ),
                 );
-              });
+              },separatorBuilder: (context, index) => const SizedBox(width: 8,),);
     });
   }
 }

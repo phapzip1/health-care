@@ -100,6 +100,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
               fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: true,
+        backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);

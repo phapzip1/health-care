@@ -374,24 +374,26 @@ class _UpdateDoctorInformationState extends State<UpdateDoctorInformation> {
                     const SizedBox(
                       height: 8,
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      ),
-                      onPressed: () {
-                        // NavigationService.navKey.currentState?.pushNamed('/schedule', arguments: state.doctor!.id);
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => BlocProvider.value(
-                              value: BlocProvider.of<AppBloc>(context),
-                              child: const DoctorScheduleScreen(),
+                    Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        ),
+                        onPressed: () {
+                          // NavigationService.navKey.currentState?.pushNamed('/schedule', arguments: state.doctor!.id);
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                value: BlocProvider.of<AppBloc>(context),
+                                child: const DoctorScheduleScreen(),
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        'Change your time for consultant',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          );
+                        },
+                        child: const Text(
+                          'Change your time for consultant',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
                       ),
                     ),
                   ],

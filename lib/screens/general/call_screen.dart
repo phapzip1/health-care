@@ -24,7 +24,7 @@ class CallScreen extends StatefulWidget {
 
 class _CallScreenState extends State<CallScreen> {
   final RtcEngine _engine = createAgoraRtcEngine();
-  final String _token = "007eJxTYMhpMpie2RKw9NHfdgb2GZ8v+37a7CqyWltMY2PEutxfthEKDIkpBmmG5obmSebJFiZmaeaJZmnJJsamyZaWlkaWqYnmx7evSmkIZGQoZHjHxMgAgSA+B0NuaVl+SmZyBgMDAOFkIYk=";
+  final String _token = "007eJxTYLA5zbRjy8y3QQH2sy9kP5x2L7ZY9Vu9dOZzgdg+hkXfZW4oMCSmGKQZmhuaJ5knW5iYpZknmqUlmxibJltaWhpZpiaaP9JZk9IQyMhw6nAgAyMUgvgcDLmlZfkpmckZDAwAMGsiiA==";
   int _remoteUid = -1;
 
   // local

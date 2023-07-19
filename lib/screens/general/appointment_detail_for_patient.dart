@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/models/appointment_model.dart';
 import 'package:health_care/screens/general/call_screen.dart';
+import 'package:health_care/screens/general/review_modal.dart';
 import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
@@ -64,8 +65,8 @@ class AppointmentDetailForPatient extends StatelessWidget {
                                 children: [
                                   CircleAvatar(
                                     radius: 24,
-                                    backgroundImage: NetworkImage(
-                                        appointment.patientImage),
+                                    backgroundImage:
+                                        NetworkImage(appointment.patientImage),
                                   ),
                                   const SizedBox(
                                     width: 8,
@@ -90,28 +91,11 @@ class AppointmentDetailForPatient extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          const Color(0xFF2F80ED),
-                                      elevation: 0,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 12)),
-                                  onPressed: () {},
-                                  child: const Row(
-                                    children: [
-                                      Icon(Icons.rate_review),
-                                      SizedBox(
-                                        width: 4,
-                                      ),
-                                      Text(
-                                        'Rating',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  )),
+                              ReviewModal(
+                                  appointment.doctorId,
+                                  appointment.patientId,
+                                  appointment.patientName,
+                                  appointment.patientImage),
                             ],
                           ),
                         ),
@@ -203,13 +187,13 @@ class AppointmentDetailForPatient extends StatelessWidget {
                                   fontWeight: FontWeight.w500,
                                   color: Colors.grey),
                             ),
-                            // subtitle: Text(
-                            //   "$price vnd",
-                            //   style: const TextStyle(
-                            //       fontSize: 16,
-                            //       fontWeight: FontWeight.bold,
-                            //       color: Colors.black),
-                            // ),
+                            subtitle: Text(
+                              "${appointment.price.truncate()} vnd",
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
                           ),
                           const Divider(
                             thickness: 1,
@@ -322,8 +306,7 @@ class AppointmentDetailForPatient extends StatelessWidget {
                               width: mediaQuery.width * 0.4,
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          const Color(0xFFE0E0E0),
+                                      backgroundColor: const Color(0xFFE0E0E0),
                                       elevation: 0,
                                       padding: EdgeInsets.symmetric(
                                           horizontal: MediaQuery.of(context)
@@ -351,22 +334,18 @@ class AppointmentDetailForPatient extends StatelessWidget {
                                   backgroundColor: const Color(0xFF2F80ED),
                                   elevation: 0,
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: MediaQuery.of(context)
-                                              .size
-                                              .width *
-                                          0.05,
+                                      horizontal:
+                                          MediaQuery.of(context).size.width *
+                                              0.05,
                                       vertical: 12)),
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => BlocProvider.value(
-                                      value:
-                                          BlocProvider.of<AppBloc>(context),
+                                      value: BlocProvider.of<AppBloc>(context),
                                       child: CallScreen(
-                                          remotename:
-                                              appointment.doctorName,
-                                          remotecover:
-                                              appointment.doctorImage),
+                                          remotename: appointment.doctorName,
+                                          remotecover: appointment.doctorImage),
                                     ),
                                   ),
                                 );

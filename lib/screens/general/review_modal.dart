@@ -162,24 +162,24 @@ class _ReviewModalState extends State<ReviewModal> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF2F80ED),
-              elevation: 0,
-              padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.05,
-                  vertical: 12)),
-          onPressed: () => _showFullModal(context),
-          child: const Text(
-            'Rating',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF2F80ED),
+            elevation: 0,
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 12)),
+        onPressed: () => _showFullModal(context),
+        child: const Row(
+          children: [
+            Icon(Icons.rate_review),
+            SizedBox(
+              width: 4,
             ),
-          )),
-    );
+            Text(
+              'Rating',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ));
   }
 }

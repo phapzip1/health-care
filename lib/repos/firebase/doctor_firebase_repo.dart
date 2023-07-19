@@ -5,7 +5,8 @@ import 'package:health_care/repos/doctor_repo.dart';
 import 'package:health_care/repos/repo_exception.dart';
 
 class DoctorFirebaseRepo extends DoctorRepo {
-  final CollectionReference _ref = FirebaseFirestore.instance.collection("doctor");
+  final CollectionReference _ref =
+      FirebaseFirestore.instance.collection("doctor");
 
   @override
   Future<void> add({
@@ -23,32 +24,30 @@ class DoctorFirebaseRepo extends DoctorRepo {
     required String specialization,
   }) async {
     try {
-      await _ref
-          .doc(id)
-          .set({
-            "name": name,
-            "phone_number": phoneNumber,
-            "image": image,
-            "gender": gender,
-            "birthday": Timestamp.fromDate(birthdate),
-            "email": email,
-            "license_id": licenseId,
-            "experience": experience,
-            "price": price,
-            "workplace": workplace,
-            "specialization": specialization,
-            "verified": false,
-            "rating": 0.0,
-            "available_time": {
-              "mon": [],
-              "tue": [],
-              "wed": [],
-              "thu": [],
-              "fri": [],
-              "sat": [],
-              "sun": [],
-            }
-          });
+      await _ref.doc(id).set({
+        "name": name,
+        "phone_number": phoneNumber,
+        "image": image,
+        "gender": gender,
+        "birthday": Timestamp.fromDate(birthdate),
+        "email": email,
+        "license_id": licenseId,
+        "experience": experience,
+        "price": price,
+        "workplace": workplace,
+        "specialization": specialization,
+        "verified": false,
+        "rating": 0.0,
+        "available_time": {
+          "mon": [],
+          "tue": [],
+          "wed": [],
+          "thu": [],
+          "fri": [],
+          "sat": [],
+          "sun": [],
+        }
+      });
       ;
     } catch (e) {
       throw GenericDBException();
@@ -66,17 +65,14 @@ class DoctorFirebaseRepo extends DoctorRepo {
     required String message,
   }) async {
     try {
-      await _ref
-          .doc(doctorId)
-          .collection("feedback")
-          .doc(patientId)
-          .set({
-            "patient_name": patientName,
-            "patient_image": patientImage,
-            "create_at": Timestamp.fromDate(createAt),
-            "rating": rating,
-            "message": message,
-          });
+      await _ref.doc(doctorId).collection("feedback").doc(patientId).set({
+        "doctor_id": doctorId,
+        "patient_name": patientName,
+        "patient_image": patientImage,
+        "create_at": Timestamp.fromDate(createAt),
+        "rating": rating,
+        "message": message,
+      });
       ;
     } catch (e) {
       throw GenericDBException();
@@ -95,14 +91,15 @@ class DoctorFirebaseRepo extends DoctorRepo {
   @override
   Future<List<FeedbackModel>> getFeedbacks(String doctorid) async {
     try {
-      final querySnapshot = await _ref.doc(doctorid).collection("feedback").get();
+      final querySnapshot =
+          await _ref.doc(doctorid).collection("feedback").get();
       return querySnapshot.docs
           .map((e) => FeedbackModel.fromMap({
                 "doctor_id": doctorid,
                 "patient_id": e.id,
                 "patient_name": e.get("patient_name"),
                 "patient_image": e.get("patient_image"),
-                "create_at": e.get("create_at"),
+                "create_at": (e.get("create_at") as Timestamp).toDate(),
                 "rating": e.get("rating"),
                 "message": e.get("message"),
               }))
@@ -137,17 +134,15 @@ class DoctorFirebaseRepo extends DoctorRepo {
           "experience": exp,
         });
       } else {
-        await _ref
-            .doc(id)
-            .update({
-              "name": username,
-              "phone_number": phone,
-              "gender": gender,
-              "birthday": Timestamp.fromDate(birthdate),
-              "price": price,
-              "workplace": workplace,
-              "experience": exp,
-            });
+        await _ref.doc(id).update({
+          "name": username,
+          "phone_number": phone,
+          "gender": gender,
+          "birthday": Timestamp.fromDate(birthdate),
+          "price": price,
+          "workplace": workplace,
+          "experience": exp,
+        });
         ;
       }
     } catch (e) {
@@ -190,7 +185,11 @@ class DoctorFirebaseRepo extends DoctorRepo {
   @override
   Future<List<DoctorModel>> getBySpecification(String spec) async {
     try {
-      final querySnapshot = await _ref.where("specialization", isEqualTo: spec).where("verified", isEqualTo: false).orderBy("rating", descending: true).get();
+      final querySnapshot = await _ref
+          .where("specialization", isEqualTo: spec)
+          .where("verified", isEqualTo: false)
+          .orderBy("rating", descending: true)
+          .get();
       return querySnapshot.docs
           .map((e) => DoctorModel.fromMap({
                 "id": e.id,
@@ -218,7 +217,8 @@ class DoctorFirebaseRepo extends DoctorRepo {
   @override
   Future<List<DoctorModel>> getAll() async {
     try {
-      final querySnapshot = await _ref.orderBy("rating", descending: true).get();
+      final querySnapshot =
+          await _ref.orderBy("rating", descending: true).get();
       return querySnapshot.docs
           .map((e) => DoctorModel.fromMap({
                 "id": e.id,
@@ -244,13 +244,12 @@ class DoctorFirebaseRepo extends DoctorRepo {
   }
 
   @override
-  Future<void> updateAvailableTime(String doctorid, List<int> time, String weekday) async {
+  Future<void> updateAvailableTime(
+      String doctorid, List<int> time, String weekday) async {
     try {
-      await _ref
-          .doc(doctorid)
-          .update({
-            "available_time.$weekday": time,
-          });
+      await _ref.doc(doctorid).update({
+        "available_time.$weekday": time,
+      });
     } catch (e) {
       throw GenericDBException();
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health_care/bloc/app_bloc.dart';
 import 'package:health_care/models/doctor_model.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,15 +8,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ReviewSection extends StatelessWidget {
   final DoctorModel userDocs;
-  ReviewSection(this.userDocs, {super.key});
+  const ReviewSection(this.userDocs, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Future.value(FirebaseFirestore.instance
-            .collection("review")
-            .where('doctor_id', isEqualTo: userDocs.id)
-            .get()),
+        future: context.read<AppBloc>().doctorProvider.getFeedbacks(userDocs.id),
         builder: (ctx, reviewSnapshot) {
           if (reviewSnapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
@@ -24,14 +22,13 @@ class ReviewSection extends StatelessWidget {
             return Container();
           }
 
-          final reviews = reviewSnapshot.data!.docs;
+          final reviews = reviewSnapshot.data!;
 
           return ListView.builder(
               shrinkWrap: true,
               itemCount: reviews.length,
               itemBuilder: (ctx, index) {
-                Timestamp timeStamp = reviews[index].data()['create_at'];
-                double rating = reviews[index].data()['rating'];
+                double rating = reviews[index].rating;
                 return Container(
                   padding: const EdgeInsets.all(16),
                   decoration: const BoxDecoration(
@@ -53,7 +50,7 @@ class ReviewSection extends StatelessWidget {
                             CircleAvatar(
                                 radius: 26.0,
                                 backgroundImage: NetworkImage(
-                                    reviews[index].data()['patient_image'])),
+                                    reviews[index].patientImage)),
                             const SizedBox(
                               width: 16,
                             ),
@@ -64,11 +61,7 @@ class ReviewSection extends StatelessWidget {
                                   width:
                                       MediaQuery.of(context).size.width * 0.4,
                                   child: Text(
-                                    reviews[index].data()['patient_name'] +
-                                        reviews[index].data()['patient_name'] +
-                                        reviews[index].data()['patient_name'] +
-                                        reviews[index].data()['patient_name'] +
-                                        reviews[index].data()['patient_name'],
+                                    reviews[index].patientName,
                                     overflow: TextOverflow.ellipsis,
                                     softWrap: true,
                                     style: const TextStyle(
@@ -78,7 +71,7 @@ class ReviewSection extends StatelessWidget {
                                 ),
                                 Text(
                                   DateFormat('dd/MM/y')
-                                      .format(timeStamp.toDate()),
+                                      .format(reviews[index].createAt),
                                   style: const TextStyle(
                                       color: Color(0xFF666666), fontSize: 16),
                                 )
@@ -110,7 +103,7 @@ class ReviewSection extends StatelessWidget {
                           height: 16,
                         ),
                         Text(
-                          reviews[index].data()['feedback'],
+                          reviews[index].message,
                           style: const TextStyle(
                               fontWeight: FontWeight.w500, fontSize: 16),
                         ),

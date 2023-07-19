@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_care/bloc/app_bloc.dart';
@@ -18,7 +17,6 @@ class RecordDetail extends StatefulWidget {
 }
 
 class _RecordDetailState extends State<RecordDetail> {
-  final userID = FirebaseAuth.instance.currentUser!.uid;
   final TextEditingController diagnosticController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
   final TextEditingController prescriptionController = TextEditingController();
@@ -42,16 +40,19 @@ class _RecordDetailState extends State<RecordDetail> {
   void _writeRecord(BuildContext context) async {
     try {
       if (diagnosticController.text != "") {
-        context.read<AppBloc>().add(AppEventUpdateHealthRecord(widget.appointment.healthRecord, widget.appointment.id));
+        context.read<AppBloc>().add(AppEventUpdateHealthRecord(
+            widget.appointment.healthRecord, widget.appointment.id));
 
-        Fluttertoast.showToast(
-          msg: "Update successfully",
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.greenAccent,
-          textColor: Colors.black,
-          fontSize: 16.0,
-        );
+        await Future.delayed(const Duration(milliseconds: 500)).then((value) {
+          Fluttertoast.showToast(
+            msg: "Successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.greenAccent,
+            textColor: Colors.black,
+            fontSize: 16.0,
+          );
+        });
       } else {
         Fluttertoast.showToast(
           msg: "You must fill diagnostic for patient",
@@ -180,8 +181,8 @@ class _RecordDetailState extends State<RecordDetail> {
                     height: 8,
                   ),
                   TextFormField(
+                    controller: diagnosticController,
                     readOnly: widget.isDoctor ? false : true,
-                    initialValue: diagnosticController.text,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
